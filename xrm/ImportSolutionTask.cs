@@ -1,20 +1,14 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 
-namespace Xrm.Tests
+namespace Xrm
 {
-    public class SolutionImportTask : IXrmTask
+    public class ImportSolutionTask : IXrmTask
     {
-        private readonly SolutionImportCommandLine _command;
+        private readonly ImportSolutionCommandLine _command;
         private readonly IOrganizationService _service;
 
-        public SolutionImportTask(SolutionImportCommandLine command, IOrganizationService service)
+        public ImportSolutionTask(ImportSolutionCommandLine command, IOrganizationService service)
         {
             _command = command;
             _service = service;
@@ -24,7 +18,7 @@ namespace Xrm.Tests
         {
             _service.Execute(new ImportSolutionRequest() {
                 PublishWorkflows = _command.Publish,
-                CustomizationFile = _command.SolutionFile
+                CustomizationFile = _command.SolutionFile,
             });
         }
     }

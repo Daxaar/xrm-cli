@@ -66,23 +66,20 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="IFileReader.cs" />
-    <Compile Include="ServerConnection.cs" />
-    <Compile Include="SolutionImportCommandLine.cs" />
-    <Compile Include="SolutionImportCommandLineTests.cs" />
-    <Compile Include="IXrmCommandLine.cs" />
-    <Compile Include="IXrmTask.cs" />
-    <Compile Include="SolutionImportTask.cs" />
-    <Compile Include="TaskCommand.cs" />
-    <Compile Include="SolutionImportTaskTests.cs" />
+    <Compile Include="ImportSolutionCommandLineTests.cs" />
+    <Compile Include="ImportSolutionTaskTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XrmTaskFactory.cs" />
     <Compile Include="XrmTaskFactoryTests.cs" />
-    <Compile Include="XrmTaskRunner.cs" />
     <Compile Include="XrmTaskRunnerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\xrm\xrm.csproj">
+      <Project>{d0aa941b-87f9-48ff-b15e-e14c225f75ca}</Project>
+      <Name>xrm</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

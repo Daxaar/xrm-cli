@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.ServiceModel.Description;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
 
-namespace Xrm.Tests
+namespace Xrm
 {
     public class ServerConnection
     {
@@ -16,8 +20,7 @@ namespace Xrm.Tests
                 throw new ArgumentException("Organization name is required format is o:yourorgname");
             }
 
-            Port = ReadArg(spaceDelimitedArgs, "port") ?? "80";
-
+            Port = ReadArg(spaceDelimitedArgs, "port") ?? ReadArg(spaceDelimitedArgs, "p") ?? "80";
             Protocol = ReadArg(spaceDelimitedArgs, "protocol") ?? "http";
         }
 
@@ -37,5 +40,18 @@ namespace Xrm.Tests
         public string OrganizationName { get; set; }
         public string Port { get; set; }
         public string Protocol { get; set; }
+
+        public IOrganizationService CreateOrgService()
+        {
+            var creds = new ClientCredentials();
+
+            creds.Windows.ClientCredential = CredentialCache.DefaultNetworkCredentials;
+
+            var uri = new Uri(string.Format("{0}://{1}:{2}/{3}/XRMServices/2011/Organization.svc",Protocol, ServerName,Port,OrganizationName));
+            Console.WriteLine("Connecting...");
+            var proxy = new OrganizationServiceProxy(uri, null, creds, null);
+            proxy.EnableProxyTypes();
+            return proxy;
+        }
     }
 }

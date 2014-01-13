@@ -14,9 +14,9 @@ namespace Xrm.Tests
         [TestMethod]
         public void WhenCommandIsImport_XrmTaskFactoryReturnsImportSolutionTask()
         {
-            var factory = new XrmTaskFactory(new[] { "import" }, new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object);
+            var factory = new XrmTaskFactory(new[] { "import","filename" }, new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object);
             IXrmTask task = factory.CreateTask();
-            Assert.IsInstanceOfType(task, typeof(SolutionImportTask));
+            Assert.IsInstanceOfType(task, typeof(ImportSolutionTask));
         }
 
         [TestMethod]

@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
-namespace Xrm.Tests
+namespace Xrm
 {
-    public class SolutionImportCommandLine : IXrmCommandLine
+    public class ImportSolutionCommandLine
     {
         private readonly IFileReader _reader = null;
 
-        public SolutionImportCommandLine(IFileReader reader)
+        public ImportSolutionCommandLine(string[] args, IFileReader reader)
         {
             Publish = true;
             ActivateProcesses = true;
             _reader = reader;
+            Parse(args);
         }
 
-        public void Parse(string command)
+        private void Parse(string[] args)
         {
-            var args = command.Split(' ');
             SolutionFilePath = args[1];
             Publish = !args.Contains("--nopublish");
             ActivateProcesses = !args.Contains("--noactivate");

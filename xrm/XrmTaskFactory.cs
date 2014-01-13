@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.Xrm.Sdk;
 
-namespace Xrm.Tests
+namespace Xrm
 {
-    public class XrmTaskFactory
+    public class XrmTaskFactory : IXrmTaskFactory
     {
         private readonly string[] _args;
         private readonly IFileReader _reader;
@@ -22,11 +22,16 @@ namespace Xrm.Tests
             {
                 case "import":
                     {
-                        return new SolutionImportTask(new SolutionImportCommandLine(_reader), _service);                        
+                        return new ImportSolutionTask(new ImportSolutionCommandLine(_args, _reader), _service);                        
                     }
                 default:
                     throw new InvalidOperationException(string.Format("Unknown command {0}", _args[0]));
             }
         }
+    }
+
+    public interface IXrmTaskFactory
+    {
+        IXrmTask CreateTask();
     }
 }
