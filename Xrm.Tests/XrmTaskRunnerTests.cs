@@ -1,46 +1,10 @@
-﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Moq;
 
 namespace Xrm.Tests
 {
-    [TestClass]
-    public class ConnectionCommandLineTests
-    {
-        [TestMethod]
-        public void CanReadServerNameArgument()
-        {
-            var connection = new ServerConnection(new List<string>(){"import"," server:servername","org:orgname","port:5555"});
-            Assert.AreEqual("servername", connection.ServerName);
-        }
-
-        [TestMethod]
-        public void CanReadOrgNameArgument()
-        {
-            var connection = new ServerConnection(new List<string>() { "import", "server:servername", "org:orgname", "port:5555" });
-            Assert.AreEqual("orgname", connection.OrganizationName);
-        }
-
-        [TestMethod]
-        public void CanReadPortNumberArgument()
-        {
-            var connection = new ServerConnection(new List<string>() { "import", "server:servername", "org:orgname", "port:5555" });
-            Assert.AreEqual("5555", connection.Port);
-        }
-
-        [TestMethod]
-        public void UsesLocalhostWhenServerNameIsNotSpecified()
-        {
-            var validCommandArgsWithoutServerName = new List<string>() {"taskname", "org:orgname"};
-
-            var connection = new ServerConnection(validCommandArgsWithoutServerName);
-
-            Assert.AreEqual("localhost",connection.ServerName);
-        }
-    }
-
     [TestClass]
     public class XrmTaskRunnerTests
     {
@@ -55,29 +19,29 @@ namespace Xrm.Tests
         [TestMethod]
         public void RunnerPassesCommandLineArgumentsToXrmFactory()
         {
+            var fileReader = new Mock<IFileReader>();
+            fileReader.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
             var args = new[] {"import", "filename"};
-            var runner = new XrmTaskRunner(new XrmTaskFactory(args, new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object),
+            var runner = new XrmTaskRunner(new XrmTaskFactory(fileReader.Object, new Mock<IOrganizationService>().Object),
                                             new Mock<ILog>().Object);
-            runner.Run();
+            runner.Run(args);
 
         }
 
         [TestMethod]
         public void RunnerCanAcceptFurtherCommandsUponCompletionOfPrevious()
         {
-            var runner = new XrmTaskRunner( new XrmTaskFactory(new[] {"import", "filename"},
-                                            new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object),
+            var fileReader = new Mock<IFileReader>();
+            fileReader.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+            var runner = new XrmTaskRunner( new XrmTaskFactory(
+                                            fileReader.Object, new Mock<IOrganizationService>().Object),
                                             new Mock<ILog>().Object);
-            runner.Run();
+            runner.Run(new[] { "import", "filename" });
         }
 
         [TestMethod]
         public void ThrowsExceptionIfFirstCommandDoesNotContainConnectionInfo()
         {
         }
-    }
-
-    class XrmTaskRunnerTestsImpl : XrmTaskRunnerTests
-    {
     }
 }

@@ -51,7 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="ExportSolutionTask.cs" />
     <Compile Include="IFileReader.cs" />
+    <Compile Include="IFileWriter.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IXrmCommandLine.cs" />
     <Compile Include="IXrmTask.cs" />
@@ -62,6 +64,7 @@
     <Compile Include="ImportSolutionCommandLine.cs" />
     <Compile Include="ImportSolutionTask.cs" />
     <Compile Include="SystemFileReader.cs" />
+    <Compile Include="SystemFileWriter.cs" />
     <Compile Include="XrmTaskFactory.cs" />
     <Compile Include="XrmTaskRunner.cs" />
   </ItemGroup>

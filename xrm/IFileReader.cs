@@ -6,5 +6,6 @@
     public interface IFileReader
     {
         byte[] ReadAllBytes(string path);
+        bool FileExists(string path);
     }
 }

@@ -12,25 +12,33 @@ namespace Xrm.Tests
     public class XrmTaskFactoryTests
     {
         [TestMethod]
-        public void WhenCommandIsImport_XrmTaskFactoryReturnsImportSolutionTask()
+        public void WhenCommandIsImport_ReturnsImportSolutionTask()
         {
-            var factory = new XrmTaskFactory(new[] { "import","filename" }, new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object);
-            IXrmTask task = factory.CreateTask();
+            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object);
+            IXrmTask task = factory.CreateTask(new[] { "import", "filename" });
             Assert.IsInstanceOfType(task, typeof(ImportSolutionTask));
+        }
+
+
+        [TestMethod]
+        public void WhenCommandIsExport_ReturnsExportSolutionTask()
+        {
+            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object);
+            IXrmTask task = factory.CreateTask(new[] { "export", "filename" });
+            Assert.IsInstanceOfType(task, typeof(ExportSolutionTask));            
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void WhenValidCommandIsNotSpecifiedThrowsException()
         {
-            const string command = "invalidcommand randomarg";
-            var factory = new XrmTaskFactory(new[] { command }, new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object);
-            factory.CreateTask();
+            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object);
+            factory.CreateTask(new[] { "invalidcommand" });
         }
         [TestMethod]
         public void AcceptsOrganizationServiceInConstructor()
         {
-            var factory = new XrmTaskFactory(new[] {"taskname", "arg", "arg"}, new Mock<IFileReader>().Object,
+            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object,
                                              new Mock<IOrganizationService>().Object);
 
             Assert.IsNotNull(factory);

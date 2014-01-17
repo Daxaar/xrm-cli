@@ -66,6 +66,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ConnectionCommandLineTests.cs" />
+    <Compile Include="ExportSolutionTaskTests.cs" />
     <Compile Include="ImportSolutionCommandLineTests.cs" />
     <Compile Include="ImportSolutionTaskTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

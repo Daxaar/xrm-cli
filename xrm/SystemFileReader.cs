@@ -8,5 +8,10 @@ namespace Xrm
         {
             return File.ReadAllBytes(path);
         }
+
+        public bool FileExists(string path)
+        {
+            return File.Exists(path);
+        }
     }
 }

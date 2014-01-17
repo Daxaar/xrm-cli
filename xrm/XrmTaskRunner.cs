@@ -11,13 +11,10 @@
             _log = log;
         }
 
-        public void Run()
+        public void Run(string[] args)
         {
-            var task = _factory.CreateTask();
-            if (task != null)
-            {
-                task.Execute();                
-            }
+            var task = _factory.CreateTask(args);
+            task.Execute();                
         }
     }
 }

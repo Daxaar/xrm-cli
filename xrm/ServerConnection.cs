@@ -50,6 +50,8 @@ namespace Xrm
             var uri = new Uri(string.Format("{0}://{1}:{2}/{3}/XRMServices/2011/Organization.svc",Protocol, ServerName,Port,OrganizationName));
             Console.WriteLine("Connecting...");
             var proxy = new OrganizationServiceProxy(uri, null, creds, null);
+            proxy.ServiceConfiguration.CurrentServiceEndpoint.Binding.OpenTimeout = new TimeSpan(0, 0, 5, 0);
+            proxy.ServiceConfiguration.CurrentServiceEndpoint.Binding.ReceiveTimeout = new TimeSpan(0, 0, 5, 0);
             proxy.EnableProxyTypes();
             return proxy;
         }
