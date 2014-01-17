@@ -1,15 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Crm.Sdk.Messages;
+using xrm;
 
 namespace Xrm.Tests
 {
     [TestClass]
     public class ImportSolutionTaskTests
     {
+        [TestMethod]
+        public void ImportsAllSolutionsInExportsFolderWhenExportsCommandOptionSet()
+        {
+            var reader = new Mock<IFileReader>();
+            reader.Setup(x => x.GetSolutionsInExportFolder()).Returns(new[] {"solution1.zip", "solution2.zip"});
+            reader.Setup(x => x.FileExists("solution1.zip")).Returns(true);
+            reader.Setup(x => x.FileExists("solution2.zip")).Returns(true);
+            var service = new Mock<IOrganizationService>();
+            var command = new ImportSolutionCommandLine(new string[] {"import", "--exports"},reader.Object);
+            var task = new ImportSolutionTask(command, service.Object, new ConsoleLogger());
+
+            task.Execute();
+
+            service.Verify(x=>x.Execute(It.IsAny<ImportSolutionRequest>()),Times.Exactly(2));
+            reader.Verify(x=>x.ReadAllBytes("solution1.zip"),Times.Once);
+            reader.Verify(x=>x.ReadAllBytes("solution2.zip"),Times.Once);
+        }
+
         [TestMethod]
         public void ExecutesImportRequestWhenCommandIsValid()
         {
@@ -26,7 +47,7 @@ namespace Xrm.Tests
             task.Execute();
 
             service.Verify(x => x.Execute(It.IsAny<ImportSolutionRequest>()),Times.Once());
-            Assert.AreEqual(filePath,command.SolutionFilePath);
+            Assert.AreEqual(filePath,command.GetSolutionFilePaths().Single());
         }
     }
 }

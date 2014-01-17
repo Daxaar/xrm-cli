@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -15,43 +16,55 @@ namespace Xrm
             _reader = reader;
         }
 
-        public string SolutionFilePath
+        public IEnumerable<string> GetSolutionFilePaths()
         {
-            get
-            {
-                var files = _args[1].Split(',');
+                //Read the import filename (inc path) from second commandline arg or read all solution files
+                //from Export directory if --exports option has been specified
+                string[] files = _args.Contains("--exports") ? _reader.GetSolutionsInExportFolder().ToArray() 
+                                                             : _args[1].Split(',');
 
                 for (int i = 0; i < files.Length; i++)
                 {
-                    if (!files[1].EndsWith(".zip"))
+                    if (!files[i].EndsWith(".zip"))
                     {
                         files[i] += ".zip";
                     }
                 }
 
-                string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                foreach (var file in files)
+                {
+                    string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
-                if (_reader.FileExists(_args[1]))
-                {
-                    return _args[1];
+                    if (_reader.FileExists(file))
+                    {
+                        yield return file;
+                    }
+                    else if (_reader.FileExists(Path.Combine(baseDirectory, "Import", file)))
+                    {
+                        yield return Path.Combine(baseDirectory, "Import", file);
+                    }
+                    else if (_reader.FileExists(Path.Combine(baseDirectory, file)))
+                    {
+                        yield return Path.Combine(baseDirectory, file);
+                    }
+                    else
+                    {
+                        throw new Exception(string.Format("Cannot find file {0}.  If you have specified multiple files they must be comma separated", file));                                            
+                    }
                 }
-                if (_reader.FileExists(Path.Combine(baseDirectory, "Import", _args[1])))
-                {
-                    return Path.Combine(baseDirectory, "Import", _args[1]);
-                }
-                if (_reader.FileExists(Path.Combine(baseDirectory, _args[1])))
-                {
-                    return Path.Combine(baseDirectory, _args[1]);
-                }
-                throw new Exception(string.Format("Cannot find file {0}", _args[1]));
-            }
+        }
+        
+
+        public byte[] ReadFile(string solutionFilePath)
+        {
+            return _reader.ReadAllBytes(solutionFilePath);
         }
 
-        public byte[] SolutionFile
+        public IEnumerable<byte[]> SolutionFiles
         {
-            get
+            get 
             {
-                return _reader.ReadAllBytes(SolutionFilePath);
+                return GetSolutionFilePaths().Select(file => _reader.ReadAllBytes(file));
             }
         }
         public bool Publish { get { return !_args.Contains("--nopublish"); } }

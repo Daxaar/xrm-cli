@@ -10,37 +10,35 @@ namespace Xrm
 {
     public class ExportSolutionTask : IXrmTask
     {
-        private readonly string _solutionname;
+        private readonly ExportSolutionCommandLine _command;
         private readonly IFileWriter _writer;
         private readonly IOrganizationService _service;
+        private readonly ILog _log;
         private readonly string _exportPath;
 
-        public ExportSolutionTask(string solutionname, IFileWriter writer, IOrganizationService service, string exportPath)
+        public ExportSolutionTask(ExportSolutionCommandLine command, IFileWriter writer, IOrganizationService service,ILog log)
         {
-            _solutionname = solutionname;
+            _command = command;
             _writer = writer;
             _service = service;
-            _exportPath = exportPath;
+            _log = log;
         }
 
         public void Execute()
         {
-            var response = (ExportSolutionResponse)_service.Execute(new ExportSolutionRequest()
+            foreach (var solution in _command.SolutionNames)
+            {
+                String path = _command.BuildExportPath(solution);
+                _log.Write(string.Format("Exporting {0} to {1}", solution, path));
+
+                var response = (ExportSolutionResponse)_service.Execute(new ExportSolutionRequest()
                 {
-                    SolutionName = _solutionname,
+                    SolutionName = solution,
                 });
 
-            if (response != null)
-            {
-                _writer.Write(response.ExportSolutionFile, ExportPath );                
-            }
-        }
-
-        public string ExportPath
-        {
-            get
-            {
-                return Path.Combine(string.IsNullOrEmpty(_exportPath) ? AppDomain.CurrentDomain.BaseDirectory : _exportPath, "Export", _solutionname + ".zip");
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                _writer.Write(response.ExportSolutionFile,path );
+                _log.Write(string.Format("{0} exported successfully",solution));
             }
         }
     }

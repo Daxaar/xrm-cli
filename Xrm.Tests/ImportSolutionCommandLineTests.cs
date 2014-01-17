@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using xrm;
 
 namespace Xrm.Tests
 {
@@ -44,7 +45,7 @@ namespace Xrm.Tests
             var fileReader = new Mock<IFileReader>();
             fileReader.SetReturnsDefault(true);
             var commandLine = new ImportSolutionCommandLine(new[]{"import ", filename}, fileReader.Object);
-            Assert.AreEqual(commandLine.SolutionFilePath, filename);
+            Assert.AreEqual(commandLine.GetSolutionFilePaths().Single(), filename);
         }
 
         [TestMethod]
@@ -79,12 +80,34 @@ namespace Xrm.Tests
         public void AcceptsMultipleSolutionNamesOnCommandLine()
         {
             var reader = new Mock<IFileReader>();
+            reader.SetReturnsDefault(true);
             var commandline = new ImportSolutionCommandLine(new[] {"import", "filename1,filename2"}, reader.Object);
             var service = new Mock<IOrganizationService>();
             var task = new ImportSolutionTask(commandline, service.Object, new Mock<ILog>().Object);
             task.Execute();
 
             service.Verify(x=>x.Execute(It.IsAny<ImportSolutionRequest>()),Times.Exactly(2));
+
+        }
+        [TestMethod]
+        public void AddsZipExtensionWhenOnlySolutionNameProvided()
+        {
+            var reader = new Mock<IFileReader>();
+            reader.SetReturnsDefault(true);
+            var commandline = new ImportSolutionCommandLine(new[] { "import", "filename1" }, reader.Object);
+            Assert.IsTrue(commandline.GetSolutionFilePaths().Single().EndsWith(".zip"));
+        }
+
+        [TestMethod]
+        public void FindsFilesInExportFolderWhenExportsOptionSpecified()
+        {
+            var reader = new Mock<IFileReader>();
+            var service = new Mock<IOrganizationService>();
+
+            var command = new ImportSolutionCommandLine(new[] {"import", "--exports"},reader.Object);
+
+            var paths = command.GetSolutionFilePaths();
+            reader.Verify(x=>x.GetSolutionsInExportFolder(),Times.Once);
 
         }
 

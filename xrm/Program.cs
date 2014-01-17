@@ -7,13 +7,13 @@ namespace xrm
     {
         private static void Main(string[] args)
         {
-            args = new[]
-                {
-                    "import",
-                    @"Export\invoicequery.zip",
-                    "org:prosper",
-                    "port:5555"
-                };
+            //args = new[]
+            //    {
+            //        "import",
+            //        @"Export\invoicequery.zip",
+            //        "org:prosper",
+            //        "port:5555"
+            //    };
             //args = new[]
             //    {
             //        "export",

@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="ExportSolutionCommandLine.cs" />
     <Compile Include="ExportSolutionTask.cs" />
     <Compile Include="IFileReader.cs" />
     <Compile Include="IFileWriter.cs" />

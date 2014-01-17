@@ -1,4 +1,6 @@
-﻿namespace Xrm
+﻿using System.Collections.Generic;
+
+namespace Xrm
 {
     /// <summary>
     /// Testable File Access
@@ -7,5 +9,6 @@
     {
         byte[] ReadAllBytes(string path);
         bool FileExists(string path);
+        IEnumerable<string> GetSolutionsInExportFolder();
     }
 }

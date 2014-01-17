@@ -5,7 +5,7 @@ namespace xrm
 {
     public class ConsoleLogger : ILog
     {
-        public void Log(string message)
+        public void Write(string message)
         {
             Console.WriteLine(message);
         }

@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Xrm
 {
@@ -12,6 +14,11 @@ namespace Xrm
         public bool FileExists(string path)
         {
             return File.Exists(path);
+        }
+
+        public IEnumerable<string> GetSolutionsInExportFolder()
+        {
+            return Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Export"));
         }
     }
 }

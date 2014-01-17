@@ -25,7 +25,7 @@ namespace Xrm
                     }
                 case "export":
                     {
-                        return new ExportSolutionTask(args[1], new SystemFileWriter(),_service,"");
+                        return new ExportSolutionTask(new ExportSolutionCommandLine(args), new SystemFileWriter(),_service,new ConsoleLogger());
                     }
                 default:
                     throw new InvalidOperationException(string.Format("Unknown command {0}", args[0]));

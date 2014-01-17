@@ -20,18 +20,22 @@ namespace Xrm
 
         public void Execute()
         {
-            _log.Log(string.Format("Importing {0}", _command.SolutionFilePath));
-            Guid jobId = Guid.NewGuid();
-            var importRequest = new ImportSolutionRequest
+            foreach (var filePath in _command.GetSolutionFilePaths())
+            {
+                _log.Write(string.Format("Importing {0}", filePath));
+                Guid jobId = Guid.NewGuid();
+                var importRequest = new ImportSolutionRequest
                 {
                     PublishWorkflows = _command.Publish,
-                    CustomizationFile = _command.SolutionFile,
+                    CustomizationFile = _command.ReadFile(filePath),
                     ImportJobId = jobId
                 };
-            _service.Execute(importRequest);
+                _service.Execute(importRequest);
 
-            Entity job = _service.Retrieve("importjob", importRequest.ImportJobId, new ColumnSet(new[] { "data", "solutionname" }));
-            _log.Log("Solution imported successfully");
+                Entity job = _service.Retrieve("importjob", importRequest.ImportJobId, new ColumnSet(new[] { "data", "solutionname" }));
+                _log.Write("Solution imported successfully");
+                
+            }
         }
     }
 }
