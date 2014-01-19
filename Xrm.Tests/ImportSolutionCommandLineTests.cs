@@ -125,9 +125,10 @@ namespace Xrm.Tests
         }
 
         [TestMethod]
-        public void DisplaysHelpTextWhenHelpOptionSpecified()
+        public void ShowHelpOptionIsTrueWhenSpecifiedAsArgument()
         {
-            var command = new ImportSolutionCommandLine(new[] { "import --help" }, new Mock<IFileReader>().Object);
+            var command = new ImportSolutionCommandLine(new[] { "import", "--help" }, new Mock<IFileReader>().Object);
+            Assert.IsTrue(command.ShowHelp);
         }
 
     }

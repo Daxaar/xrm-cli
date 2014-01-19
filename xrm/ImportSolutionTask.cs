@@ -20,6 +20,17 @@ namespace Xrm
 
         public void Execute()
         {
+            if (_command.ShowHelp)
+            {
+                _log.Write("Import examples:\n");
+                _log.Write(@"import solutionname x:\path\to\solutionname.zip");
+                _log.Write(@"import solutionname1,solutionname2 x:\path\to\imports\folder");
+                _log.Write(@"import solutionname1,solutionname2");
+                _log.Write("\tImports ALL solutions in the Imports folder located with the application folder");
+                _log.Write(@"import solutionname1,solutionname2 --exports");
+                _log.Write("\tImports ALL solutions in the Exports folder located with the application folder");
+                return;
+            }
             foreach (var filePath in _command.GetSolutionFilePaths())
             {
                 _log.Write(string.Format("Importing {0}", filePath));

@@ -70,5 +70,7 @@ namespace Xrm
         }
         public bool Publish { get { return !_args.Contains("--nopublish"); } }
         public bool ActivateProcesses { get { return !_args.Contains("--noactivate"); } }
+
+        public bool ShowHelp { get { return _args.Contains("--help"); } }
     }
 }

@@ -49,5 +49,17 @@ namespace Xrm.Tests
             service.Verify(x => x.Execute(It.IsAny<ImportSolutionRequest>()),Times.Once());
             Assert.AreEqual(filePath,command.GetSolutionFilePaths().Single());
         }
+
+        [TestMethod]
+        public void DoesNotAttemptToImportSolutionWhenHelpOptionSpecified()
+        {
+            var service     = new Mock<IOrganizationService>();
+            var commandLine = new ImportSolutionCommandLine(new[] {"import", "--help"}, new Mock<IFileReader>().Object);
+            var task        = new ImportSolutionTask(  commandLine, service.Object, new ConsoleLogger());
+            
+            task.Execute();
+            
+            service.Verify(x=>x.Execute(It.IsAny<OrganizationRequest>()),Times.Never);
+        }
     }
 }
