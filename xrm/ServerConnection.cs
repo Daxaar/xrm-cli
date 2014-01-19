@@ -8,12 +8,16 @@ using Microsoft.Xrm.Sdk.Client;
 
 namespace Xrm
 {
-    public class ServerConnection
+    public class ServerConnection : IDisposable
     {
-        public ServerConnection(List<string> spaceDelimitedArgs)
-        {
-            ServerName = ReadArg(spaceDelimitedArgs, "server") ?? ReadArg(spaceDelimitedArgs, "s") ?? "localhost";
+        private readonly ILog _logger;
+        OrganizationServiceProxy _proxy;
 
+        public ServerConnection(List<string> spaceDelimitedArgs, ILog logger)
+        {
+            _logger = logger;
+            ServerName = ReadArg(spaceDelimitedArgs, "server") ?? ReadArg(spaceDelimitedArgs, "s") ?? "localhost";
+            Debug = spaceDelimitedArgs.Contains("--debug");
             OrganizationName = ReadArg(spaceDelimitedArgs, "org") ?? ReadArg(spaceDelimitedArgs, "o");
             if (string.IsNullOrEmpty(OrganizationName))
             {
@@ -40,20 +44,25 @@ namespace Xrm
         public string OrganizationName { get; set; }
         public string Port { get; set; }
         public string Protocol { get; set; }
-
+        public bool Debug { get; set; }
         public IOrganizationService CreateOrgService()
         {
+            _logger.Write("Connecting...");
             var creds = new ClientCredentials();
 
             creds.Windows.ClientCredential = CredentialCache.DefaultNetworkCredentials;
 
-            var uri = new Uri(string.Format("{0}://{1}:{2}/{3}/XRMServices/2011/Organization.svc",Protocol, ServerName,Port,OrganizationName));
-            Console.WriteLine("Connecting...");
-            var proxy = new OrganizationServiceProxy(uri, null, creds, null);
-            proxy.ServiceConfiguration.CurrentServiceEndpoint.Binding.OpenTimeout = new TimeSpan(0, 0, 5, 0);
-            proxy.ServiceConfiguration.CurrentServiceEndpoint.Binding.ReceiveTimeout = new TimeSpan(0, 0, 5, 0);
-            proxy.EnableProxyTypes();
-            return proxy;
+            var uri = new Uri(string.Format("{0}://{1}:{2}/{3}/XRMServices/2011/Organization.svc", Protocol, ServerName, Port, OrganizationName));
+            _proxy = new OrganizationServiceProxy(uri, null, creds, null);
+            _proxy.ServiceConfiguration.CurrentServiceEndpoint.Binding.OpenTimeout = new TimeSpan(0, 0, 5, 0);
+            _proxy.ServiceConfiguration.CurrentServiceEndpoint.Binding.ReceiveTimeout = new TimeSpan(0, 0, 5, 0);
+            _proxy.EnableProxyTypes();
+            return _proxy;
+        }
+
+        public void Dispose()
+        {
+            _proxy.Dispose();
         }
     }
 }

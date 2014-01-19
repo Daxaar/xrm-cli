@@ -43,6 +43,15 @@ namespace Xrm.Tests
         }
 
         [TestMethod]
+        public void SplitsCommaSeparatedListOfSolutions()
+        {
+            var command = new ExportSolutionCommandLine(new[] { "export", "solution1,solution2", @"out:c:\path\to\file" });
+            Assert.AreEqual(2, command.SolutionNames.Count());
+            Assert.AreEqual("solution1",command.SolutionNames.ToList()[0]);
+            Assert.AreEqual("solution2", command.SolutionNames.ToList()[1]);
+        }
+
+        [TestMethod]
         public void UsesExportFolderWhenThirdParameterIsNotExportPath()
         {
             var command = new ExportSolutionCommandLine(new[] { "export", "solution1", "org:orgname" });
@@ -51,16 +60,13 @@ namespace Xrm.Tests
         }
 
         [TestMethod]
-        public void UsesAllSolutionFilesInExportsFolderWhenExportsCommandOptionSet()
+        public void UsesFilenameForSolutionWhenWhenExportPathSpecifiesFilename()
         {
             var reader = new Mock<IFileReader>();
-            reader.Setup(x => x.GetSolutionsInExportFolder()).Returns(new[] { @"Exports\solution1.zip", @"Exports\solution2.zip" });
-            reader.Setup(x => x.FileExists(@"Exports\solution1.zip")).Returns(true);
-            reader.Setup(x => x.FileExists(@"Exports\solution2.zip")).Returns(true);
-            var command = new ImportSolutionCommandLine(new[] { "import", "--exports" }, reader.Object);
+            const string path = @"c:\export\specificfilename.zip";
+            var command = new ExportSolutionCommandLine(new[] { "export", "sol1",path });
 
-            Assert.IsTrue(command.GetSolutionFilePaths().Contains(@"Exports\solution1.zip"));
-            Assert.IsTrue(command.GetSolutionFilePaths().Contains(@"Exports\solution2.zip"));
+            Assert.AreEqual(command.BuildExportPath("sol1"),path);
         }
 
     }

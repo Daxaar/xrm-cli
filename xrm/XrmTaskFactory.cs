@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
 using xrm;
 
 namespace Xrm
@@ -8,11 +9,13 @@ namespace Xrm
     {
         private readonly IFileReader _reader;
         private readonly IOrganizationService _service;
+        private readonly ILog _logger;
 
-        public XrmTaskFactory(IFileReader reader, IOrganizationService service)
+        public XrmTaskFactory(IFileReader reader, IOrganizationService service,ILog logger)
         {
             _reader = reader;
             _service = service;
+            _logger = logger;
         }
 
         public IXrmTask CreateTask(string[] args)
@@ -21,11 +24,20 @@ namespace Xrm
             {
                 case "import":
                     {
-                        return new ImportSolutionTask(new ImportSolutionCommandLine(args, _reader), _service, new ConsoleLogger());                        
+                        return new ImportSolutionTask(new ImportSolutionCommandLine(args, _reader), _service, _logger);                        
                     }
                 case "export":
                     {
-                        return new ExportSolutionTask(new ExportSolutionCommandLine(args), new SystemFileWriter(),_service,new ConsoleLogger());
+                        return new ExportSolutionTask(new ExportSolutionCommandLine(args), new SystemFileWriter(),_service,_logger);
+                    }
+                case "exit":
+                case "close":
+                    {
+                        return new ExitTask(new ConsoleLogger());
+                    }
+                case "connect":
+                    {
+                        return new ConnectTask(_service, new ConsoleLogger());
                     }
                 default:
                     throw new InvalidOperationException(string.Format("Unknown command {0}", args[0]));
@@ -33,16 +45,36 @@ namespace Xrm
         }
     }
 
-    //public class ExportSolutionCommandLine
-    //{
-    //    public ExportSolutionCommandLine(string[] args)
-    //    {
-    //        ExportFilePath = args.ReadArg()
-    //    }
-    //}
-
-    public interface IXrmTaskFactory
+    public class ConnectTask : IXrmTask
     {
-        IXrmTask CreateTask(string[] args);
+        private readonly IOrganizationService _service;
+        private readonly ILog _logger;
+
+        public ConnectTask(IOrganizationService service, ILog logger)
+        {
+            _service = service;
+            _logger = logger;
+        }
+
+
+        public void Execute()
+        {
+            _logger.Write("Connected to " + ((OrganizationServiceProxy)_service).ServiceManagement.CurrentServiceEndpoint.Address);
+        }
+    }
+
+    public class ExitTask : IXrmTask
+    {
+        private readonly ILog _logger;
+
+        public ExitTask(ILog logger)
+        {
+            _logger = logger;
+        }
+
+        public void Execute()
+        {
+            _logger.Write("Exiting...");
+        }
     }
 }

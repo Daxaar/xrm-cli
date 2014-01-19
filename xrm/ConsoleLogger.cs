@@ -7,7 +7,7 @@ namespace xrm
     {
         public void Write(string message)
         {
-            Console.WriteLine(message);
+            Console.WriteLine("\t" + message);
         }
     }
 }

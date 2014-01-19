@@ -106,9 +106,28 @@ namespace Xrm.Tests
 
             var command = new ImportSolutionCommandLine(new[] {"import", "--exports"},reader.Object);
 
-            var paths = command.GetSolutionFilePaths();
+            var paths = command.GetSolutionFilePaths().ToList();
             reader.Verify(x=>x.GetSolutionsInExportFolder(),Times.Once);
 
+        }
+
+        [TestMethod]
+        public void UsesAllSolutionFilesInExportsFolderWhenExportsCommandOptionSet()
+        {
+            var reader = new Mock<IFileReader>();
+            reader.Setup(x => x.GetSolutionsInExportFolder()).Returns(new[] { @"Exports\solution1.zip", @"Exports\solution2.zip" });
+            reader.Setup(x => x.FileExists(@"Exports\solution1.zip")).Returns(true);
+            reader.Setup(x => x.FileExists(@"Exports\solution2.zip")).Returns(true);
+            var command = new ImportSolutionCommandLine(new[] { "import", "--exports" }, reader.Object);
+
+            Assert.IsTrue(command.GetSolutionFilePaths().Contains(@"Exports\solution1.zip"));
+            Assert.IsTrue(command.GetSolutionFilePaths().Contains(@"Exports\solution2.zip"));
+        }
+
+        [TestMethod]
+        public void DisplaysHelpTextWhenHelpOptionSpecified()
+        {
+            var command = new ImportSolutionCommandLine(new[] { "import --help" }, new Mock<IFileReader>().Object);
         }
 
     }

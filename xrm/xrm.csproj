@@ -58,6 +58,7 @@
     <Compile Include="ILog.cs" />
     <Compile Include="IXrmCommandLine.cs" />
     <Compile Include="IXrmTask.cs" />
+    <Compile Include="IXrmTaskFactory.cs" />
     <Compile Include="optionsets.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -22,6 +22,7 @@ namespace Xrm
                 //from Export directory if --exports option has been specified
                 string[] files = _args.Contains("--exports") ? _reader.GetSolutionsInExportFolder().ToArray() 
                                                              : _args[1].Split(',');
+                
 
                 for (int i = 0; i < files.Length; i++)
                 {

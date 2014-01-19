@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Xrm;
 
 namespace xrm
@@ -21,11 +22,8 @@ namespace xrm
             //        "org:prosper",
             //        "port:5555"
             //    };
-
-            var connection = new ServerConnection(args.ToList());
-            var taskFactory = new XrmTaskFactory(new SystemFileReader(), connection.CreateOrgService());
-            var task = taskFactory.CreateTask(args);
-            task.Execute();
+            var runner = new XrmTaskRunner(new ConsoleLogger());
+            runner.Run(args);
         }
     }
 }

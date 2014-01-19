@@ -21,7 +21,17 @@ namespace Xrm
 
         public string BuildExportPath(string solutionName)
         {
-            string path = _args.FirstOrDefault(x => x.Contains("out:") || x.Contains("output:"));
+            string path = _args.FirstOrDefault(x => x.Contains("out:") || x.Contains("output:") || x.Contains("to:"));
+
+            if (_args[2].EndsWith(".zip"))
+            {
+                //export path is specifying a full path including filename check only one solution specified and return path
+                if (SolutionNames.Count() > 1)
+                {
+                    throw new InvalidOperationException("Cannot include filename in export path when multiple solutions have been specified.");
+                }
+                return _args[2];
+            }
 
             if (string.IsNullOrEmpty(path))
             {
