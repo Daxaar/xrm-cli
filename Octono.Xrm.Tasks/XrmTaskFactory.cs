@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
+using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {
@@ -41,39 +41,6 @@ namespace Octono.Xrm.Tasks
                 default:
                     throw new InvalidOperationException(string.Format("Unknown command {0}", args[0]));
             }
-        }
-    }
-
-    public class ConnectTask : IXrmTask
-    {
-        private readonly IOrganizationService _service;
-        private readonly ILog _logger;
-
-        public ConnectTask(IOrganizationService service, ILog logger)
-        {
-            _service = service;
-            _logger = logger;
-        }
-
-
-        public void Execute()
-        {
-            _logger.Write("Connected to " + ((OrganizationServiceProxy)_service).ServiceManagement.CurrentServiceEndpoint.Address);
-        }
-    }
-
-    public class ExitTask : IXrmTask
-    {
-        private readonly ILog _logger;
-
-        public ExitTask(ILog logger)
-        {
-            _logger = logger;
-        }
-
-        public void Execute()
-        {
-            _logger.Write("Exiting...");
         }
     }
 }

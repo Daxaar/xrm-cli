@@ -1,4 +1,4 @@
-﻿namespace Octono.Xrm.Tasks
+﻿namespace Octono.Xrm.Tasks.IO
 {
     public interface IFileWriter
     {

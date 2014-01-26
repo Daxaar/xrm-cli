@@ -4,6 +4,7 @@ using Microsoft.Xrm.Sdk;
 using Moq;
 using Octono.Xrm.ConsoleTaskRunner;
 using Octono.Xrm.Tasks;
+using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tests
 {

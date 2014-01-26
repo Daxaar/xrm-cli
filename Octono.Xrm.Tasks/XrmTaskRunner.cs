@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {

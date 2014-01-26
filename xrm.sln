@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xrm", "xrm\xrm.csproj", "{D0AA941B-87F9-48FF-B15E-E14C225F75CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Octono.Xrm.ConsoleTaskRunner", "xrm\Octono.Xrm.ConsoleTaskRunner.csproj", "{D0AA941B-87F9-48FF-B15E-E14C225F75CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xrm.Tests", "Xrm.Tests\Xrm.Tests.csproj", "{35A27080-45D4-4FCE-91EB-F80A56A9EFA9}"
 EndProject

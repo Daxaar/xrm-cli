@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {
@@ -11,7 +12,6 @@ namespace Octono.Xrm.Tasks
         private readonly IFileWriter _writer;
         private readonly IOrganizationService _service;
         private readonly ILog _log;
-        private readonly string _exportPath;
 
         public ExportSolutionTask(ExportSolutionCommandLine command, IFileWriter writer, IOrganizationService service,ILog log)
         {
@@ -23,6 +23,8 @@ namespace Octono.Xrm.Tasks
 
         public void Execute()
         {
+            if (ShowHelp()) return;
+
             foreach (var solution in _command.SolutionNames)
             {
                 String path = _command.BuildExportPath(solution);
@@ -30,13 +32,30 @@ namespace Octono.Xrm.Tasks
 
                 var response = (ExportSolutionResponse)_service.Execute(new ExportSolutionRequest()
                 {
-                    SolutionName = solution,
+                    SolutionName = solution
                 });
 
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
                 _writer.Write(response.ExportSolutionFile,path );
                 _log.Write(string.Format("{0} exported successfully",solution));
             }
+        }
+
+        private bool ShowHelp()
+        {
+            if (_command.ShowHelp)
+            {
+                _log.Write("Usage");
+                _log.Write(@"export solutionname x:\path\to\solutionname.zip");
+                _log.Write(@"export solutionname1,solutionname2 x:\path\to\exports\folder");
+                _log.Write(@"export solutionname1,solutionname2");
+                _log.Write("\tExports listed solutions in the Exports folder");
+                _log.Write("Switches");
+                _log.Write("-m Managed");
+                _log.Write("-p Publish before export");
+                return true;
+            }
+            return false;
         }
     }
 }

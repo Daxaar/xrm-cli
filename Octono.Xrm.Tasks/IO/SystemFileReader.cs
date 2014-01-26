@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Octono.Xrm.Tasks
+namespace Octono.Xrm.Tasks.IO
 {
     public class SystemFileReader : IFileReader
     {

@@ -84,9 +84,9 @@
       <Project>{60207963-97C9-4948-9FA7-050BD7D35D7D}</Project>
       <Name>Octono.Xrm.Tasks</Name>
     </ProjectReference>
-    <ProjectReference Include="..\xrm\xrm.csproj">
+    <ProjectReference Include="..\xrm\Octono.Xrm.ConsoleTaskRunner.csproj">
       <Project>{d0aa941b-87f9-48ff-b15e-e14c225f75ca}</Project>
-      <Name>xrm</Name>
+      <Name>Octono.Xrm.ConsoleTaskRunner</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
