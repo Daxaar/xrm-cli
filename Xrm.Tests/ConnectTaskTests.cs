@@ -7,6 +7,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 
-namespace Xrm.Tests
+namespace Octono.Xrm.Tests
 {
 }

@@ -1,4 +1,7 @@
-﻿using Xrm;
+﻿
+
+using Octono.Xrm.ConsoleTaskRunner;
+using Octono.Xrm.Tasks;
 
 namespace xrm
 {

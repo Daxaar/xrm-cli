@@ -6,7 +6,7 @@ using System.ServiceModel.Description;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 
-namespace Xrm
+namespace Octono.Xrm.Tasks
 {
     public class ServerConnection : IDisposable
     {

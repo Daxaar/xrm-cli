@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{56AC72
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Octono.Xrm.Tasks", "Octono.Xrm.Tasks\Octono.Xrm.Tasks.csproj", "{60207963-97C9-4948-9FA7-050BD7D35D7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{35A27080-45D4-4FCE-91EB-F80A56A9EFA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35A27080-45D4-4FCE-91EB-F80A56A9EFA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35A27080-45D4-4FCE-91EB-F80A56A9EFA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60207963-97C9-4948-9FA7-050BD7D35D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60207963-97C9-4948-9FA7-050BD7D35D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60207963-97C9-4948-9FA7-050BD7D35D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60207963-97C9-4948-9FA7-050BD7D35D7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

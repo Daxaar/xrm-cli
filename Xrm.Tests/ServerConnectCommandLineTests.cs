@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Octono.Xrm.ConsoleTaskRunner;
+using Octono.Xrm.Tasks;
 using xrm;
 
-namespace Xrm.Tests
+namespace Octono.Xrm.Tests
 {
     [TestClass]
     public class ServerConnectCommandLineTests

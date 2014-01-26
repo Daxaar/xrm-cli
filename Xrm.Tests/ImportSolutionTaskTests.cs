@@ -6,9 +6,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Crm.Sdk.Messages;
+using Octono.Xrm.ConsoleTaskRunner;
+using Octono.Xrm.Tasks;
 using xrm;
 
-namespace Xrm.Tests
+namespace Octono.Xrm.Tests
 {
     [TestClass]
     public class ImportSolutionTaskTests

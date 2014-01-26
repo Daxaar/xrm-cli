@@ -1,9 +1,8 @@
 ﻿using System;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
-using xrm;
 
-namespace Xrm
+namespace Octono.Xrm.Tasks
 {
     public class XrmTaskFactory : IXrmTaskFactory
     {
@@ -33,11 +32,11 @@ namespace Xrm
                 case "exit":
                 case "close":
                     {
-                        return new ExitTask(new ConsoleLogger());
+                        return new ExitTask(_logger);
                     }
                 case "connect":
                     {
-                        return new ConnectTask(_service, new ConsoleLogger());
+                        return new ConnectTask(_service, _logger);
                     }
                 default:
                     throw new InvalidOperationException(string.Format("Unknown command {0}", args[0]));

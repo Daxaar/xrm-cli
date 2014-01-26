@@ -8,9 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Octono.Xrm.Tasks;
 using xrm;
 
-namespace Xrm.Tests
+namespace Octono.Xrm.Tests
 {
     [TestClass]
     public class ImportSolutionCommandLineTests

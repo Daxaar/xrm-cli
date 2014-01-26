@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Xrm
+namespace Octono.Xrm.Tasks
 {
     /// <summary>
     /// Testable File Access

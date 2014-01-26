@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Xrm
+namespace Octono.Xrm.Tasks
 {
     public class SystemFileWriter : IFileWriter
     {

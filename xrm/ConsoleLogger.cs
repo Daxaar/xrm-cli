@@ -1,7 +1,7 @@
 ﻿using System;
-using Xrm;
+using Octono.Xrm.Tasks;
 
-namespace xrm
+namespace Octono.Xrm.ConsoleTaskRunner
 {
     public class ConsoleLogger : ILog
     {

@@ -1,4 +1,4 @@
-﻿namespace Xrm
+﻿namespace Octono.Xrm.Tasks
 {
     public interface IXrmTaskFactory
     {

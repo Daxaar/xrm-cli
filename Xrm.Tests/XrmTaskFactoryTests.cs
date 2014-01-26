@@ -1,13 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xrm.Sdk;
 using Moq;
-using xrm;
+using Octono.Xrm.ConsoleTaskRunner;
+using Octono.Xrm.Tasks;
 
-namespace Xrm.Tests
+namespace Octono.Xrm.Tests
 {
     [TestClass]
     public class XrmTaskFactoryTests

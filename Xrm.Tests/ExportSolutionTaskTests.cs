@@ -3,9 +3,11 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Moq;
+using Octono.Xrm.ConsoleTaskRunner;
+using Octono.Xrm.Tasks;
 using xrm;
 
-namespace Xrm.Tests
+namespace Octono.Xrm.Tests
 {
     [TestClass]
     public class ExportSolutionTaskTests

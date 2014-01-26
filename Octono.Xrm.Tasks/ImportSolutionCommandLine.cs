@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Xrm
+namespace Octono.Xrm.Tasks
 {
     public class ImportSolutionCommandLine
     {

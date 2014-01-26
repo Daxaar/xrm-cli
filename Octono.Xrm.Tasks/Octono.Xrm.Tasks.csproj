@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D0AA941B-87F9-48FF-B15E-E14C225F75CA}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{60207963-97C9-4948-9FA7-050BD7D35D7D}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Octono.Xrm.ConsoleTaskRunner</RootNamespace>
-    <AssemblyName>Xrm</AssemblyName>
+    <RootNamespace>Octono.Xrm.Tasks</RootNamespace>
+    <AssemblyName>Octono.Xrm.Tasks</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,10 +32,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft Dynamics CRM\Server\bin\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <HintPath>..\xrm\bin\Debug\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft Dynamics CRM\Server\bin\Microsoft.Xrm.Sdk.dll</HintPath>
+      <HintPath>..\xrm\bin\Debug\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,18 +48,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleLogger.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ExportSolutionCommandLine.cs" />
+    <Compile Include="ExportSolutionTask.cs" />
+    <Compile Include="IFileReader.cs" />
+    <Compile Include="IFileWriter.cs" />
+    <Compile Include="ILog.cs" />
+    <Compile Include="ImportSolutionCommandLine.cs" />
+    <Compile Include="ImportSolutionTask.cs" />
+    <Compile Include="IXrmCommandLine.cs" />
+    <Compile Include="IXrmTask.cs" />
+    <Compile Include="IXrmTaskFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Octono.Xrm.Tasks\Octono.Xrm.Tasks.csproj">
-      <Project>{60207963-97c9-4948-9fa7-050bd7d35d7d}</Project>
-      <Name>Octono.Xrm.Tasks</Name>
-    </ProjectReference>
+    <Compile Include="ServerConnection.cs" />
+    <Compile Include="SystemFileReader.cs" />
+    <Compile Include="SystemFileWriter.cs" />
+    <Compile Include="XrmTaskFactory.cs" />
+    <Compile Include="XrmTaskRunner.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

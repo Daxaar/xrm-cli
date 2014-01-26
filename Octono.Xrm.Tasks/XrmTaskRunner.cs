@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using xrm;
 
-namespace Xrm
+namespace Octono.Xrm.Tasks
 {
     public class XrmTaskRunner
     {
@@ -18,7 +17,7 @@ namespace Xrm
         {
             try
             {
-                using (var connection = new ServerConnection(args.ToList(),new ConsoleLogger()))
+                using (var connection = new ServerConnection(args.ToList(),_logger))
                 {
                     var taskFactory = new XrmTaskFactory(new SystemFileReader(), connection.CreateOrgService(), _logger);
                     IXrmTask task = taskFactory.CreateTask(args);

@@ -3,7 +3,7 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 
-namespace Xrm
+namespace Octono.Xrm.Tasks
 {
     public class ImportSolutionTask : IXrmTask
     {

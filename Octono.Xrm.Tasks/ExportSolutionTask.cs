@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 
-namespace Xrm
+namespace Octono.Xrm.Tasks
 {
     public class ExportSolutionTask : IXrmTask
     {
