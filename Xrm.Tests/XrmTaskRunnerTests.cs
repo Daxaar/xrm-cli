@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using xrm;
 
