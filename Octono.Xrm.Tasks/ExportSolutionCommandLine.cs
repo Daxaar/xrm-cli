@@ -21,6 +21,8 @@ namespace Octono.Xrm.Tasks
 
         public bool ShowHelp { get { return _args.Contains("--help"); } }
 
+        public bool Managed { get { return _args.Contains("-m"); } }
+
         public string BuildExportPath(string solutionName)
         {
             string path = _args.FirstOrDefault(x => x.Contains("out:") || x.Contains("output:") || x.Contains("to:"));

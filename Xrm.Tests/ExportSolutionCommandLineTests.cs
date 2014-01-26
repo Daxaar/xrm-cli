@@ -10,6 +10,14 @@ namespace Octono.Xrm.Tests
     public class ExportSolutionCommandLineTests
     {
         [TestMethod]
+        public void SetsManagedPropertyTrueWhenArgumentIncluded()
+        {
+            const string managedArg = "-m";
+            var command = new ExportSolutionCommandLine(new[]{"export","solution1",managedArg});
+            Assert.IsTrue(command.Managed);
+        }
+
+        [TestMethod]
         public void CanReadCommaSeparatedSolutionFilesArgument()
         {
             var command = new ExportSolutionCommandLine(new[] {"export","solution1,solution2"});

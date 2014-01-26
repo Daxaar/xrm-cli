@@ -32,7 +32,9 @@ namespace Octono.Xrm.Tasks
 
                 var response = (ExportSolutionResponse)_service.Execute(new ExportSolutionRequest()
                 {
-                    SolutionName = solution
+                    SolutionName = solution,
+                    Managed = _command.Managed
+                    
                 });
 
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
@@ -52,7 +54,6 @@ namespace Octono.Xrm.Tasks
                 _log.Write("\tExports listed solutions in the Exports folder");
                 _log.Write("Switches");
                 _log.Write("-m Managed");
-                _log.Write("-p Publish before export");
                 return true;
             }
             return false;
