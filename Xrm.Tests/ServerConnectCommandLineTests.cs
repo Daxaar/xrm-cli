@@ -2,7 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Octono.Xrm.ConsoleTaskRunner;
 using Octono.Xrm.Tasks;
-using xrm;
 
 namespace Octono.Xrm.Tests
 {

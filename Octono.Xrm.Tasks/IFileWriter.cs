@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Octono.Xrm.Tasks
+﻿namespace Octono.Xrm.Tasks
 {
     public interface IFileWriter
     {

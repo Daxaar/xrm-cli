@@ -55,7 +55,6 @@
     <Compile Include="ILog.cs" />
     <Compile Include="ImportSolutionCommandLine.cs" />
     <Compile Include="ImportSolutionTask.cs" />
-    <Compile Include="IXrmCommandLine.cs" />
     <Compile Include="IXrmTask.cs" />
     <Compile Include="IXrmTaskFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

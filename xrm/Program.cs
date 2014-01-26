@@ -1,9 +1,6 @@
-﻿
+﻿using Octono.Xrm.Tasks;
 
-using Octono.Xrm.ConsoleTaskRunner;
-using Octono.Xrm.Tasks;
-
-namespace xrm
+namespace Octono.Xrm.ConsoleTaskRunner
 {
     internal class Program
     {

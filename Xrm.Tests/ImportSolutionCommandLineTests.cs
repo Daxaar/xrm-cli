@@ -2,14 +2,10 @@
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Octono.Xrm.Tasks;
-using xrm;
 
 namespace Octono.Xrm.Tests
 {

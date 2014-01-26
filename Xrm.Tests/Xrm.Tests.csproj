@@ -68,7 +68,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ServerConnectCommandLineTests.cs" />
-    <Compile Include="ConnectTaskTests.cs" />
     <Compile Include="ExportSolutionCommandLineTests.cs" />
     <Compile Include="ExportSolutionTaskTests.cs" />
     <Compile Include="ImportSolutionCommandLineTests.cs" />
