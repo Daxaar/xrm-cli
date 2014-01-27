@@ -38,6 +38,10 @@ namespace Octono.Xrm.Tasks
                     {
                         return new ConnectTask(_service, _logger);
                     }
+                case "publish" :
+                    {
+                        return new PublishSolutionTask(_service,_logger);
+                    }
                 default:
                     throw new InvalidOperationException(string.Format("Unknown command {0}", args[0]));
             }

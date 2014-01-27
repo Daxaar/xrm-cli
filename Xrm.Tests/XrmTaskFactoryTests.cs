@@ -44,5 +44,13 @@ namespace Octono.Xrm.Tests
             Assert.IsNotNull(factory);
         }
 
+        [TestMethod]
+        public void WhenCommandIsPublish_ReturnsPublishSolutionTask()
+        {
+            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object, new ConsoleLogger());
+            IXrmTask task = factory.CreateTask(new[] { "publish" });
+            Assert.IsInstanceOfType(task, typeof(PublishSolutionTask)); 
+        }
+
     }
 }
