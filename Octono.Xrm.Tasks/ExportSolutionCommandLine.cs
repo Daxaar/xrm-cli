@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Xrm.Sdk.Client;
 
 namespace Octono.Xrm.Tasks
 {
@@ -28,7 +29,7 @@ namespace Octono.Xrm.Tasks
             get { return _args.Contains("-i"); }
         }
 
-        public string BuildExportPath(string solutionName)
+        public string BuildExportPath(string solutionName, string version = "")
         {
             string path = _args.FirstOrDefault(x => x.Contains("out:") || x.Contains("output:") || x.Contains("to:"));
 
@@ -42,16 +43,13 @@ namespace Octono.Xrm.Tasks
                 return _args[2];
             }
 
-            if (string.IsNullOrEmpty(path))
+            path = string.IsNullOrEmpty(path) ? @"Export" : path.Substring(path.IndexOf(':')+1);
+
+            if (version != "")
             {
-                path = @"Export";
+                solutionName += "-";
             }
-            else
-            {
-                path = path.Substring(path.IndexOf(':')+1);
-            }
- 
-            return Path.Combine(path, solutionName + ".zip");
+            return Path.Combine(path, solutionName + version.Replace(".","-") + ".zip");
         }
     }
 }

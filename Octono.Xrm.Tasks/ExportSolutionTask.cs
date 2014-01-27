@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
 using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
@@ -27,7 +29,8 @@ namespace Octono.Xrm.Tasks
 
             foreach (var solution in _command.SolutionNames)
             {
-                String path = _command.BuildExportPath(solution);
+                string version = GetSolutionVersionNumber(solution);
+                String path = _command.BuildExportPath(solution,version);
 
                 if (_command.IncrementVersionBeforeExport)
                 {
@@ -63,6 +66,23 @@ namespace Octono.Xrm.Tasks
                 return true;
             }
             return false;
+        }
+
+        private string GetSolutionVersionNumber(string solution)
+        {
+            using (var context = new OrganizationServiceContext(_service))
+            {
+                try
+                {
+                    return context.CreateQuery("solution")
+                                  .First(x => x.GetAttributeValue<string>("uniquename") == solution)
+                                  .GetAttributeValue<string>("version");
+                }
+                catch (Exception)
+                {
+                    return "";
+                }
+            }
         }
     }
 }
