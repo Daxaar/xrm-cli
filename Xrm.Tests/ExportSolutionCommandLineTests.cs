@@ -10,6 +10,14 @@ namespace Octono.Xrm.Tests
     public class ExportSolutionCommandLineTests
     {
         [TestMethod]
+        public void SetsIncrementVersionBeforeExportTrueWhenArgumentIncluded()
+        {
+            const string incrementArgument = "-i";
+            var command = new ExportSolutionCommandLine(new[] { "export", "solution1", incrementArgument });
+            Assert.IsTrue(command.IncrementVersionBeforeExport);
+        }
+
+        [TestMethod]
         public void SetsManagedPropertyTrueWhenArgumentIncluded()
         {
             const string managedArg = "-m";

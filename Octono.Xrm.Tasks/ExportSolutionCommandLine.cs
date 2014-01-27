@@ -23,6 +23,11 @@ namespace Octono.Xrm.Tasks
 
         public bool Managed { get { return _args.Contains("-m"); } }
 
+        public bool IncrementVersionBeforeExport
+        {
+            get { return _args.Contains("-i"); }
+        }
+
         public string BuildExportPath(string solutionName)
         {
             string path = _args.FirstOrDefault(x => x.Contains("out:") || x.Contains("output:") || x.Contains("to:"));

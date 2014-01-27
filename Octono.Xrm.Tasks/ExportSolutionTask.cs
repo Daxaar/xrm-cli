@@ -28,8 +28,14 @@ namespace Octono.Xrm.Tasks
             foreach (var solution in _command.SolutionNames)
             {
                 String path = _command.BuildExportPath(solution);
-                _log.Write(string.Format("Exporting {0} to {1}", solution, path));
 
+                if (_command.IncrementVersionBeforeExport)
+                {
+                    var incrementVersionTask = new IncrementSolutionVersionTask(solution,_service, _log);
+                    incrementVersionTask.Execute();
+                }
+
+                _log.Write(string.Format("Exporting {0} to {1}", solution, path));
                 var response = (ExportSolutionResponse)_service.Execute(new ExportSolutionRequest()
                 {
                     SolutionName = solution,

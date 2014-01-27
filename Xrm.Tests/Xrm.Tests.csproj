@@ -73,6 +73,7 @@
     <Compile Include="ImportSolutionCommandLineTests.cs" />
     <Compile Include="ImportSolutionTaskTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SolutionVersionFormatterTests.cs" />
     <Compile Include="XrmTaskFactoryTests.cs" />
     <Compile Include="XrmTaskRunnerTests.cs" />
   </ItemGroup>
