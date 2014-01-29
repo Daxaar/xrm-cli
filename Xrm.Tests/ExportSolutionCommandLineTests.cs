@@ -88,6 +88,5 @@ namespace Octono.Xrm.Tests
             string path = command.BuildExportPath("solution", "0.0.0.1");
             Assert.AreEqual("Export\\solution-0-0-0-1.zip",path);
         }
-
     }
 }
