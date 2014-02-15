@@ -17,7 +17,7 @@ namespace Octono.Xrm.Tasks
         {
             try
             {
-                using (var connection = new ServerConnection(args.ToList(),_logger))
+                using (var connection = new ServerConnection(args,_logger,new SystemConfigurationManager()))
                 {
                     var taskFactory = new XrmTaskFactory(new SystemFileReader(), connection.CreateOrgService(), _logger);
                     IXrmTask task = taskFactory.CreateTask(args);

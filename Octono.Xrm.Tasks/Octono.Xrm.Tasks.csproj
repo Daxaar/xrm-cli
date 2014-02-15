@@ -38,6 +38,7 @@
       <HintPath>..\xrm\bin\Debug\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -53,11 +54,13 @@
     <Compile Include="ExportSolutionCommandLine.cs" />
     <Compile Include="ExportSolutionTask.cs" />
     <Compile Include="IncrementSolutionVersionTask.cs" />
+    <Compile Include="IO\IConfigurationManager.cs" />
     <Compile Include="IO\IFileReader.cs" />
     <Compile Include="IO\IFileWriter.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="ImportSolutionCommandLine.cs" />
     <Compile Include="ImportSolutionTask.cs" />
+    <Compile Include="IO\SystemConfigurationManager.cs" />
     <Compile Include="IXrmTask.cs" />
     <Compile Include="IXrmTaskFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
