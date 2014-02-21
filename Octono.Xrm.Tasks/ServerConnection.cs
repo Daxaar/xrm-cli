@@ -119,9 +119,11 @@ namespace Octono.Xrm.Tasks
             var uri = new Uri(string.Format("{0}://{1}:{2}/{3}/XRMServices/2011/Organization.svc", Protocol, ServerName, Port, Organisation));
             _logger.Write("Connecting to " + uri.AbsoluteUri);
             
-            _proxy = new OrganizationServiceProxy(uri, null, creds, null);
-            _proxy.ServiceConfiguration.CurrentServiceEndpoint.Binding.OpenTimeout = new TimeSpan(0, 0, 5, 0);
-            _proxy.ServiceConfiguration.CurrentServiceEndpoint.Binding.ReceiveTimeout = new TimeSpan(0, 0, 5, 0);
+            _proxy = new OrganizationServiceProxy(uri, null, creds, null) {Timeout = new TimeSpan(0, 0, 10, 0)};
+            _proxy.ServiceConfiguration.CurrentServiceEndpoint.Binding.OpenTimeout = new TimeSpan(0, 0, 10, 0);
+            _proxy.ServiceConfiguration.CurrentServiceEndpoint.Binding.ReceiveTimeout = new TimeSpan(0, 0, 10, 0);
+            _proxy.ServiceConfiguration.CurrentServiceEndpoint.Binding.CloseTimeout = new TimeSpan(0, 0, 10, 0);
+            _proxy.ServiceConfiguration.CurrentServiceEndpoint.Binding.SendTimeout = new TimeSpan(0, 0, 10, 0);
             _proxy.EnableProxyTypes();
             
             return _proxy;
