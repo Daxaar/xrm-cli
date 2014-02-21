@@ -60,5 +60,11 @@ namespace Octono.Xrm.Tests
             
             service.Verify(x=>x.Execute(It.IsAny<OrganizationRequest>()),Times.Never);
         }
+
+        [TestMethod]
+        public void ImportsOnlyTheFileSpecifiedWhenReadingFromExportsFolder()
+        {
+            //TODO:  Noticed a bug whilst using tool that started reading all solutions rather than just the one specified
+        }
     }
 }

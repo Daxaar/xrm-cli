@@ -7,7 +7,8 @@ namespace Octono.Xrm.ConsoleTaskRunner
     {
         public void Write(string message)
         {
-            Console.WriteLine("\t" + message);
+            var time = DateTime.Now.TimeOfDay;
+            Console.WriteLine(string.Format("{0}:{1}:{2}", time.Hours, time.Minutes, time.Seconds) + " - " + message);
         }
     }
 }
