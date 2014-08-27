@@ -88,5 +88,20 @@ namespace Octono.Xrm.Tests
             string path = command.BuildExportPath("solution", "0.0.0.1");
             Assert.AreEqual("Export\\solution-0-0-0-1.zip",path);
         }
+
+        [TestMethod]
+        public void AddsManagedSuffixWhenExportedSolutionIsManaged()
+        {
+            var command = new ExportSolutionCommandLine(new[] { "export", "solution","-m" });
+            string path = command.BuildExportPath("solution", "0.0.0.1");
+            Assert.AreEqual("Export\\solution-0-0-0-1_managed.zip", path);
+        }        
+        [TestMethod]
+        public void DoesNotAddManagedSuffixWhenExportedSolutionIsUnmanaged()
+        {
+            var command = new ExportSolutionCommandLine(new[] { "export", "solution" });
+            string path = command.BuildExportPath("solution", "0.0.0.1");
+            Assert.AreEqual("Export\\solution-0-0-0-1.zip", path);
+        }
     }
 }

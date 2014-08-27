@@ -49,7 +49,7 @@ namespace Octono.Xrm.Tasks
             {
                 solutionName += "-";
             }
-            return Path.Combine(path, solutionName + version.Replace(".","-") + ".zip");
+            return Path.Combine(path, solutionName + version.Replace(".","-") + (Managed ? "_managed.zip" : ".zip"));
         }
     }
 }
