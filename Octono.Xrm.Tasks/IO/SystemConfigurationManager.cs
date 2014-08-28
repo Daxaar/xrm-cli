@@ -32,12 +32,13 @@ namespace Octono.Xrm.Tasks.IO
 
         public void Save()
         {
-            _config.Save(ConfigurationSaveMode.Full);
+            _config.Save();
         }
 
         public void Add(string key, string value)
         {
             AppSettingsSection section = _config.AppSettings;
+            section.Settings.Remove(key);
             section.Settings.Add(key,value);
         }
     }

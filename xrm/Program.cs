@@ -9,10 +9,8 @@ namespace Octono.Xrm.ConsoleTaskRunner
             //args = new[]
             //    {
             //        "export",
-            //        "IQDevelopment",
-            //        "o:prosper",
-            //        "s:dc1",
-            //        "p:5555",
+            //        "Solution1,Solution2",
+            //        "o:XRM2DEV",
             //        "--save"
             //    };
 
