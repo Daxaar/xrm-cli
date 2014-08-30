@@ -17,3 +17,6 @@ Extensibility:
 
 Add a new IXrmTask taking a CommandLine instance on it's ctor.  This should provide the IXrmTask implementation with all of the information it needs off the command line.
 
+Bucket List:
+
+- Add new task to set custom import path
