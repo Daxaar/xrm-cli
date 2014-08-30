@@ -1,3 +1,3 @@
-[ ] - Display list of import files from Import folder when no parameter provided.
-[ ] - Add new task to set custom import path.
-[ ] - Add MEF support to prevent the need for the XrmTaskFactory.
+- [ ] Display list of import files from Import folder when no parameter provided.
+- [ ] Add new task to set custom import path.
+- [ ] Add MEF support to prevent the need for the XrmTaskFactory.
