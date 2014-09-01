@@ -50,12 +50,16 @@ namespace Octono.Xrm.Tests
         public void FindsFileInInSameDirectoryAsExecutableWhenOnlyFilenameProvided()
         {
             string defaultPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filename.zip");
-            var fileReader = new Mock<IFileReader>();
+            var fileReader  = new Mock<IFileReader>();
+            var context     = new Mock<IXrmTaskContext>();
+            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
+            context.Setup(x => x.Service).Returns(new Mock<IOrganizationService>().Object);
+
             fileReader.Setup(x => x.FileExists(defaultPath)).Returns(true);
             var commandline = new ImportSolutionCommandLine(new string[] { "import", "filename.zip" }, fileReader.Object);
-            var task = new ImportSolutionTask(commandline, new Mock<IOrganizationService>().Object, new Mock<ILog>().Object);
+            var task = new ImportSolutionTask(commandline);
 
-            task.Execute();
+            task.Execute(context.Object);
                 
             fileReader.Verify(x => x.ReadAllBytes(It.IsAny<string>()));
             
@@ -65,11 +69,15 @@ namespace Octono.Xrm.Tests
         {
             string defaultPath  = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Import","filename.zip") ;
             var fileReader      = new Mock<IFileReader>();
+            var context = new Mock<IXrmTaskContext>();
+            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
+            context.Setup(x => x.Service).Returns(new Mock<IOrganizationService>().Object);
+
             fileReader.Setup(x => x.FileExists(defaultPath)).Returns(true);
             var commandline = new ImportSolutionCommandLine(new[] { "import", "filename.zip" }, fileReader.Object);
-            var task = new ImportSolutionTask(commandline, new Mock<IOrganizationService>().Object,new Mock<ILog>().Object);
+            var task = new ImportSolutionTask(commandline);
 
-            task.Execute();
+            task.Execute(context.Object);
 
             fileReader.Verify(x=>x.ReadAllBytes(defaultPath));
         }
@@ -78,11 +86,16 @@ namespace Octono.Xrm.Tests
         public void AcceptsMultipleSolutionNamesOnCommandLine()
         {
             var reader = new Mock<IFileReader>();
+            var context = new Mock<IXrmTaskContext>();
+            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
+            var service = new Mock<IOrganizationService>();
+            
+            context.Setup(x => x.Service).Returns(service.Object);
+
             reader.SetReturnsDefault(true);
             var commandline = new ImportSolutionCommandLine(new[] {"import", "filename1,filename2"}, reader.Object);
-            var service = new Mock<IOrganizationService>();
-            var task = new ImportSolutionTask(commandline, service.Object, new Mock<ILog>().Object);
-            task.Execute();
+            var task = new ImportSolutionTask(commandline);
+            task.Execute(context.Object);
 
             service.Verify(x=>x.Execute(It.IsAny<ImportSolutionRequest>()),Times.Exactly(2));
 

@@ -5,20 +5,12 @@ namespace Octono.Xrm.Tasks
 {
     public class PublishSolutionTask : IXrmTask
     {
-        private readonly IOrganizationService _service;
-        private readonly ILog _logger;
-
-        public PublishSolutionTask(IOrganizationService service,ILog logger)
-        {
-            _service = service;
-            _logger = logger;
-        }
-
-        public void Execute()
+        public void Execute(IXrmTaskContext context)
         {   
-            _logger.Write("Publishing all changes");
-            _service.Execute(new PublishAllXmlRequest());
-            _logger.Write("Publish complete");
+            context.Log.Write("Publishing all changes");
+            context.Service.Execute(new PublishAllXmlRequest());
+            context.Log.Write("Publish complete");
         }
+        public bool RequiresServerConnection { get { return true; } }
     }
 }

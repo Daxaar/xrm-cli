@@ -12,34 +12,30 @@ namespace Octono.Xrm.Tasks
     {
         private readonly ExportSolutionCommandLine _command;
         private readonly IFileWriter _writer;
-        private readonly IOrganizationService _service;
-        private readonly ILog _log;
 
-        public ExportSolutionTask(ExportSolutionCommandLine command, IFileWriter writer, IOrganizationService service,ILog log)
+        public ExportSolutionTask(ExportSolutionCommandLine command, IFileWriter writer)
         {
             _command = command;
             _writer = writer;
-            _service = service;
-            _log = log;
         }
 
-        public void Execute()
+        public void Execute(IXrmTaskContext context)
         {
-            if (ShowHelp()) return;
+            if (ShowHelp(context.Log)) return;
 
             foreach (var solution in _command.SolutionNames)
             {
                 if (_command.IncrementVersionBeforeExport)
                 {
-                    var incrementVersionTask = new IncrementSolutionVersionTask(solution,_service, _log);
-                    incrementVersionTask.Execute();
+                    var incrementVersionTask = new IncrementSolutionVersionTask(solution);
+                    incrementVersionTask.Execute(context);
                 }
 
-                string version = GetSolutionVersionNumber(solution);
+                string version = GetSolutionVersionNumber(solution,context.Service);
                 String path = _command.BuildExportPath(solution, version);
 
-                _log.Write(string.Format("Exporting {0} to {1}", solution, path));
-                var response = (ExportSolutionResponse)_service.Execute(new ExportSolutionRequest()
+                context.Log.Write(string.Format("Exporting {0} to {1}", solution, path));
+                var response = (ExportSolutionResponse)context.Service.Execute(new ExportSolutionRequest()
                 {
                     SolutionName = solution,
                     Managed = _command.Managed
@@ -48,29 +44,30 @@ namespace Octono.Xrm.Tasks
 
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
                 _writer.Write(response.ExportSolutionFile,path );
-                _log.Write(string.Format("{0} exported successfully",solution));
+                context.Log.Write(string.Format("{0} exported successfully",solution));
             }
         }
+        public bool RequiresServerConnection { get { return true; } }
 
-        private bool ShowHelp()
+        private bool ShowHelp(ILog log)
         {
             if (_command.ShowHelp)
             {
-                _log.Write("Usage");
-                _log.Write(@"export solutionname x:\path\to\solutionname.zip");
-                _log.Write(@"export solutionname1,solutionname2 x:\path\to\exports\folder");
-                _log.Write(@"export solutionname1,solutionname2");
-                _log.Write("\tExports listed solutions in the Exports folder");
-                _log.Write("Switches");
-                _log.Write("-m Managed");
+                log.Write("Usage");
+                log.Write(@"export solutionname x:\path\to\solutionname.zip");
+                log.Write(@"export solutionname1,solutionname2 x:\path\to\exports\folder");
+                log.Write(@"export solutionname1,solutionname2");
+                log.Write("\tExports listed solutions in the Exports folder");
+                log.Write("Switches");
+                log.Write("-m Managed");
                 return true;
             }
             return false;
         }
 
-        private string GetSolutionVersionNumber(string solution)
+        private string GetSolutionVersionNumber(string solution, IOrganizationService service)
         {
-            using (var context = new OrganizationServiceContext(_service))
+            using (var context = new OrganizationServiceContext(service))
             {
                 try
                 {

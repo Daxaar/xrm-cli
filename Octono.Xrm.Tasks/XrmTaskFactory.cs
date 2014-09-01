@@ -7,14 +7,12 @@ namespace Octono.Xrm.Tasks
     public class XrmTaskFactory : IXrmTaskFactory
     {
         private readonly IFileReader _reader;
-        private readonly IOrganizationService _service;
-        private readonly ILog _logger;
+        private readonly IFileWriter _writer;
 
-        public XrmTaskFactory(IFileReader reader, IOrganizationService service,ILog logger)
+        public XrmTaskFactory(IFileReader reader,IFileWriter writer)
         {
             _reader = reader;
-            _service = service;
-            _logger = logger;
+            _writer = writer;
         }
 
         public IXrmTask CreateTask(string[] args)
@@ -23,24 +21,24 @@ namespace Octono.Xrm.Tasks
             {
                 case "import":
                     {
-                        return new ImportSolutionTask(new ImportSolutionCommandLine(args, _reader), _service, _logger);                        
+                        return new ImportSolutionTask(new ImportSolutionCommandLine(args, _reader));                        
                     }
                 case "export":
                     {
-                        return new ExportSolutionTask(new ExportSolutionCommandLine(args), new SystemFileWriter(),_service,_logger);
+                        return new ExportSolutionTask(new ExportSolutionCommandLine(args), _writer);
                     }
                 case "exit":
                 case "close":
                     {
-                        return new ExitTask(_logger);
+                        return new ExitTask();
                     }
                 case "connect":
                     {
-                        return new ConnectTask(_service, _logger);
+                        return new ConnectTask();
                     }
                 case "publish" :
                     {
-                        return new PublishSolutionTask(_service,_logger);
+                        return new PublishSolutionTask();
                     }
                 default:
                     throw new InvalidOperationException(string.Format("Unknown command {0}", args[0]));

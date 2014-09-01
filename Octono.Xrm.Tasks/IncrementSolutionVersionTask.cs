@@ -7,24 +7,20 @@ namespace Octono.Xrm.Tasks
     public class IncrementSolutionVersionTask : IXrmTask
     {
         private readonly string _solutionName;
-        private readonly IOrganizationService _service;
-        private readonly ILog _log;
 
-        public IncrementSolutionVersionTask(string solutionName, IOrganizationService service, ILog log)
+        public IncrementSolutionVersionTask(string solutionName)
         {
             _solutionName = solutionName;
-            _service = service;
-            _log = log;
         }
 
-        public void Execute()
+        public void Execute(IXrmTaskContext context)
         {
-            _log.Write(string.Format("Incrementing Version Number for solution {0}",_solutionName));
+            context.Log.Write(string.Format("Incrementing Version Number for solution {0}",_solutionName));
             string oldVersion, newVersion;
 
-            using (var context = new OrganizationServiceContext(_service))
+            using (var orgContext = new OrganizationServiceContext(context.Service))
             {
-                var solution = context.CreateQuery("solution")
+                var solution = orgContext.CreateQuery("solution")
                                       .First(s => s.GetAttributeValue<string>("uniquename") == _solutionName);
 
                 oldVersion = solution.GetAttributeValue<string>("version");
@@ -32,14 +28,16 @@ namespace Octono.Xrm.Tasks
                 var formatter = new SolutionVersionFormatter();
                 newVersion = formatter.Increment(oldVersion);
                 solution["version"] = newVersion;
-                context.UpdateObject(solution);
-                context.SaveChanges();
+                orgContext.UpdateObject(solution);
+                orgContext.SaveChanges();
             }
-            _log.Write(string.Format("Incremented Solution {0} from {1} to {2}",_solutionName,oldVersion,newVersion));
+            context.Log.Write(string.Format("Incremented Solution {0} from {1} to {2}",_solutionName,oldVersion,newVersion));
         }
+        public bool RequiresServerConnection { get { return true; } }
     }
     public class IncrementSolutionCommandLine
     {
         public string Solution { get; set; }
     }
+
 }

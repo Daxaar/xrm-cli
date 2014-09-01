@@ -8,23 +8,19 @@ namespace Octono.Xrm.Tasks
     public class ImportSolutionTask : IXrmTask
     {
         private readonly ImportSolutionCommandLine _command;
-        private readonly IOrganizationService _service;
-        private readonly ILog _log;
 
-        public ImportSolutionTask(ImportSolutionCommandLine command, IOrganizationService service, ILog log)
+        public ImportSolutionTask(ImportSolutionCommandLine command)
         {
             _command = command;
-            _service = service;
-            _log = log;
         }
 
-        public void Execute()
+        public void Execute(IXrmTaskContext context)
         {
-            if (ShowHelp()) return;
+            if (ShowHelp(context.Log)) return;
 
             foreach (var filePath in _command.GetSolutionFilePaths())
             {
-                _log.Write(string.Format("Importing {0}", filePath));
+                context.Log.Write(string.Format("Importing {0}", filePath));
                 Guid jobId = Guid.NewGuid();
                 var importRequest = new ImportSolutionRequest
                 {
@@ -32,32 +28,33 @@ namespace Octono.Xrm.Tasks
                     CustomizationFile = _command.ReadFile(filePath),
                     ImportJobId = jobId
                 };
-                _service.Execute(importRequest);
+                context.Service.Execute(importRequest);
                 
-                _log.Write(string.Format("Publishing {0}",filePath));
-                _service.Execute(new PublishAllXmlRequest());
+                context.Log.Write(string.Format("Publishing {0}",filePath));
+                context.Service.Execute(new PublishAllXmlRequest());
 
-                Entity job = _service.Retrieve("importjob", importRequest.ImportJobId, new ColumnSet(new[] { "data", "solutionname" }));
-                _log.Write("Solution imported successfully");
+                Entity job = context.Service.Retrieve("importjob", importRequest.ImportJobId, new ColumnSet(new[] { "data", "solutionname" }));
+                context.Log.Write("Solution imported successfully");
                 
             }
         }
+        public bool RequiresServerConnection { get { return true; } }
 
-        private bool ShowHelp()
+        private bool ShowHelp(ILog log)
         {
             if (_command.ShowHelp)
             {
                 //_log.Write("Usage\n");
-                _log.Write(@"import ");
-                _log.Write("\tWithout any args imports all solutions in the Imports folder");
-                _log.Write(@"import solutionname x:\path\to\solutionname.zip");
-                _log.Write(@"import solutionname1,solutionname2 x:\path\to\imports\folder");
-                _log.Write(@"import solutionname1,solutionname2");
-                _log.Write("\tImports listed solutions in the Imports folder");
-                _log.Write(@"import solutionname1,solutionname2 --exports");
-                _log.Write("\tImports listed solutions in the Exports folder");
-                _log.Write(@"import --exports");
-                _log.Write("\tImports all solutions in the Exports folder");
+                log.Write(@"import ");
+                log.Write("\tWithout any args imports all solutions in the Imports folder");
+                log.Write(@"import solutionname x:\path\to\solutionname.zip");
+                log.Write(@"import solutionname1,solutionname2 x:\path\to\imports\folder");
+                log.Write(@"import solutionname1,solutionname2");
+                log.Write("\tImports listed solutions in the Imports folder");
+                log.Write(@"import solutionname1,solutionname2 --exports");
+                log.Write("\tImports listed solutions in the Exports folder");
+                log.Write(@"import --exports");
+                log.Write("\tImports all solutions in the Exports folder");
                 return true;
             }
             return false;

@@ -14,7 +14,7 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void WhenCommandIsImport_ReturnsImportSolutionTask()
         {
-            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object,new ConsoleLogger());
+            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object);
             IXrmTask task = factory.CreateTask(new[] { "import", "filename" });
             Assert.IsInstanceOfType(task, typeof(ImportSolutionTask));
         }
@@ -23,7 +23,7 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void WhenCommandIsExport_ReturnsExportSolutionTask()
         {
-            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object,new ConsoleLogger());
+            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object);
             IXrmTask task = factory.CreateTask(new[] { "export", "filename" });
             Assert.IsInstanceOfType(task, typeof(ExportSolutionTask));            
         }
@@ -32,14 +32,13 @@ namespace Octono.Xrm.Tests
         [ExpectedException(typeof(InvalidOperationException))]
         public void WhenValidCommandIsNotSpecifiedThrowsException()
         {
-            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object, new ConsoleLogger());
+            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object);
             factory.CreateTask(new[] { "invalidcommand" });
-        }
+        }   
         [TestMethod]
         public void AcceptsOrganizationServiceInConstructor()
         {
-            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object,
-                                             new Mock<IOrganizationService>().Object, new ConsoleLogger());
+            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object);
 
             Assert.IsNotNull(factory);
         }
@@ -47,7 +46,7 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void WhenCommandIsPublish_ReturnsPublishSolutionTask()
         {
-            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IOrganizationService>().Object, new ConsoleLogger());
+            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object);
             IXrmTask task = factory.CreateTask(new[] { "publish" });
             Assert.IsInstanceOfType(task, typeof(PublishSolutionTask)); 
         }

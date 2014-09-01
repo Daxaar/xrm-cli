@@ -18,10 +18,12 @@ namespace Octono.Xrm.Tests
             var command = new ExportSolutionCommandLine(new[] {"export", "sol1,sol2"});
             var writer = new Mock<IFileWriter>();
             var service = new Mock<IOrganizationService>();
+            var context = new Mock<IXrmTaskContext>();
+            context.Setup(x => x.Service).Returns(service.Object);
             service.Setup(x => x.Execute(It.IsAny<OrganizationRequest>())).Returns(new ExportSolutionResponse());
-            var task = new ExportSolutionTask(command, writer.Object, service.Object,new ConsoleLogger());
+            var task = new ExportSolutionTask(command, writer.Object);
             writer.Setup(x => x.Write(It.IsAny<byte[]>(), It.IsAny<string>())).Callback<byte[], string>((x, y) => Console.WriteLine(y));
-            task.Execute();
+            task.Execute(context.Object);
             writer.Verify(x=>x.Write(It.IsAny<byte[]>(),It.IsAny<string>()),Times.Exactly(2));
         }
     }

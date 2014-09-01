@@ -2,16 +2,12 @@
 {
     public class ExitTask : IXrmTask
     {
-        private readonly ILog _logger;
 
-        public ExitTask(ILog logger)
+        public void Execute(IXrmTaskContext context)
         {
-            _logger = logger;
+            context.Log.Write("Exiting...");
         }
 
-        public void Execute()
-        {
-            _logger.Write("Exiting...");
-        }
+        public bool RequiresServerConnection { get { return false; }}
     }
 }
