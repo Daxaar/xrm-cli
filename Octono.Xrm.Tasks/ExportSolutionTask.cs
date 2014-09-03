@@ -42,7 +42,6 @@ namespace Octono.Xrm.Tasks
                     
                 });
 
-                Directory.CreateDirectory(Path.GetDirectoryName(path));
                 _writer.Write(response.ExportSolutionFile,path );
                 context.Log.Write(string.Format("{0} exported successfully",solution));
             }
