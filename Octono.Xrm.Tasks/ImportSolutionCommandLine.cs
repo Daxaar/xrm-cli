@@ -73,5 +73,10 @@ namespace Octono.Xrm.Tasks
         public bool ActivateProcesses { get { return !_args.Contains("--noactivate"); } }
 
         public bool ShowHelp { get { return _args.Contains("--help"); } }
+
+        public bool OverwriteUmanaged
+        {
+            get { return _args.Contains("--overwrite"); }
+        }
     }
 }

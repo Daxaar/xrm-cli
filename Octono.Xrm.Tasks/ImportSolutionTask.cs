@@ -26,7 +26,8 @@ namespace Octono.Xrm.Tasks
                 {
                     PublishWorkflows = _command.Publish,
                     CustomizationFile = _command.ReadFile(filePath),
-                    ImportJobId = jobId
+                    ImportJobId = jobId,
+                    OverwriteUnmanagedCustomizations = _command.OverwriteUmanaged
                 };
                 context.Service.Execute(importRequest);
                 

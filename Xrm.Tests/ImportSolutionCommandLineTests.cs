@@ -142,5 +142,12 @@ namespace Octono.Xrm.Tests
             Assert.IsTrue(command.ShowHelp);
         }
 
+        [TestMethod]
+        public void SetsOverwriteUnmanagedTrueWhenArgumentSpecified()
+        {
+            var command = new ImportSolutionCommandLine(new[] { "import", "--overwrite" }, new Mock<IFileReader>().Object);
+            Assert.IsTrue(command.OverwriteUmanaged);
+        }
+
     }
 }
