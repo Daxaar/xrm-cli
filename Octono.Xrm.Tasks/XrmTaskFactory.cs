@@ -17,11 +17,16 @@ namespace Octono.Xrm.Tasks
 
         public IXrmTask CreateTask(string[] args)
         {
-            switch (args[0].ToLower().Trim())
+            switch
+                (args[0].ToLower().Trim())
             {
+                case "deletesolution":
+                    {
+                        return new DeleteSolutionTask(new DeleteSolutionCommandLine(args));                            
+                    }
                 case "import":
                     {
-                        return new ImportSolutionTask(new ImportSolutionCommandLine(args, _reader));                        
+                        return new ImportSolutionTask(new ImportSolutionCommandLine(args, _reader));
                     }
                 case "export":
                     {
@@ -36,7 +41,7 @@ namespace Octono.Xrm.Tasks
                     {
                         return new ConnectTask();
                     }
-                case "publish" :
+                case "publish":
                     {
                         return new PublishSolutionTask();
                     }

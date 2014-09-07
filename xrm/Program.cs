@@ -8,10 +8,9 @@ namespace Octono.Xrm.ConsoleTaskRunner
         {
             //args = new[]
             //    {
-            //        "export",
-            //        "Solution1,Solution2",
-            //        "o:XRM2DEV",
-            //        "--save"
+            //        "deletesolution",
+            //        "BaseSolution",
+            //        "o:xrm4dev"
             //    };
 
             var runner = new XrmTaskRunner(new ConsoleLogger());

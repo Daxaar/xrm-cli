@@ -61,6 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectTask.cs" />
+    <Compile Include="DeleteSolutionCommandLine.cs" />
+    <Compile Include="DeleteSolutionTask.cs" />
     <Compile Include="ExitTask.cs" />
     <Compile Include="ExportSolutionCommandLine.cs" />
     <Compile Include="ExportSolutionTask.cs" />
