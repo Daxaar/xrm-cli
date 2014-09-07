@@ -32,8 +32,10 @@ namespace Octono.Xrm.Tasks
                 context.Service.Execute(importRequest);
                 
                 context.Log.Write(string.Format("Publishing {0}",filePath));
-                context.Service.Execute(new PublishAllXmlRequest());
-
+                if (_command.Publish)
+                {
+                    context.Service.Execute(new PublishAllXmlRequest());
+                }
                 Entity job = context.Service.Retrieve("importjob", importRequest.ImportJobId, new ColumnSet(new[] { "data", "solutionname" }));
                 context.Log.Write("Solution imported successfully");
                 
