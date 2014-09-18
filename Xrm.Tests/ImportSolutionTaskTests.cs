@@ -20,6 +20,7 @@ namespace Octono.Xrm.Tests
             var service = new Mock<IOrganizationService>();
             
             context.Setup(x => x.Service).Returns(service.Object);
+            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
 
             reader.Setup(x => x.GetSolutionsInExportFolder()).Returns(new[] { "solution1.zip", "solution2.zip" });
             reader.Setup(x => x.FileExists("solution1.zip")).Returns(true);
@@ -41,6 +42,7 @@ namespace Octono.Xrm.Tests
             var reader = new Mock<IFileReader>();
             var context = new Mock<IXrmTaskContext>();
             context.Setup(x => x.Service).Returns(service.Object);
+            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
 
             const string filePath = @"c:\path\to\file.zip";
 
@@ -62,7 +64,7 @@ namespace Octono.Xrm.Tests
             var service = new Mock<IOrganizationService>();
             var context = new Mock<IXrmTaskContext>();
             context.Setup(x => x.Service).Returns(service.Object);
-
+            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
             var commandLine = new ImportSolutionCommandLine(new[] {"import", "--help"}, new Mock<IFileReader>().Object);
             var task        = new ImportSolutionTask(commandLine);
             

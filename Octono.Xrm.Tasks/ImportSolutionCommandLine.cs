@@ -76,7 +76,7 @@ namespace Octono.Xrm.Tasks
 
         public bool OverwriteUmanaged
         {
-            get { return _args.Contains("--overwrite"); }
+            get { return _args.Contains("--overwrite") || _args.Contains("-o") || _args.Contains("--o"); }
         }
     }
 }
