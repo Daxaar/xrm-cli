@@ -58,8 +58,7 @@ namespace Octono.Xrm.Tests
             var settings = new NameValueCollection();
             config.SetupGet(x => x.AppSettings).Returns(settings);
 
-            var conn = new ServerConnection(new[] { "taskname", "s:servername", "o:orgname", "p:5555", "protocol:http", "--save" },
-                                 new ConsoleLogger(), config.Object);
+            new ServerConnection(new[] { "taskname", "s:servername", "o:orgname", "p:5555", "protocol:http", "--save" },new ConsoleLogger(), config.Object);
             
             config.Verify(x=>x.Add("server","servername"));
             config.Verify(x=>x.Add("org","orgname"));

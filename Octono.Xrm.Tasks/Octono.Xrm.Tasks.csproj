@@ -63,6 +63,7 @@
     <Compile Include="ConnectTask.cs" />
     <Compile Include="DeleteSolutionCommandLine.cs" />
     <Compile Include="DeleteSolutionTask.cs" />
+    <Compile Include="DeployWebResourceTask.cs" />
     <Compile Include="ExitTask.cs" />
     <Compile Include="ExportSolutionCommandLine.cs" />
     <Compile Include="ExportSolutionTask.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="IO\SystemFileReader.cs" />
     <Compile Include="IO\SystemFileWriter.cs" />
     <Compile Include="SolutionVersionFormatter.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="XrmTaskFactory.cs" />
     <Compile Include="XrmTaskRunner.cs" />
   </ItemGroup>

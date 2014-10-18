@@ -12,6 +12,14 @@ namespace Octono.Xrm.Tests
     public class XrmTaskFactoryTests
     {
         [TestMethod]
+        public void WhenCommandIsDeployReturnsDeployWebResourceTask()
+        {
+            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object);
+            IXrmTask task = factory.CreateTask(new[] { "deploy", "filename.js" });
+            Assert.IsInstanceOfType(task, typeof(DeployWebResourceTask));            
+        }
+
+        [TestMethod]
         public void WhenCommandIsImport_ReturnsImportSolutionTask()
         {
             var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object);

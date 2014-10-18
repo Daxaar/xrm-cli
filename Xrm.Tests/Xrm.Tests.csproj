@@ -79,6 +79,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DeployWebResourceTaskTests.cs" />
     <Compile Include="ServerConnectionTests.cs" />
     <Compile Include="ExportSolutionCommandLineTests.cs" />
     <Compile Include="ExportSolutionTaskTests.cs" />

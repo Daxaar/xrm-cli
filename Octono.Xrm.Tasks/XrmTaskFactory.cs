@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using Microsoft.Xrm.Sdk;
 using Octono.Xrm.Tasks.IO;
 
@@ -20,6 +22,12 @@ namespace Octono.Xrm.Tasks
             switch
                 (args[0].ToLower().Trim())
             {
+                case "deploy":
+                    {
+                        if (Path.GetExtension(args[1]) == ".js")
+                            return new DeployWebResourceTask(new DeployWebResourceCommandLine(args), _reader);
+                        throw new InvalidOperationException("Unsupported deployment file");
+                    }
                 case "deletesolution":
                     {
                         return new DeleteSolutionTask(new DeleteSolutionCommandLine(args));                            
@@ -48,6 +56,23 @@ namespace Octono.Xrm.Tasks
                 default:
                     throw new InvalidOperationException(string.Format("Unknown command {0}", args[0]));
             }
+        }
+    }
+
+    public class DeployWebResourceCommandLine
+    {
+        private readonly string[] _args;
+
+        public DeployWebResourceCommandLine(string[] args)
+        {
+            _args = args;
+        }
+
+        public string FilePath { get { return _args[1]; } }
+
+        public bool AllowEmptyFile
+        {
+            get { return _args.Contains("-f") || _args.Contains("-force"); }
         }
     }
 }

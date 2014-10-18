@@ -10,5 +10,6 @@ namespace Octono.Xrm.Tasks.IO
         byte[] ReadAllBytes(string path);
         bool FileExists(string path);
         IEnumerable<string> GetSolutionsInExportFolder();
+        string RemoveFileExtension(string filePath);
     }
 }

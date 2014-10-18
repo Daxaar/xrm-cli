@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
 
 namespace Octono.Xrm.Tasks
