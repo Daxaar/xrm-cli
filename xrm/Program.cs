@@ -6,13 +6,10 @@ namespace Octono.Xrm.ConsoleTaskRunner
     {
         private static void Main(string[] args)
         {
-            args = new[]
-                {
-                    "deploy",
-                    "c:\\test\\ntt_contribution.js",
-                    "o:xrmdev",
-                    "s:w12dev"
-                };
+            //args = new[]
+            //    {
+            //        "Enter args here for testing"
+            //    };
 
             var runner = new XrmTaskRunner(new ConsoleLogger());
             runner.Run(args);

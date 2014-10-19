@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using Octono.Xrm.Tasks.IO;
 //TODO: Adding warning when updating a managed webresource
@@ -46,7 +45,7 @@ namespace Octono.Xrm.Tasks
             context.Log.Write(string.Format("Retrieving {0}", fileNameWithoutExtension));
             var query = new QueryExpression("webresource") {ColumnSet = new ColumnSet(new[] {"content"})};
 
-            query.Criteria.AddCondition("name", ConditionOperator.Equal, fileNameWithoutExtension);
+            query.Criteria.AddCondition("id", ConditionOperator.Equal, fileNameWithoutExtension);
             var resource = context.Service.RetrieveMultiple(query).Entities.SingleOrDefault();
 
             if (resource == null)
@@ -64,13 +63,8 @@ namespace Octono.Xrm.Tasks
             resource["content"] = fileContent64;
             context.Service.Update(resource);
 
-            //Publish the change
-            context.Log.Write(string.Format("Publishing {0}", fileNameWithoutExtension));
-            var publish = new PublishXmlRequest();
-            string webResourceXml = string.Format("<importexportxml><webresources><webresource>{0}</webresource></webresources></importexportxml>",resource.Id);
-
-            publish.ParameterXml = webResourceXml;
-            context.Service.Execute(publish);
+            var publish = new PublishWebResourceTask(resource.Id);
+            publish.Execute(context);
         }
 
         public bool RequiresServerConnection { get; private set; }

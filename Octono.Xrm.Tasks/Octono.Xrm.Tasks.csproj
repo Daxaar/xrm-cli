@@ -79,6 +79,7 @@
     <Compile Include="IXrmTaskFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublishSolutionTask.cs" />
+    <Compile Include="PublishWebResourceTask.cs" />
     <Compile Include="ServerConnection.cs" />
     <Compile Include="IO\SystemFileReader.cs" />
     <Compile Include="IO\SystemFileWriter.cs" />

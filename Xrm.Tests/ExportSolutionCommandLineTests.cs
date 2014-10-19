@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Octono.Xrm.Tasks;
-using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tests
 {
@@ -74,7 +72,6 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void UsesFilenameForSolutionWhenWhenExportPathSpecifiesFilename()
         {
-            var reader = new Mock<IFileReader>();
             const string path = @"c:\export\specificfilename.zip";
             var command = new ExportSolutionCommandLine(new[] { "export", "sol1",path });
 

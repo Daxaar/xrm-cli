@@ -1,10 +1,8 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Moq;
-using Octono.Xrm.ConsoleTaskRunner;
 using Octono.Xrm.Tasks;
 using Octono.Xrm.Tasks.IO;
 
@@ -14,7 +12,8 @@ namespace Octono.Xrm.Tests
     public class DeployWebResourceTaskTests
     {
         private const string Path = @"c:\test\ntt_contribution.js";
-        private static readonly string[] Args = new[] {"deploy", Path };
+        private const string WebResourceContent = "random javascript content";
+        private static readonly string[] Args = new[] { "deploy", Path };
 
         [TestMethod]
         public void DoesNotUpdateWebResourceWhenLocalFileIsEmptyAndForceFlagNotSpecified()
@@ -26,7 +25,6 @@ namespace Octono.Xrm.Tests
             
             context.Setup(x => x.Service).Returns(service.Object);
             context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
-            
             task.Execute(context.Object);
             
             service.Verify(x=>x.Update(It.IsAny<Entity>()),Times.Never);
@@ -36,7 +34,7 @@ namespace Octono.Xrm.Tests
         public void ReadsWebResourceFileFromDisk()
         {
 
-            var reader  = new Mock<IFileReader>();
+            var reader  = CreateFileReaderWithContent();
             var task    = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args),reader.Object);
             var context = new Mock<IXrmTaskContext>();
             var service = new Mock<IOrganizationService>();
@@ -44,6 +42,7 @@ namespace Octono.Xrm.Tests
 
             service.Setup(x => x.RetrieveMultiple(It.IsAny<QueryBase>())).Returns(collectionWithOneRecord);
             context.Setup(x => x.Service).Returns(service.Object);
+            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
             
             task.Execute(context.Object);
             
@@ -56,43 +55,42 @@ namespace Octono.Xrm.Tests
             var context         = new Mock<IXrmTaskContext>();
             var service         = new Mock<IOrganizationService>();
             var collectionWithOneRecord    = new EntityCollection(new[] { new Entity("webresource") });
-            var reader          = new Mock<IFileReader>();
-            var task            = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), reader.Object);
+            var task            = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), CreateFileReaderWithContent().Object);
 
             service.Setup(x => x.RetrieveMultiple(It.IsAny<QueryBase>())).Returns(collectionWithOneRecord);
             context.Setup(x => x.Service).Returns(service.Object);
+            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
 
             task.Execute(context.Object);
             
             service.Verify(x=>x.RetrieveMultiple(It.IsAny<QueryBase>()),Times.Once);
         }
 
+        private static Mock<IFileReader> CreateFileReaderWithContent()
+        {
+            var reader = new Mock<IFileReader>();
+            reader.Setup(x => x.ReadAllBytes(Path)).Returns(Encoding.UTF8.GetBytes(WebResourceContent));
+            return reader;
+        }
+
         [TestMethod]
         public void UpdatesWebResourceContentAsBase64String()
         {
-            const string webresourcecontent = "random javascript content";
             var context = new Mock<IXrmTaskContext>();
             var service = new Mock<IOrganizationService>();
-            var reader  = new Mock<IFileReader>();
-            reader.Setup(x => x.ReadAllBytes(Path)).Returns(Encoding.UTF8.GetBytes(webresourcecontent));
-            var webresource = new Entity("webresource") { Attributes = new AttributeCollection() { { "name", "ntt_contribution" } } };
+            var webresource = new Entity("webresource") { Attributes = new AttributeCollection { { "name", "ntt_contribution" } } };
 
-            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), reader.Object);
+            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), CreateFileReaderWithContent().Object);
 
             service.Setup(x => x.RetrieveMultiple(It.IsAny<QueryBase>())).Returns(new EntityCollection(new[] { webresource } ));
             context.Setup(x => x.Service).Returns(service.Object);
+            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
 
             task.Execute(context.Object);
 
             service.Verify(x => x.RetrieveMultiple(It.IsAny<QueryBase>()), Times.Once);
             service.Verify(x => x.Update(webresource),Times.Once);
-            Assert.AreEqual(webresourcecontent.ToBase64String(),webresource["content"]);
-        }
-
-        [TestMethod]
-        public void ThrowsExceptionWhenWebResourceNotFound()
-        {
-            
+            Assert.AreEqual(WebResourceContent.ToBase64String(),webresource["content"]);
         }
     }
 }
