@@ -45,7 +45,7 @@ namespace Octono.Xrm.Tasks
             context.Log.Write(string.Format("Retrieving {0}", fileNameWithoutExtension));
             var query = new QueryExpression("webresource") {ColumnSet = new ColumnSet(new[] {"content"})};
 
-            query.Criteria.AddCondition("id", ConditionOperator.Equal, fileNameWithoutExtension);
+            query.Criteria.AddCondition("name", ConditionOperator.Equal, fileNameWithoutExtension);
             var resource = context.Service.RetrieveMultiple(query).Entities.SingleOrDefault();
 
             if (resource == null)
@@ -59,7 +59,7 @@ namespace Octono.Xrm.Tasks
                 return;
             }
             //Set the content of the webresource to the file content and update
-            context.Log.Write(string.Format("Updating {0}", fileNameWithoutExtension));
+            context.Log.Write(string.Format("Deploying {0}", fileNameWithoutExtension));
             resource["content"] = fileContent64;
             context.Service.Update(resource);
 

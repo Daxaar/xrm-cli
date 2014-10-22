@@ -16,7 +16,7 @@ namespace Octono.Xrm.Tasks
         public void Execute(IXrmTaskContext context)
         {
             //Publish the change
-            context.Log.Write(string.Format("Publishing {0}", _id));
+            context.Log.Write("Publishing");
             var publish = new PublishXmlRequest();
             string webResourceXml = string.Format("<importexportxml><webresources><webresource>{0}</webresource></webresources></importexportxml>", _id);
 
