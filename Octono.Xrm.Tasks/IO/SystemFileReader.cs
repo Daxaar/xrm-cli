@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Octono.Xrm.Tasks.IO
 {
@@ -28,6 +29,11 @@ namespace Octono.Xrm.Tasks.IO
             
             string extension = Path.GetExtension(filename);
             return extension != null ? filename.Replace(extension, "") : filename;
+        }
+
+        public IEnumerable<string> GetModifiedFilesSince(DateTime lastModified, string path, bool recursive = false)
+        {
+            return Directory.GetFiles(path).Where(file => Directory.GetLastAccessTime(file) > lastModified);
         }
     }
 }

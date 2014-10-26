@@ -10,5 +10,11 @@ namespace Octono.Xrm.ConsoleTaskRunner
             var time = DateTime.Now.TimeOfDay;
             Console.WriteLine(string.Format("{0}:{1}:{2}", time.Hours, time.Minutes, time.Seconds) + " - " + message);
         }
+
+        public string Prompt(string message)
+        {
+            Console.WriteLine(message);
+            return Console.ReadLine();
+        }
     }
 }

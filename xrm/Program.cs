@@ -8,7 +8,9 @@ namespace Octono.Xrm.ConsoleTaskRunner
         {
             //args = new[]
             //    {
-            //        "Enter args here for testing"
+            //        "pull",
+            //        "ntt_HTML_Case_Documents"
+            //        //"c:\\test\\ntt_contribution.js"
             //    };
 
             var runner = new XrmTaskRunner(new ConsoleLogger());

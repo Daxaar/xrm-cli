@@ -1,10 +1,12 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Moq;
 using Octono.Xrm.Tasks;
 using Octono.Xrm.Tasks.IO;
+using Octono.Xrm.Tests.Builders;
 
 namespace Octono.Xrm.Tests
 {
@@ -18,8 +20,7 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void DoesNotUpdateWebResourceWhenLocalFileIsEmptyAndForceFlagNotSpecified()
         {
-            var reader  = new Mock<IFileReader>();
-            var task    = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), reader.Object);
+            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), new Mock<IFileReader>().Object, MockConfigurationManagerBuilder.Build());
             var context = new Mock<IXrmTaskContext>();
             var service = new Mock<IOrganizationService>();
             
@@ -33,9 +34,8 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void ReadsWebResourceFileFromDisk()
         {
-
-            var reader  = CreateFileReaderWithContent();
-            var task    = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args),reader.Object);
+            var reader  = new MockFileReaderBuilder().Returns(3).ModifiedFiles.WithRandomFileContent.Build();
+            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), reader.Object, MockConfigurationManagerBuilder.Build());
             var context = new Mock<IXrmTaskContext>();
             var service = new Mock<IOrganizationService>();
             var collectionWithOneRecord = new EntityCollection(new[] { new Entity("webresource") });
@@ -55,7 +55,7 @@ namespace Octono.Xrm.Tests
             var context         = new Mock<IXrmTaskContext>();
             var service         = new Mock<IOrganizationService>();
             var collectionWithOneRecord    = new EntityCollection(new[] { new Entity("webresource") });
-            var task            = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), CreateFileReaderWithContent().Object);
+            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), CreateFileReaderWithContent().Object, MockConfigurationManagerBuilder.Build());
 
             service.Setup(x => x.RetrieveMultiple(It.IsAny<QueryBase>())).Returns(collectionWithOneRecord);
             context.Setup(x => x.Service).Returns(service.Object);
@@ -80,7 +80,7 @@ namespace Octono.Xrm.Tests
             var service = new Mock<IOrganizationService>();
             var webresource = new Entity("webresource") { Attributes = new AttributeCollection { { "name", "ntt_contribution" } } };
 
-            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), CreateFileReaderWithContent().Object);
+            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), CreateFileReaderWithContent().Object, MockConfigurationManagerBuilder.Build());
 
             service.Setup(x => x.RetrieveMultiple(It.IsAny<QueryBase>())).Returns(new EntityCollection(new[] { webresource } ));
             context.Setup(x => x.Service).Returns(service.Object);

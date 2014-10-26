@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Octono.Xrm.Tasks.IO
 {
@@ -11,5 +12,6 @@ namespace Octono.Xrm.Tasks.IO
         bool FileExists(string path);
         IEnumerable<string> GetSolutionsInExportFolder();
         string RemoveFileExtension(string filePath);
+        IEnumerable<string> GetModifiedFilesSince(DateTime lastModified, string path, bool recursive = false);
     }
 }

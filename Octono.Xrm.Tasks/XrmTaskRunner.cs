@@ -15,18 +15,20 @@ namespace Octono.Xrm.Tasks
 
         public void Run(string[] args)
         {
+            IConfigurationManager config = new SystemConfigurationManager();
             try
             {
-                var taskFactory = new XrmTaskFactory(new SystemFileReader(),new SystemFileWriter());
-                IXrmTask task   = taskFactory.CreateTask(args);
+                var taskFactory = new XrmTaskFactory(new SystemFileReader(), new SystemFileWriter(),
+                                                     new SystemConfigurationManager());
+                IXrmTask task = taskFactory.CreateTask(args);
 
                 //Some tasks act on configuration and don't require a connection
                 if (task.RequiresServerConnection)
                 {
-                    using (var connection = new ServerConnection(args, _logger, new SystemConfigurationManager()))
+                    using (var connection = new ServerConnection(args, _logger, config))
                     {
                         task.Execute(new DefaultXrmTaskContext(connection.CreateOrgService(), _logger));
-                    }                    
+                    }
                 }
                 else
                 {
@@ -39,6 +41,10 @@ namespace Octono.Xrm.Tasks
                 _logger.Write(args.Contains("--debug")
                                   ? e.StackTrace
                                   : "\tUse --debug to view the full stacktrace");
+            }
+            finally
+            {
+                config.Save();
             }
         }
     }

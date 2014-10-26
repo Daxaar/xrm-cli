@@ -79,7 +79,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Builders\MockConfigurationManagerBuilder.cs" />
+    <Compile Include="DeployMultipleWebResourceTaskTests.cs" />
     <Compile Include="DeployWebResourceTaskTests.cs" />
+    <Compile Include="Builders\MockFileReaderBuilder.cs" />
     <Compile Include="ServerConnectionTests.cs" />
     <Compile Include="ExportSolutionCommandLineTests.cs" />
     <Compile Include="ExportSolutionTaskTests.cs" />
@@ -103,15 +106,7 @@
       <Name>Octono.Xrm.ConsoleTaskRunner</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\tools\CrmSvcUtil.exe" />
-    <Content Include="bin\tools\CrmSvcUtil.xml" />
-    <Content Include="bin\tools\Microsoft.Xrm.Sdk.dll" />
-    <Content Include="bin\tools\SolutionPackager.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\Debug\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
