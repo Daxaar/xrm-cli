@@ -68,7 +68,6 @@
     <Compile Include="ExitTask.cs" />
     <Compile Include="ExportSolutionCommandLine.cs" />
     <Compile Include="ExportSolutionTask.cs" />
-    <Compile Include="ITaskGateway.cs" />
     <Compile Include="IncrementSolutionVersionTask.cs" />
     <Compile Include="IO\IConfigurationManager.cs" />
     <Compile Include="IO\IFileReader.cs" />
@@ -89,7 +88,6 @@
     <Compile Include="IO\SystemFileWriter.cs" />
     <Compile Include="SolutionVersionFormatter.cs" />
     <Compile Include="StringExtensions.cs" />
-    <Compile Include="CrmTaskGateway.cs" />
     <Compile Include="XrmTaskFactory.cs" />
     <Compile Include="XrmTaskRunner.cs" />
   </ItemGroup>
