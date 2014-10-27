@@ -11,7 +11,7 @@ This tool can also be used by a system administrator for deploying solutions acr
 
 Some example usages:
 
-#####Export a solution managed and increment the version number also save the server details to config
+#####Export a solution managed and increment the version number also saves the server details to config which will be reused on subsequent commands if server details are not specified.
 `xrm.exe export solutionname "c:\exports\solution.zip" -i -m o:orgname s:servername --save`
 
 #####Import a solution.
@@ -23,7 +23,7 @@ Some example usages:
 #####Deploy new_file web resource from disk.
 `xrm.exe deploy "c:\webresources\new_file.js`
 
-#####When xrm.exe is on your path the current directory is assumed allowing.
+#####When xrm.exe is on your path the current directory is assumed allowing you to specify just file names.
 `xrm.exe deploy new_file.js`
 
 #####Deploy all changed web resources from folder.
