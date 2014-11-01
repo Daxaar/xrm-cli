@@ -1,5 +1,4 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk;
 
 namespace Octono.Xrm.Tasks
 {

@@ -56,7 +56,7 @@ namespace Octono.Xrm.Tests
             context.Setup(x => x.Service).Returns(new Mock<IOrganizationService>().Object);
 
             fileReader.Setup(x => x.FileExists(defaultPath)).Returns(true);
-            var commandline = new ImportSolutionCommandLine(new string[] { "import", "filename.zip" }, fileReader.Object);
+            var commandline = new ImportSolutionCommandLine(new[] { "import", "filename.zip" }, fileReader.Object);
             var task = new ImportSolutionTask(commandline);
 
             task.Execute(context.Object);
@@ -112,12 +112,10 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void FindsFilesInExportFolderWhenExportsOptionSpecified()
         {
-            var reader = new Mock<IFileReader>();
-            var service = new Mock<IOrganizationService>();
-
+            var reader  = new Mock<IFileReader>();
             var command = new ImportSolutionCommandLine(new[] {"import", "--exports"},reader.Object);
 
-            var paths = command.GetSolutionFilePaths().ToList();
+            command.GetSolutionFilePaths().ToList();
             reader.Verify(x=>x.GetSolutionsInExportFolder(),Times.Once);
 
         }

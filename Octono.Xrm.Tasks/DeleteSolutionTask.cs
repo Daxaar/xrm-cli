@@ -21,7 +21,6 @@ namespace Octono.Xrm.Tasks
                 var solution = from s in ctx.CreateQuery("solution")
                                where s.GetAttributeValue<string>("uniquename") == _command.SolutionName
                                select s.Id;
-                               //select s.ToEntityReference();
 
                 context.Log.Write(string.Format("Deleting solution {0}", _command.SolutionName));
                 context.Service.Delete("solution",solution.Single());

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Microsoft.Xrm.Sdk;
@@ -60,7 +61,7 @@ namespace Octono.Xrm.Tasks
 
             var publish = new PublishWebResourceTask(resource.Id);
             publish.Execute(context);
-            _config.Add("lastmodified", DateTime.Now.ToString());
+            _config.Add("lastmodified", DateTime.Now.ToString(CultureInfo.InvariantCulture));
         }
 
         public bool RequiresServerConnection { get; private set; }

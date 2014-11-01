@@ -8,7 +8,7 @@ namespace Octono.Xrm.Tests.Builders
     internal class MockFileReaderBuilder
     {
         private readonly Mock<IFileReader> _reader = new Mock<IFileReader>();
-        private int _currentCount = 0;
+        private int _currentCount;
         public MockFileReaderBuilder Returns(int count)
         {
             _currentCount = count;

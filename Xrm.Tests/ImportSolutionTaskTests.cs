@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Crm.Sdk.Messages;
-using Octono.Xrm.ConsoleTaskRunner;
 using Octono.Xrm.Tasks;
 using Octono.Xrm.Tasks.IO;
 
@@ -25,7 +24,7 @@ namespace Octono.Xrm.Tests
             reader.Setup(x => x.GetSolutionsInExportFolder()).Returns(new[] { "solution1.zip", "solution2.zip" });
             reader.Setup(x => x.FileExists("solution1.zip")).Returns(true);
             reader.Setup(x => x.FileExists("solution2.zip")).Returns(true);
-            var command = new ImportSolutionCommandLine(new string[] {"import", "--exports"},reader.Object);
+            var command = new ImportSolutionCommandLine(new[] {"import", "--exports"},reader.Object);
             var task = new ImportSolutionTask(command);
 
             task.Execute(context.Object);

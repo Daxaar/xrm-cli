@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Octono.Xrm.ConsoleTaskRunner;
@@ -12,31 +11,6 @@ namespace Octono.Xrm.Tests
     [TestClass]
     public class ServerConnectionTests
     {
-        /// <summary>
-        /// Using the Brad Wilson testable factory pattern to access the otherwise private ctor members
-        /// of ServerConnection against which we can execute assertions
-        /// </summary>
-        //private class TestableServerConnection : ServerConnection
-        //{
-        //    private readonly IList<string> _args;
-
-        //    public TestableServerConnection(IList<string> args, Mock<ILog> log = null, Mock<IConfigurationManager> configurationManager = null ) : base(args,log.Object,configurationManager.Object)
-        //    {
-        //        _args = args;
-        //        Log = log ?? new Mock<ILog>();
-        //        ConfigurationManager = configurationManager ?? new Mock<IConfigurationManager>();
-        //    }
-
-        //    //private ServerConnection _serverConnection = null;
-        //    public ServerConnection Create()
-        //    {
-        //        return new ServerConnection(_args, Log.Object, ConfigurationManager.Object);
-        //    }
-
-        //    public Mock<ILog> Log { get; set; }
-        //    public Mock<IConfigurationManager> ConfigurationManager { get; set; }
-        //}
-
         private ServerConnection CreateServerConnection(string[] args)
         {
             var config = new Mock<IConfigurationManager>();

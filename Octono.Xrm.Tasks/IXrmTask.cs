@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 
 namespace Octono.Xrm.Tasks
 {

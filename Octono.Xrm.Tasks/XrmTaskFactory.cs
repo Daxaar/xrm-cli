@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Microsoft.Xrm.Sdk;
 using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks

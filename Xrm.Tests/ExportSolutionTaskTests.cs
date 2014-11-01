@@ -3,7 +3,6 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Moq;
-using Octono.Xrm.ConsoleTaskRunner;
 using Octono.Xrm.Tasks;
 using Octono.Xrm.Tasks.IO;
 

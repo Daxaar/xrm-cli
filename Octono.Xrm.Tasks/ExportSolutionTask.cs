@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
@@ -35,8 +34,8 @@ namespace Octono.Xrm.Tasks
                 String path = _command.BuildExportPath(solution, version);
 
                 context.Log.Write(string.Format("Exporting {0} to {1}", solution, path));
-                var response = (ExportSolutionResponse)context.Service.Execute(new ExportSolutionRequest()
-                {
+                var response = (ExportSolutionResponse)context.Service.Execute(new ExportSolutionRequest
+                    {
                     SolutionName = solution,
                     Managed = _command.Managed
                     
