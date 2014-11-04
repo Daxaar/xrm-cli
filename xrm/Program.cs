@@ -6,12 +6,11 @@ namespace Octono.Xrm.ConsoleTaskRunner
     {
         private static void Main(string[] args)
         {
-            //args = new[]
-            //    {
-            //        "pull",
-            //        "ntt_HTML_Case_Documents"
-            //        //"c:\\test\\ntt_contribution.js"
-            //    };
+            args = new[]
+                {
+                    "pull",
+                    "--help"
+                };
 
             var runner = new XrmTaskRunner(new ConsoleLogger());
             runner.Run(args);

@@ -23,7 +23,7 @@ namespace Octono.Xrm.Tasks
                 IXrmTask task = taskFactory.CreateTask(args);
 
                 //Some tasks act on configuration and don't require a connection
-                if (task.RequiresServerConnection)
+                if (task.RequiresServerConnection && DoesNotContainHelpArgument(args))
                 {
                     using (var connection = new ServerConnection(args, _logger, config))
                     {
@@ -46,6 +46,11 @@ namespace Octono.Xrm.Tasks
             {
                 config.Save();
             }
+        }
+
+        private static bool DoesNotContainHelpArgument(string[] args)
+        {
+            return !args.Any(a => a.Contains("help") || a.Contains("/?"));
         }
     }
 }

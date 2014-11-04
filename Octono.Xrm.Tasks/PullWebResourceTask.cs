@@ -22,6 +22,8 @@ namespace Octono.Xrm.Tasks
 
         public void Execute(IXrmTaskContext context)
         {
+            if (ShowHelp(context.Log)) return;
+
             var query       = new WebResourceQuery(context.Service);
             var entity      = query.Retrieve(_commandLine.Name);
             var content     = entity.GetAttributeValue<string>("content").FromBase64String();
@@ -33,6 +35,19 @@ namespace Octono.Xrm.Tasks
         }
 
         public bool RequiresServerConnection { get; private set; }
+
+        private bool ShowHelp(ILog log)
+        {
+            if (_commandLine.ShowHelp)
+            {
+                log.Write("Usage");
+                log.Write(@"pull webresourcelogicalname x:\path\to\save\to\filename.xyz");
+                log.Write(@"Optionally omit the path to save the file to the current directory");
+                log.Write(@"Server Connection params are required if they haven't already been saved to config");
+                return true;
+            }
+            return false;
+        }
     }
 
     public static class WebResourceType
