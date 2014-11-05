@@ -29,9 +29,23 @@ namespace Octono.Xrm.Tasks
             var content     = entity.GetAttributeValue<string>("content").FromBase64String();
             var optionset   = entity.GetAttributeValue<OptionSetValue>("webresourcetype");
             var type        = WebResourceType.ToFileExtension(optionset.Value);
-            var filePath    = Path.Combine(_commandLine.Path, _commandLine.Name + type );
+            var path        = _commandLine.Path;
             
+            if(string.IsNullOrEmpty(path))
+                path = Directory.GetCurrentDirectory();
+
+            var filePath    = Path.Combine(path, _commandLine.Name + type );
+
+            if (File.Exists(filePath) && _commandLine.Overwrite == false)
+            {
+                if (context.Log.Prompt("Overwrite existing file? y/n").Contains("n"))
+                {
+                    context.Log.Write("Pull cancelled");
+                    return;
+                }
+            }
             _writer.Write(System.Text.Encoding.UTF8.GetBytes(content),filePath);
+            context.Log.Write("File written to " + filePath);
         }
 
         public bool RequiresServerConnection { get; private set; }

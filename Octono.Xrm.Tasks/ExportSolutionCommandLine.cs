@@ -7,9 +7,9 @@ namespace Octono.Xrm.Tasks
 {
     public class ExportSolutionCommandLine
     {
-        private readonly string[] _args;
+        private readonly IList<string> _args;
 
-        public ExportSolutionCommandLine(string[] args)
+        public ExportSolutionCommandLine(IList<string> args)
         {
             _args = args;
         }
@@ -32,7 +32,7 @@ namespace Octono.Xrm.Tasks
         {
             string path = _args.FirstOrDefault(x => x.Contains("out:") || x.Contains("output:") || x.Contains("to:"));
 
-            if (_args.Length > 2 && _args[2].EndsWith(".zip"))
+            if (_args.Count > 2 && _args[2].EndsWith(".zip"))
             {
                 //export path is specifying a full path including filename check only one solution specified and return path
                 if (SolutionNames.Count() > 1)

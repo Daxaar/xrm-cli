@@ -1,7 +1,9 @@
-﻿namespace Octono.Xrm.Tasks
+﻿using System.Collections.Generic;
+
+namespace Octono.Xrm.Tasks
 {
     public interface IXrmTaskFactory
     {
-        IXrmTask CreateTask(string[] args);
+        IXrmTask CreateTask(IList<string> args);
     }
 }

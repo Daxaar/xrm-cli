@@ -10,7 +10,7 @@ namespace Octono.Xrm.Tests.Builders
         {
             var cm = new Mock<IConfigurationManager>();
             cm.Setup(x => x.AppSettings).Returns(new NameValueCollection());
-            return new Mock<IConfigurationManager>().Object;
+            return cm.Object;
         }
     }
 }

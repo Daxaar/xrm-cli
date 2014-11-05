@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Octono.Xrm.Tasks.IO;
@@ -17,25 +18,26 @@ namespace Octono.Xrm.Tasks
             _configurationManager = configurationManager;
         }
 
-        public IXrmTask CreateTask(string[] args)
+        public IXrmTask CreateTask(IList<string> args)
         {
+            args = StripConnectionInfo(args.ToList());
             switch
                 (args[0].ToLower().Trim())
             {
                 case "pull":
                     {
-                        if (args.Length == 2)
+                        if (args.Count == 2)
                         {
-                            args = new[] { args[0],args[1], Directory.GetCurrentDirectory() };
+                            args.Add(Directory.GetCurrentDirectory());
                         }
                         return new PullWebResourceTask(new PullWebResourceCommandLine(args),_writer);
                     }
                 case "deploy":
                     {
                         //Assume the current directory if nothing is specified as the second argument
-                        if (args.Length == 1)
+                        if (args.Count == 1)
                         {
-                            args = new[] {args[0], Directory.GetCurrentDirectory()};
+                            args.Add(Directory.GetCurrentDirectory());
                         }
                         if (Path.GetExtension(args[1]) == ".js")
                         {
@@ -73,15 +75,24 @@ namespace Octono.Xrm.Tasks
                     throw new InvalidOperationException(string.Format("Unknown command {0}", args[0]));
             }
         }
+
+        private static List<string> StripConnectionInfo(List<string> args)
+        {
+            return args.Except(args.Where(  a => a.StartsWith("o:") || 
+                                            a.StartsWith("s:") || 
+                                            a.StartsWith("p:") || 
+                                            a.StartsWith("protocol:")))
+                       .ToList();
+        }
     }
 
     public class DeployWebResourceCommandLine
     {
         private readonly string[] _args;
 
-        public DeployWebResourceCommandLine(string[] args)
+        public DeployWebResourceCommandLine(IEnumerable<string> args)
         {
-            _args = args;
+            _args = args.ToArray();
         }
 
         public string FilePath { get { return _args[1]; } }

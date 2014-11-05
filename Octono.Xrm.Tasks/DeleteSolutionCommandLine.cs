@@ -1,10 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Octono.Xrm.Tasks
 {
     public class DeleteSolutionCommandLine
     {
-        public DeleteSolutionCommandLine(string[] args)
+        public DeleteSolutionCommandLine(IList<string> args)
         {
             //args[0]           args[1]         
             //deletesolution    solutionname

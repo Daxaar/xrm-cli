@@ -6,12 +6,6 @@ namespace Octono.Xrm.ConsoleTaskRunner
     {
         private static void Main(string[] args)
         {
-            args = new[]
-                {
-                    "pull",
-                    "--help"
-                };
-
             var runner = new XrmTaskRunner(new ConsoleLogger());
             runner.Run(args);
         }
