@@ -3,7 +3,7 @@ using Microsoft.Xrm.Sdk.Client;
 
 namespace Octono.Xrm.Tasks
 {
-    public class IncrementSolutionVersionTask : IXrmTask
+    public class IncrementSolutionVersionTask : XrmTask
     {
         private readonly string _solutionName;
 
@@ -12,7 +12,7 @@ namespace Octono.Xrm.Tasks
             _solutionName = solutionName;
         }
 
-        public void Execute(IXrmTaskContext context)
+        public override void Execute(IXrmTaskContext context)
         {
             context.Log.Write(string.Format("Incrementing Version Number for solution {0}",_solutionName));
             string oldVersion, newVersion;
@@ -32,7 +32,6 @@ namespace Octono.Xrm.Tasks
             }
             context.Log.Write(string.Format("Incremented Solution {0} from {1} to {2}",_solutionName,oldVersion,newVersion));
         }
-        public bool RequiresServerConnection { get { return true; } }
     }
     public class IncrementSolutionCommandLine
     {

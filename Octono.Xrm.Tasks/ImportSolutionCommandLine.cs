@@ -9,7 +9,7 @@ namespace Octono.Xrm.Tasks
     public class ImportSolutionCommandLine
     {
         private readonly IList<string> _args;
-        private readonly IFileReader _reader = null;
+        private readonly IFileReader _reader;
 
         public ImportSolutionCommandLine(IList<string> args, IFileReader reader)
         {

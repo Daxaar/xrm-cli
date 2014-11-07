@@ -104,7 +104,7 @@ namespace Octono.Xrm.Tasks
             if (!string.IsNullOrEmpty(arg))
             {
                 arg = arg.Trim();
-                arg = arg.Substring(arg.IndexOf(":") + 1);
+                arg = arg.Substring(arg.IndexOf(":", StringComparison.Ordinal) + 1);
             }
 
             return arg;

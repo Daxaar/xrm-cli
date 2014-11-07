@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectTask.cs" />
+    <Compile Include="DefaultXrmTaskContext.cs" />
     <Compile Include="DeleteSolutionCommandLine.cs" />
     <Compile Include="DeleteSolutionTask.cs" />
     <Compile Include="DeployMultipleWebResourceTask.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="ImportSolutionTask.cs" />
     <Compile Include="IO\SystemConfigurationManager.cs" />
     <Compile Include="IXrmTask.cs" />
+    <Compile Include="IXrmTaskContext.cs" />
     <Compile Include="IXrmTaskFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublishSolutionTask.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="IO\SystemFileWriter.cs" />
     <Compile Include="SolutionVersionFormatter.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="XrmTask.cs" />
     <Compile Include="XrmTaskFactory.cs" />
     <Compile Include="XrmTaskRunner.cs" />
   </ItemGroup>

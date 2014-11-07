@@ -7,7 +7,7 @@ using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {
-    public class ExportSolutionTask : IXrmTask
+    public class ExportSolutionTask : XrmTask
     {
         private readonly ExportSolutionCommandLine _command;
         private readonly IFileWriter _writer;
@@ -18,7 +18,7 @@ namespace Octono.Xrm.Tasks
             _writer = writer;
         }
 
-        public void Execute(IXrmTaskContext context)
+        public override void Execute(IXrmTaskContext context)
         {
             if (ShowHelp(context.Log)) return;
 
@@ -45,7 +45,6 @@ namespace Octono.Xrm.Tasks
                 context.Log.Write(string.Format("{0} exported successfully",solution));
             }
         }
-        public bool RequiresServerConnection { get { return true; } }
 
         private bool ShowHelp(ILog log)
         {

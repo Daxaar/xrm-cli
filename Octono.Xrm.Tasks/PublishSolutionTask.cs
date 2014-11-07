@@ -2,14 +2,13 @@
 
 namespace Octono.Xrm.Tasks
 {
-    public class PublishSolutionTask : IXrmTask
+    public class PublishSolutionTask : XrmTask
     {
-        public void Execute(IXrmTaskContext context)
+        public override void Execute(IXrmTaskContext context)
         {   
             context.Log.Write("Publishing all changes");
             context.Service.Execute(new PublishAllXmlRequest());
             context.Log.Write("Publish complete");
         }
-        public bool RequiresServerConnection { get { return true; } }
     }
 }

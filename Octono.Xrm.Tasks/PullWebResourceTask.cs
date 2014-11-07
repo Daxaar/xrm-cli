@@ -8,7 +8,7 @@ using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {
-    public class PullWebResourceTask : IXrmTask
+    public class PullWebResourceTask : XrmTask
     {
         private readonly PullWebResourceCommandLine _commandLine;
         private readonly IFileWriter _writer;
@@ -17,10 +17,9 @@ namespace Octono.Xrm.Tasks
         {
             _commandLine = commandLine;
             _writer = writer;
-            RequiresServerConnection = true;
         }
 
-        public void Execute(IXrmTaskContext context)
+        public override void Execute(IXrmTaskContext context)
         {
             if (ShowHelp(context.Log)) return;
 
@@ -47,8 +46,6 @@ namespace Octono.Xrm.Tasks
             _writer.Write(System.Text.Encoding.UTF8.GetBytes(content),filePath);
             context.Log.Write("File written to " + filePath);
         }
-
-        public bool RequiresServerConnection { get; private set; }
 
         private bool ShowHelp(ILog log)
         {

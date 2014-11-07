@@ -4,7 +4,7 @@ using Microsoft.Xrm.Sdk.Client;
 
 namespace Octono.Xrm.Tasks
 {
-    public class DeleteSolutionTask : IXrmTask
+    public class DeleteSolutionTask : XrmTask
     {
         private readonly DeleteSolutionCommandLine _command;
 
@@ -13,7 +13,7 @@ namespace Octono.Xrm.Tasks
             _command = command;
         }
 
-        public void Execute(IXrmTaskContext context)
+        public override void Execute(IXrmTaskContext context)
         {
             ShowHelp(context.Log);
             using (var ctx = new OrganizationServiceContext(context.Service))
@@ -38,7 +38,5 @@ namespace Octono.Xrm.Tasks
             log.Write(@"delete solution solutionname");
             log.Write("[solutionname] parameter needs to be the unique name and not display name");
         }
-
-        public bool RequiresServerConnection { get { return true; } }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using System;
 using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
 
 namespace Octono.Xrm.Tasks
 {
-    public class ImportSolutionTask : IXrmTask
+    public class ImportSolutionTask : XrmTask
     {
         private readonly ImportSolutionCommandLine _command;
 
@@ -15,7 +13,7 @@ namespace Octono.Xrm.Tasks
             _command = command;
         }
 
-        public void Execute(IXrmTaskContext context)
+        public override void Execute(IXrmTaskContext context)
         {
             if (ShowHelp(context.Log)) return;
 
@@ -37,12 +35,11 @@ namespace Octono.Xrm.Tasks
                 {
                     context.Service.Execute(new PublishAllXmlRequest());
                 }
-                Entity job = context.Service.Retrieve("importjob", importRequest.ImportJobId, new ColumnSet(new[] { "data", "solutionname" }));
+                context.Service.Retrieve("importjob", importRequest.ImportJobId, new ColumnSet(new[] { "data", "solutionname" }));
                 context.Log.Write("Solution imported successfully");
                 
             }
         }
-        public bool RequiresServerConnection { get { return true; } }
 
         private bool ShowHelp(ILog log)
         {

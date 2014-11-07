@@ -7,8 +7,6 @@ namespace Octono.Xrm.Tasks
     {
         public DeleteSolutionCommandLine(IList<string> args)
         {
-            //args[0]           args[1]         
-            //deletesolution    solutionname
             SolutionName = args[1];
             ShowHelp = args.Any(arg => arg == "--help" || arg == "-help");
         }

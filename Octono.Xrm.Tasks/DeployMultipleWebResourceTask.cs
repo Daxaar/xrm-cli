@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {
-    public class DeployMultipleWebResourceTask : IXrmTask
+    public class DeployMultipleWebResourceTask : XrmTask
     {
         private readonly DeployWebResourceCommandLine _commandLine;
         private readonly IFileReader _reader;
-        private readonly DateTime? _lastModified;
+        private readonly DateTime _lastModified;
         private readonly IConfigurationManager _config;
 
         public DeployMultipleWebResourceTask(DeployWebResourceCommandLine commandLine, IFileReader reader, IConfigurationManager config)
@@ -16,13 +17,14 @@ namespace Octono.Xrm.Tasks
             _commandLine = commandLine;
             _reader = reader;
             _config = config;
-            _lastModified = _config.AppSettings.AllKeys.Contains("lastmodified") ? DateTime.Parse(config.AppSettings["lastmodified"]) : DateTime.MinValue;
-            RequiresServerConnection = true;
+            _lastModified = _config.AppSettings.AllKeys.Contains("lastmodified")
+                                ? DateTime.Parse(config.AppSettings["lastmodified"])
+                                : DateTime.MinValue;
         }
 
-        public void Execute(IXrmTaskContext context)
+        public override void Execute(IXrmTaskContext context)
         {
-            var files = _reader.GetModifiedFilesSince(_lastModified.Value, _commandLine.FilePath).ToList();
+            var files = _reader.GetModifiedFilesSince(_lastModified, _commandLine.FilePath).ToList();
 
             if (_commandLine.Confirm)
             {
@@ -38,9 +40,7 @@ namespace Octono.Xrm.Tasks
                 var task = new DeployWebResourceTask(commandLine, _reader,_config);
                 task.Execute(context);
             }
-            _config.Add("lastmodified",DateTime.Now.ToString());
+            _config.Add("lastmodified",DateTime.Now.ToString(CultureInfo.InvariantCulture));
         }
-
-        public bool RequiresServerConnection { get; private set; }
     }
 }

@@ -17,7 +17,7 @@ namespace Octono.Xrm.Tasks
     /// <remarks>
     /// Currently assumes the webresource exists on the server and therefore only updates the content.
     /// </remarks>
-    public class DeployWebResourceTask : IXrmTask
+    public class DeployWebResourceTask : XrmTask
     {
         private readonly DeployWebResourceCommandLine _commandLine;
         private readonly IFileReader _reader;
@@ -28,10 +28,9 @@ namespace Octono.Xrm.Tasks
             _commandLine = commandLine;
             _reader = reader;
             _config = config;
-            RequiresServerConnection = true;
         }
 
-        public void Execute(IXrmTaskContext context)
+        public override void Execute(IXrmTaskContext context)
         {
             var content     = _reader.ReadAllBytes(_commandLine.FilePath);
             string fileNameWithoutExtension = _reader.RemoveFileExtension(Path.GetFileName(_commandLine.FilePath));
@@ -64,7 +63,6 @@ namespace Octono.Xrm.Tasks
             _config.Add("lastmodified", DateTime.Now.ToString(CultureInfo.InvariantCulture));
         }
 
-        public bool RequiresServerConnection { get; private set; }
     }
 
     public class WebResourceQuery

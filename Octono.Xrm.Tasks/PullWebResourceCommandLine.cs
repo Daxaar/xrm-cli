@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -17,7 +16,7 @@ namespace Octono.Xrm.Tasks
             //If the user has explicitly defined the path anywhere in the args using the to: prefix
             //If not get the first arg that is a valid directory, failing that assume current directory
             _path = _args.Find(x => x.StartsWith("to:")) ??
-                    _args.Skip(2).FirstOrDefault(x => !x.StartsWith("-") && Directory.Exists(System.IO.Path.GetDirectoryName(x))) ?? 
+                    _args.Skip(2).FirstOrDefault(x => !x.StartsWith("-") && Directory.Exists(System.IO.Path.GetDirectoryName(x) ?? "")) ?? 
                     Directory.GetCurrentDirectory();
         }
 

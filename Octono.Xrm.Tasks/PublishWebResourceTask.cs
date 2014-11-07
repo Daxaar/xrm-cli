@@ -3,17 +3,16 @@ using Microsoft.Crm.Sdk.Messages;
 
 namespace Octono.Xrm.Tasks
 {
-    public class PublishWebResourceTask : IXrmTask
+    public class PublishWebResourceTask : XrmTask
     {
         private readonly Guid _id;
 
         public PublishWebResourceTask(Guid id)
         {
             _id = id;
-            RequiresServerConnection = true;
         }
 
-        public void Execute(IXrmTaskContext context)
+        public override void Execute(IXrmTaskContext context)
         {
             //Publish the change
             context.Log.Write("Publishing");
@@ -24,7 +23,5 @@ namespace Octono.Xrm.Tasks
             context.Service.Execute(publish);
 
         }
-
-        public bool RequiresServerConnection { get; private set; }
     }
 }
