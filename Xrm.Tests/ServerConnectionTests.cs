@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Octono.Xrm.ConsoleTaskRunner;
@@ -11,11 +12,16 @@ namespace Octono.Xrm.Tests
     [TestClass]
     public class ServerConnectionTests
     {
-        private ServerConnection CreateServerConnection(string[] args)
+        private Mock<IConfigurationManager> CreateConfig()
         {
             var config = new Mock<IConfigurationManager>();
             config.Setup(x => x.AppSettings).Returns(new NameValueCollection());
-            return new ServerConnection(args,new ConsoleLogger(), config.Object);
+            config.Setup(x => x.ConnectionStrings).Returns(new List<ServerConnection>());
+            return config;
+        }
+        private ServerConnection CreateServerConnection(string[] args)
+        {
+            return new ServerConnection(args,new ConsoleLogger(), CreateConfig().Object);
         }
 
         [TestMethod]
@@ -28,16 +34,9 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void WritesConnectionSettingsToFileWhenSaveOptionSpecified()
         {
-            var config = new Mock<IConfigurationManager>();
-            var settings = new NameValueCollection();
-            config.SetupGet(x => x.AppSettings).Returns(settings);
-
+            var config = CreateConfig();
             new ServerConnection(new[] { "taskname", "s:servername", "o:orgname", "p:5555", "protocol:http", "--save" },new ConsoleLogger(), config.Object);
-            
-            config.Verify(x=>x.Add("server","servername"));
-            config.Verify(x=>x.Add("org","orgname"));
-            config.Verify(x=>x.Add("port","5555"));
-            config.Verify(x=>x.Add("protocol","http"));
+            config.Verify(x=>x.Save(),Times.Once);
         }
 
         [TestMethod]

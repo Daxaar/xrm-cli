@@ -15,11 +15,13 @@ namespace Octono.Xrm.Tasks
 
         public void Run(string[] args)
         {
-            IConfigurationManager config = new SystemConfigurationManager();
+            var reader = new SystemFileReader();
+            var writer = new SystemFileWriter();
+
+            IConfigurationManager config = new JsonConfigurationManager(reader,writer);
             try
             {
-                var taskFactory = new XrmTaskFactory(new SystemFileReader(), new SystemFileWriter(),
-                                                     new SystemConfigurationManager());
+                var taskFactory = new XrmTaskFactory(reader,writer,config);
                 IXrmTask task = taskFactory.CreateTask(args);
 
                 //Some tasks act on configuration and don't require a connection

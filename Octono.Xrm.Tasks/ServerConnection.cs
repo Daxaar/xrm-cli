@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Description;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
+using Newtonsoft.Json;
 using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
@@ -15,14 +17,20 @@ namespace Octono.Xrm.Tasks
         private readonly IConfigurationManager _config;
         OrganizationServiceProxy _proxy;
 
+        public string Name { get; set; }
         public string ServerName { get; set; }
         public string Organisation { get; set; }
         public string Port { get; set; }
         public string Protocol { get; set; }
+        [JsonIgnore]
         public bool Debug { get; set; }
-
+        [JsonIgnore]
         public bool Save { get; set; }
 
+        public ServerConnection()
+        {
+            
+        }
         public ServerConnection(IList<string> spaceDelimitedArgs, ILog logger,IConfigurationManager config)
         {
             _logger     = logger;
@@ -45,13 +53,14 @@ namespace Octono.Xrm.Tasks
                             ReadArg(spaceDelimitedArgs, "o") ?? 
                             ReadFromConfig("org") ??
                             ThrowOnNull<string>("Organization name parameter is required o:yourorgname");
-            
+
+
             if (Save)
             {
-                config.Add("server", ServerName);
-                config.Add("org", Organisation);
-                config.Add("port", Port);
-                config.Add("protocol", Protocol);
+                Name = ReadArg(spaceDelimitedArgs, "name") ??
+                       ReadArg(spaceDelimitedArgs, "n");
+                
+                config.ConnectionStrings.Add(this); //new ConnectionStringSettings(Name,CreateConnectionString().AbsoluteUri));
                 config.Save();
             }
         }
@@ -115,7 +124,7 @@ namespace Octono.Xrm.Tasks
             var creds = new ClientCredentials();
             creds.Windows.ClientCredential = CredentialCache.DefaultNetworkCredentials;
 
-            var uri = new Uri(string.Format("{0}://{1}:{2}/{3}/XRMServices/2011/Organization.svc", Protocol, ServerName, Port, Organisation));
+            var uri = new Uri(ConnectionString);
             _logger.Write("Connecting to " + uri.AbsoluteUri);
             
             _proxy = new OrganizationServiceProxy(uri, null, creds, null) {Timeout = new TimeSpan(0, 0, 10, 0)};
@@ -126,6 +135,14 @@ namespace Octono.Xrm.Tasks
             _proxy.EnableProxyTypes();
             
             return _proxy;
+        }
+
+        public string ConnectionString
+        {
+            get
+            {
+                return string.Format("{0}://{1}:{2}/{3}/XRMServices/2011/Organization.svc", Protocol, ServerName,Port, Organisation);
+            }
         }
 
         public void Dispose()
