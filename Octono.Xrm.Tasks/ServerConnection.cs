@@ -58,9 +58,10 @@ namespace Octono.Xrm.Tasks
             if (Save)
             {
                 Name = ReadArg(spaceDelimitedArgs, "name") ??
-                       ReadArg(spaceDelimitedArgs, "n");
-                
-                config.ConnectionStrings.Add(this); //new ConnectionStringSettings(Name,CreateConnectionString().AbsoluteUri));
+                       ReadArg(spaceDelimitedArgs, "n") ??
+                       ServerName + ":" + Organisation;
+
+                config.ConnectionStrings[Name] = this;
                 config.Save();
             }
         }

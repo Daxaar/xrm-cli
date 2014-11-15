@@ -16,7 +16,7 @@ namespace Octono.Xrm.Tests
         {
             var config = new Mock<IConfigurationManager>();
             config.Setup(x => x.AppSettings).Returns(new NameValueCollection());
-            config.Setup(x => x.ConnectionStrings).Returns(new List<ServerConnection>());
+            config.Setup(x => x.ConnectionStrings).Returns(new Dictionary<string,ServerConnection>());
             return config;
         }
         private ServerConnection CreateServerConnection(string[] args)

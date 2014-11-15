@@ -9,7 +9,7 @@ namespace Octono.Xrm.Tasks.IO
     public interface IConfigurationManager
     {
         NameValueCollection AppSettings{get;}
-        IList<ServerConnection> ConnectionStrings { get; }
+        Dictionary<string,ServerConnection> ConnectionStrings { get; }
         void Save();
         void Add(string key, string value);
     }
@@ -32,7 +32,7 @@ namespace Octono.Xrm.Tasks.IO
 
  
         public NameValueCollection AppSettings { get; private set; }
-        public IList<ServerConnection> ConnectionStrings { get { return _configuration.Connections ?? (_configuration.Connections = new List<ServerConnection>()); }}
+        public Dictionary<string,ServerConnection> ConnectionStrings { get { return _configuration.Connections ?? (_configuration.Connections = new Dictionary<string, ServerConnection>()); }}
 
         public void Save()
         {
@@ -48,7 +48,7 @@ namespace Octono.Xrm.Tasks.IO
 
     public class XrmConfiguration
     {
-        public List<ServerConnection> Connections { get; set; }
+        public Dictionary<string,ServerConnection> Connections { get; set; }
         public Dictionary<string, string> AppSettings { get; set; } 
     }
 }
