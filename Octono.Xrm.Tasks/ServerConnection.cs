@@ -59,7 +59,7 @@ namespace Octono.Xrm.Tasks
             {
                 Name = ReadArg(spaceDelimitedArgs, "name") ??
                        ReadArg(spaceDelimitedArgs, "n") ??
-                       ServerName + ":" + Organisation;
+                       ThrowOnNull<string>("You must specify a connection name using the n:name format when saving a connection.");
 
                 config.ConnectionStrings[Name] = this;
                 config.Save();
