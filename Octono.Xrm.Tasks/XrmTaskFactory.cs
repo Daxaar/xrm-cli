@@ -10,17 +10,17 @@ namespace Octono.Xrm.Tasks
     {
         private readonly IFileReader _reader;
         private readonly IFileWriter _writer;
-        private readonly IConfigurationManager _configurationManager;
-        public XrmTaskFactory(IFileReader reader,IFileWriter writer,IConfigurationManager configurationManager)
+        private readonly IXrmConfiguration _configuration;
+        public XrmTaskFactory(IFileReader reader,IFileWriter writer,IXrmConfiguration configuration)
         {
             _reader = reader;
             _writer = writer;
-            _configurationManager = configurationManager;
+            _configuration = configuration;
         }
 
         public IXrmTask CreateTask(IList<string> args)
         {
-            args = StripConnectionInfo(args.ToList());
+            //args = StripConnectionInfo(args.ToList());
             switch
                 (args[0].ToLower().Trim())
             {
@@ -41,10 +41,10 @@ namespace Octono.Xrm.Tasks
                         }
                         if (Path.GetExtension(args[1]) == ".js")
                         {
-                            return new DeployWebResourceTask(new DeployWebResourceCommandLine(args), _reader, _configurationManager);                            
+                            return new DeployWebResourceTask(new DeployWebResourceCommandLine(args), _reader);                            
                         }
                         
-                        return new DeployMultipleWebResourceTask(new DeployWebResourceCommandLine(args), _reader,_configurationManager);
+                        return new DeployMultipleWebResourceTask(new DeployWebResourceCommandLine(args), _reader);
                     }
                 case "deletesolution":
                     {
@@ -63,62 +63,17 @@ namespace Octono.Xrm.Tasks
                     {
                         return new ExitTask();
                     }
-                case "connect":
+                case "addconnection":
                     {
-                        return new ConnectTask();
+                        return new AddConnectionTask(args);
                     }
                 case "publish":
                     {
-                        return new PublishSolutionTask();
+                        return new PublishSolutionTask(new PublishSolutionCommandLine(args));
                     }
                 default:
                     throw new InvalidOperationException(string.Format("Unknown command {0}", args[0]));
             }
         }
-
-        private static List<string> StripConnectionInfo(List<string> args)
-        {
-            return args.Except(args.Where(  a => a.StartsWith("o:") || 
-                                            a.StartsWith("s:") || 
-                                            a.StartsWith("p:") || 
-                                            a.StartsWith("protocol:")))
-                       .ToList();
-        }
-    }
-
-    public class DeployWebResourceCommandLine
-    {
-        private readonly string[] _args;
-
-        public DeployWebResourceCommandLine(IEnumerable<string> args)
-        {
-            _args = args.ToArray();
-        }
-
-        public string FilePath { get { return _args[1]; } }
-
-        public bool AllowEmptyFile
-        {
-            get { return _args.Contains("-f") || _args.Contains("-force"); }
-        }
-
-        public DateTime? LastModified
-        {
-            get
-            { 
-                var modified = _args.FirstOrDefault(arg => arg.StartsWith("m:"));
-                if (modified != null)
-                {
-                    DateTime lastModified;
-                    if (DateTime.TryParse(modified.Substring(2), out lastModified))
-                    {
-                        return lastModified;
-                    }
-                }
-                return null;
-            }
-        }
-
-        public bool Confirm { get { return !_args.Contains("-nc") && !_args.Contains("--noconfirm"); } }
     }
 }

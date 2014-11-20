@@ -14,11 +14,11 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void ExportsAllSolutionsProvidedOnCommandLine()
         {
-            var command = new ExportSolutionCommandLine(new[] {"export", "sol1,sol2"});
+            var command = new ExportSolutionCommandLine(new[] { "export", "sol1,sol2", "conn:connectionName" });
             var writer = new Mock<IFileWriter>();
             var service = new Mock<IOrganizationService>();
             var context = new Mock<IXrmTaskContext>();
-            context.Setup(x => x.Service).Returns(service.Object);
+            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(service.Object);
             service.Setup(x => x.Execute(It.IsAny<OrganizationRequest>())).Returns(new ExportSolutionResponse());
             context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
             var task = new ExportSolutionTask(command, writer.Object);

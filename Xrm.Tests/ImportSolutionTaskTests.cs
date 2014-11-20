@@ -18,13 +18,13 @@ namespace Octono.Xrm.Tests
             var context = new Mock<IXrmTaskContext>();
             var service = new Mock<IOrganizationService>();
             
-            context.Setup(x => x.Service).Returns(service.Object);
+            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(service.Object);
             context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
 
-            reader.Setup(x => x.GetSolutionsInExportFolder()).Returns(new[] { "solution1.zip", "solution2.zip" });
+            reader.Setup(x => x.GetSolutionsInExportFolder()).Returns(new[] { "solution1.zip", "solution2.zip", "conn:connectionName" });
             reader.Setup(x => x.FileExists("solution1.zip")).Returns(true);
             reader.Setup(x => x.FileExists("solution2.zip")).Returns(true);
-            var command = new ImportSolutionCommandLine(new[] {"import", "--exports"},reader.Object);
+            var command = new ImportSolutionCommandLine(new[] { "import", "--exports", "conn:connectionName" }, reader.Object);
             var task = new ImportSolutionTask(command);
 
             task.Execute(context.Object);
@@ -40,12 +40,12 @@ namespace Octono.Xrm.Tests
             var service = new Mock<IOrganizationService>();
             var reader = new Mock<IFileReader>();
             var context = new Mock<IXrmTaskContext>();
-            context.Setup(x => x.Service).Returns(service.Object);
+            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(service.Object);
             context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
 
             const string filePath = @"c:\path\to\file.zip";
 
-            var command = new ImportSolutionCommandLine(new[] { "import", filePath }, reader.Object);
+            var command = new ImportSolutionCommandLine(new[] { "import", filePath, "conn:connectionName" }, reader.Object);
             
             reader.Setup(x => x.ReadAllBytes(filePath)).Returns(new byte[] { });
             reader.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
@@ -62,9 +62,9 @@ namespace Octono.Xrm.Tests
         {
             var service = new Mock<IOrganizationService>();
             var context = new Mock<IXrmTaskContext>();
-            context.Setup(x => x.Service).Returns(service.Object);
+            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(service.Object);
             context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
-            var commandLine = new ImportSolutionCommandLine(new[] {"import", "--help"}, new Mock<IFileReader>().Object);
+            var commandLine = new ImportSolutionCommandLine(new[] { "import", "--help", "conn:connectionName" }, new Mock<IFileReader>().Object);
             var task        = new ImportSolutionTask(commandLine);
             
             task.Execute(context.Object);

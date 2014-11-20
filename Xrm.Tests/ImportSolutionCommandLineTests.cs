@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
@@ -16,7 +17,7 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void CanReadPublishArgument()
         {
-            var commandLine = new ImportSolutionCommandLine(new[] {"import"," filename ","nopublish"}, new Mock<IFileReader>().Object);
+            var commandLine = new ImportSolutionCommandLine(new[] { "import", " filename ", "nopublish", "conn:connectionName" }, new Mock<IFileReader>().Object);
 
             Assert.IsTrue(commandLine.Publish);
         }
@@ -24,14 +25,14 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void CanReadActivateProcessesArgument()
         {
-            var commandLine = new ImportSolutionCommandLine(new[] {"import"," filename"," noactivate"}, new Mock<IFileReader>().Object);
+            var commandLine = new ImportSolutionCommandLine(new[] { "import", " filename", " noactivate", "conn:connectionName" }, new Mock<IFileReader>().Object);
             Assert.IsTrue(commandLine.ActivateProcesses);
         }
 
         [TestMethod]
         public void DefaultArgumentsAreTrueWhenNotSpecified()
         {
-            var commandLine = new ImportSolutionCommandLine(new[] {"import","filename"}, new Mock<IFileReader>().Object);
+            var commandLine = new ImportSolutionCommandLine(new[] { "import", "filename", "conn:connectionName" }, new Mock<IFileReader>().Object);
             Assert.IsTrue(commandLine.ActivateProcesses);
             Assert.IsTrue(commandLine.Publish);
         }
@@ -42,7 +43,7 @@ namespace Octono.Xrm.Tests
             const string filename = @"c:\path\to\file.zip";
             var fileReader = new Mock<IFileReader>();
             fileReader.SetReturnsDefault(true);
-            var commandLine = new ImportSolutionCommandLine(new[]{"import ", filename}, fileReader.Object);
+            var commandLine = new ImportSolutionCommandLine(new[] { "import ", filename, "conn:connectionName" }, fileReader.Object);
             Assert.AreEqual(commandLine.GetSolutionFilePaths().Single(), filename);
         }
 
@@ -53,10 +54,10 @@ namespace Octono.Xrm.Tests
             var fileReader  = new Mock<IFileReader>();
             var context     = new Mock<IXrmTaskContext>();
             context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
-            context.Setup(x => x.Service).Returns(new Mock<IOrganizationService>().Object);
+            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(new Mock<IOrganizationService>().Object);
 
             fileReader.Setup(x => x.FileExists(defaultPath)).Returns(true);
-            var commandline = new ImportSolutionCommandLine(new[] { "import", "filename.zip" }, fileReader.Object);
+            var commandline = new ImportSolutionCommandLine(new[] { "import", "filename.zip", "conn:connectionName" }, fileReader.Object);
             var task = new ImportSolutionTask(commandline);
 
             task.Execute(context.Object);
@@ -67,14 +68,15 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void FindsFileInImportFolderWhenOnlyFilenameProvided()
         {
-            string defaultPath  = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Import","filename.zip") ;
+            string defaultPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Import", "filename.zip");
             var fileReader      = new Mock<IFileReader>();
-            var context = new Mock<IXrmTaskContext>();
+            var context         = new Mock<IXrmTaskContext>();
+            
             context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
-            context.Setup(x => x.Service).Returns(new Mock<IOrganizationService>().Object);
+            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(new Mock<IOrganizationService>().Object);
 
             fileReader.Setup(x => x.FileExists(defaultPath)).Returns(true);
-            var commandline = new ImportSolutionCommandLine(new[] { "import", "filename.zip" }, fileReader.Object);
+            var commandline = new ImportSolutionCommandLine(new[] { "import", "filename.zip", "conn:connectionName" }, fileReader.Object);
             var task = new ImportSolutionTask(commandline);
 
             task.Execute(context.Object);
@@ -90,10 +92,10 @@ namespace Octono.Xrm.Tests
             context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
             var service = new Mock<IOrganizationService>();
             
-            context.Setup(x => x.Service).Returns(service.Object);
+            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(service.Object);
 
             reader.SetReturnsDefault(true);
-            var commandline = new ImportSolutionCommandLine(new[] {"import", "filename1,filename2"}, reader.Object);
+            var commandline = new ImportSolutionCommandLine(new[] { "import", "filename1,filename2", "conn:connectionName" }, reader.Object);
             var task = new ImportSolutionTask(commandline);
             task.Execute(context.Object);
 
@@ -105,7 +107,7 @@ namespace Octono.Xrm.Tests
         {
             var reader = new Mock<IFileReader>();
             reader.SetReturnsDefault(true);
-            var commandline = new ImportSolutionCommandLine(new[] { "import", "filename1" }, reader.Object);
+            var commandline = new ImportSolutionCommandLine(new[] { "import", "filename1", "conn:connectionName" }, reader.Object);
             Assert.IsTrue(commandline.GetSolutionFilePaths().Single().EndsWith(".zip"));
         }
 
@@ -113,7 +115,7 @@ namespace Octono.Xrm.Tests
         public void FindsFilesInExportFolderWhenExportsOptionSpecified()
         {
             var reader  = new Mock<IFileReader>();
-            var command = new ImportSolutionCommandLine(new[] {"import", "--exports"},reader.Object);
+            var command = new ImportSolutionCommandLine(new[] { "import", "--exports", "conn:connectionName" }, reader.Object);
 
             command.GetSolutionFilePaths().ToList();
             reader.Verify(x=>x.GetSolutionsInExportFolder(),Times.Once);
@@ -124,10 +126,10 @@ namespace Octono.Xrm.Tests
         public void UsesAllSolutionFilesInExportsFolderWhenExportsCommandOptionSet()
         {
             var reader = new Mock<IFileReader>();
-            reader.Setup(x => x.GetSolutionsInExportFolder()).Returns(new[] { @"Exports\solution1.zip", @"Exports\solution2.zip" });
+            reader.Setup(x => x.GetSolutionsInExportFolder()).Returns(new[] { @"Exports\solution1.zip", @"Exports\solution2.zip", "conn:connectionName" });
             reader.Setup(x => x.FileExists(@"Exports\solution1.zip")).Returns(true);
             reader.Setup(x => x.FileExists(@"Exports\solution2.zip")).Returns(true);
-            var command = new ImportSolutionCommandLine(new[] { "import", "--exports" }, reader.Object);
+            var command = new ImportSolutionCommandLine(new[] { "import", "--exports", "conn:connectionName" }, reader.Object);
 
             Assert.IsTrue(command.GetSolutionFilePaths().Contains(@"Exports\solution1.zip"));
             Assert.IsTrue(command.GetSolutionFilePaths().Contains(@"Exports\solution2.zip"));
@@ -136,14 +138,14 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void ShowHelpOptionIsTrueWhenSpecifiedAsArgument()
         {
-            var command = new ImportSolutionCommandLine(new[] { "import", "--help" }, new Mock<IFileReader>().Object);
+            var command = new ImportSolutionCommandLine(new[] { "import", "--help", "conn:connectionName" }, new Mock<IFileReader>().Object);
             Assert.IsTrue(command.ShowHelp);
         }
 
         [TestMethod]
         public void SetsOverwriteUnmanagedTrueWhenArgumentSpecified()
         {
-            var command = new ImportSolutionCommandLine(new[] { "import", "--overwrite" }, new Mock<IFileReader>().Object);
+            var command = new ImportSolutionCommandLine(new[] { "import", "--overwrite", "conn:connectionName" }, new Mock<IFileReader>().Object);
             Assert.IsTrue(command.OverwriteUmanaged);
         }
 

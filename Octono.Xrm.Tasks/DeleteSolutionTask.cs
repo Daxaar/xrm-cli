@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 
 namespace Octono.Xrm.Tasks
@@ -16,15 +17,16 @@ namespace Octono.Xrm.Tasks
         public override void Execute(IXrmTaskContext context)
         {
             ShowHelp(context.Log);
-            using (var ctx = new OrganizationServiceContext(context.Service))
+            IOrganizationService service = context.ServiceFactory.Create(_command.ConnectionName);
+            using (var ctx = new OrganizationServiceContext(service))
             {
                 var solution = from s in ctx.CreateQuery("solution")
                                where s.GetAttributeValue<string>("uniquename") == _command.SolutionName
                                select s.Id;
 
                 context.Log.Write(string.Format("Deleting solution {0}", _command.SolutionName));
-                context.Service.Delete("solution",solution.Single());
-                context.Service.Execute(new PublishAllXmlRequest());
+                service.Delete("solution",solution.Single());
+                service.Execute(new PublishAllXmlRequest());
                 context.Log.Write(string.Format("Solution deleted successfully"));
             }
         }

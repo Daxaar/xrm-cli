@@ -21,13 +21,11 @@ namespace Octono.Xrm.Tasks
     {
         private readonly DeployWebResourceCommandLine _commandLine;
         private readonly IFileReader _reader;
-        private readonly IConfigurationManager _config;
 
-        public DeployWebResourceTask(DeployWebResourceCommandLine commandLine, IFileReader reader, IConfigurationManager config)
+        public DeployWebResourceTask(DeployWebResourceCommandLine commandLine, IFileReader reader)
         {
             _commandLine = commandLine;
             _reader = reader;
-            _config = config;
         }
 
         public override void Execute(IXrmTaskContext context)
@@ -44,7 +42,8 @@ namespace Octono.Xrm.Tasks
 
             //Retrieve the existing web resource based on the filename
             context.Log.Write(string.Format("Retrieving {0}", fileNameWithoutExtension));
-            var query = new WebResourceQuery(context.Service);
+            IOrganizationService service = context.ServiceFactory.Create(_commandLine.ConnectionName);
+            var query = new WebResourceQuery(service);
             var resource = query.Retrieve(fileNameWithoutExtension);
 
             if (!string.IsNullOrEmpty(resource.GetAttributeValue<string>("content")) &&
@@ -56,11 +55,11 @@ namespace Octono.Xrm.Tasks
             //Set the content of the webresource to the file content and update
             context.Log.Write(string.Format("Deploying {0}", fileNameWithoutExtension));
             resource["content"] = fileContent64;
-            context.Service.Update(resource);
+            service.Update(resource);
 
-            var publish = new PublishWebResourceTask(resource.Id);
+            var publish = new PublishWebResourceTask(resource.Id,_commandLine.ConnectionName);
             publish.Execute(context);
-            _config.Add("lastmodified", DateTime.Now.ToString(CultureInfo.InvariantCulture));
+            context.Configuration.AppSettings["lastmodified"] = DateTime.Now.ToString(CultureInfo.InvariantCulture);
         }
 
     }

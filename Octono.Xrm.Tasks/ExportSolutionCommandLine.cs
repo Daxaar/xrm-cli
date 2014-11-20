@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace Octono.Xrm.Tasks
 {
-    public class ExportSolutionCommandLine
+    public class ExportSolutionCommandLine : CommandLine
     {
         private readonly IList<string> _args;
 
-        public ExportSolutionCommandLine(IList<string> args)
+        public ExportSolutionCommandLine(IList<string> args) : base(args)
         {
             _args = args;
         }

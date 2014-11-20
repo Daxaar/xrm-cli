@@ -26,15 +26,16 @@ namespace Octono.Xrm.Tasks
             {
                 if (_command.IncrementVersionBeforeExport)
                 {
-                    var incrementVersionTask = new IncrementSolutionVersionTask(solution);
+                    var incrementVersionTask = new IncrementSolutionVersionTask(new IncrementSolutionCommandLine(_command.Args));
                     incrementVersionTask.Execute(context);
                 }
 
-                string version = GetSolutionVersionNumber(solution,context.Service);
+                IOrganizationService service = context.ServiceFactory.Create(_command.ConnectionName);
+                string version = GetSolutionVersionNumber(solution,service);
                 String path = _command.BuildExportPath(solution, version);
 
                 context.Log.Write(string.Format("Exporting {0} to {1}", solution, path));
-                var response = (ExportSolutionResponse)context.Service.Execute(new ExportSolutionRequest
+                var response = (ExportSolutionResponse)service.Execute(new ExportSolutionRequest
                     {
                     SolutionName = solution,
                     Managed = _command.Managed

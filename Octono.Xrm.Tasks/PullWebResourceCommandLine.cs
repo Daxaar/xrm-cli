@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace Octono.Xrm.Tasks
 {
-    public class PullWebResourceCommandLine
+    public class PullWebResourceCommandLine : CommandLine
     {
         private readonly List<string> _args;
         private readonly string _path = "";
 
-        public PullWebResourceCommandLine(IEnumerable<string> args)
+        public PullWebResourceCommandLine(IList<string> args) : base(args)
         {
             _args = args.ToList();
 

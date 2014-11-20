@@ -1,26 +1,29 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 
 namespace Octono.Xrm.Tasks
 {
     public class IncrementSolutionVersionTask : XrmTask
     {
-        private readonly string _solutionName;
+        private readonly IncrementSolutionCommandLine _commandLine;
 
-        public IncrementSolutionVersionTask(string solutionName)
+        public IncrementSolutionVersionTask(IncrementSolutionCommandLine commandLine)
         {
-            _solutionName = solutionName;
+            _commandLine = commandLine;
         }
 
         public override void Execute(IXrmTaskContext context)
         {
-            context.Log.Write(string.Format("Incrementing Version Number for solution {0}",_solutionName));
+            context.Log.Write(string.Format("Incrementing Version Number for solution {0}",_commandLine.Solution));
             string oldVersion, newVersion;
 
-            using (var orgContext = new OrganizationServiceContext(context.Service))
+            IOrganizationService service = context.ServiceFactory.Create(_commandLine.ConnectionName);
+            using (var orgContext = new OrganizationServiceContext(service))
             {
                 var solution = orgContext.CreateQuery("solution")
-                                      .First(s => s.GetAttributeValue<string>("uniquename") == _solutionName);
+                                      .First(s => s.GetAttributeValue<string>("uniquename") == _commandLine.Solution);
 
                 oldVersion = solution.GetAttributeValue<string>("version");
 
@@ -30,11 +33,16 @@ namespace Octono.Xrm.Tasks
                 orgContext.UpdateObject(solution);
                 orgContext.SaveChanges();
             }
-            context.Log.Write(string.Format("Incremented Solution {0} from {1} to {2}",_solutionName,oldVersion,newVersion));
+            context.Log.Write(string.Format("Incremented Solution {0} from {1} to {2}", _commandLine.Solution, oldVersion, newVersion));
         }
     }
-    public class IncrementSolutionCommandLine
+    public class IncrementSolutionCommandLine : CommandLine
     {
+        public IncrementSolutionCommandLine(IList<string> args) : base(args)
+        {
+            Solution = args.FirstOrDefault(arg => arg.StartsWith("s:"));
+        }
+
         public string Solution { get; set; }
     }
 

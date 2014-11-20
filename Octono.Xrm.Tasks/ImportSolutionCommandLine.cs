@@ -6,12 +6,12 @@ using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {
-    public class ImportSolutionCommandLine
+    public class ImportSolutionCommandLine : CommandLine
     {
         private readonly IList<string> _args;
         private readonly IFileReader _reader;
 
-        public ImportSolutionCommandLine(IList<string> args, IFileReader reader)
+        public ImportSolutionCommandLine(IList<string> args, IFileReader reader) : base(args)
         {
             _args = args;
             _reader = reader;
@@ -21,9 +21,9 @@ namespace Octono.Xrm.Tasks
         {
                 //Read the import filename (inc path) from second commandline arg or read all solution files
                 //from Export directory if --exports option has been specified
-                string[] files = _args.Contains("--exports") ? _reader.GetSolutionsInExportFolder().ToArray() 
-                                                             : _args[1].Split(',');
-                
+                string[] files = _args.Contains("--exports") 
+                                    ? _reader.GetSolutionsInExportFolder().Where(x => x.Contains(":") == false).ToArray() 
+                                    : _args[1].Split(',');
 
                 for (int i = 0; i < files.Length; i++)
                 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 
 namespace Octono.Xrm.Tasks
@@ -28,14 +29,15 @@ namespace Octono.Xrm.Tasks
                     ImportJobId = jobId,
                     OverwriteUnmanagedCustomizations = _command.OverwriteUmanaged
                 };
-                context.Service.Execute(importRequest);
+                IOrganizationService service = context.ServiceFactory.Create(_command.ConnectionName);
+                service.Execute(importRequest);
                 
                 context.Log.Write(string.Format("Publishing {0}",filePath));
                 if (_command.Publish)
                 {
-                    context.Service.Execute(new PublishAllXmlRequest());
+                    service.Execute(new PublishAllXmlRequest());
                 }
-                context.Service.Retrieve("importjob", importRequest.ImportJobId, new ColumnSet(new[] { "data", "solutionname" }));
+                service.Retrieve("importjob", importRequest.ImportJobId, new ColumnSet(new[] { "data", "solutionname" }));
                 context.Log.Write("Solution imported successfully");
                 
             }

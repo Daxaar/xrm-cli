@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
@@ -17,42 +19,31 @@ namespace Octono.Xrm.Tasks
         {
             var reader = new SystemFileReader();
             var writer = new SystemFileWriter();
+            
+            IConfigurationManager configManager = new JsonConfigurationManager(reader,writer);
 
-            IConfigurationManager config = new JsonConfigurationManager(reader,writer);
+            IXrmConfiguration config = configManager.Load();
+            var taskFactory = new XrmTaskFactory(reader, writer, config);
             try
             {
-                var taskFactory = new XrmTaskFactory(reader,writer,config);
                 IXrmTask task = taskFactory.CreateTask(args);
 
-                //Some tasks act on configuration and don't require a connection
-                if (task.RequiresServerConnection && DoesNotContainHelpArgument(args))
+                using (var factory = new XrmServiceFactory(_logger, config))
                 {
-                    using (var connection = new ServerConnection(args, _logger, config))
-                    {
-                        task.Execute(new DefaultXrmTaskContext(connection.CreateOrgService(), _logger));
-                    }
-                }
-                else
-                {
-                    task.Execute(new DefaultXrmTaskContext(_logger));
+                    task.Execute(new XrmTaskContext(factory, _logger,config));
                 }
             }
             catch (Exception e)
             {
-                _logger.Write("Error:" + e.Message + "\n");
-                _logger.Write(args.Contains("--debug")
-                                  ? e.StackTrace
-                                  : "\tUse --debug to view the full stacktrace");
+                _logger.Write("Error:\n" + e.Message + "\n" + e.StackTrace);
             }
             finally
             {
-                config.Save();
+                writer.Write(_logger.History.SelectMany(s => System.Text.Encoding.ASCII.GetBytes(s)).ToArray(),
+                             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.log"));
+                configManager.Save(config);
             }
         }
-
-        private static bool DoesNotContainHelpArgument(string[] args)
-        {
-            return !args.Any(a => a.Contains("help") || a.Contains("/?"));
-        }
     }
+
 }
