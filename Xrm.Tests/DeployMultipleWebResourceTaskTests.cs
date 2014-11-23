@@ -13,7 +13,6 @@ namespace Octono.Xrm.Tests
     [TestClass]
     public class DeployMultipleWebResourceTaskTests
     {
-
         private static ILog CreateLog(string promptResponse = "yes")
         {
             var log = new Mock<ILog>();

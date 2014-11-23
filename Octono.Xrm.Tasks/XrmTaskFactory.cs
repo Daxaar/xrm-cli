@@ -6,6 +6,9 @@ using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Creates an IXrmTask concrete type based on the command passed in the arguments
+    /// </summary>
     public class XrmTaskFactory : IXrmTaskFactory
     {
         private readonly IFileReader _reader;

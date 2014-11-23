@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Command line parser for DeployWebResourceTask
+    /// </summary>
     public class DeployWebResourceCommandLine : CommandLine
     {
         public DeployWebResourceCommandLine(IList<string> args) : base(args)

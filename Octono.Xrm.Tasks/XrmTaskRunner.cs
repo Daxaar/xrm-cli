@@ -6,6 +6,9 @@ using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Initiating class called from containing application (Program.cs)
+    /// </summary>
     public class XrmTaskRunner
     {
         private readonly ILog _logger;

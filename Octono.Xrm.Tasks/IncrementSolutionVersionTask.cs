@@ -5,6 +5,9 @@ using Microsoft.Xrm.Sdk.Client;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Increments the version number of a solution using the semantic versioning format http://semver.org/
+    /// </summary>
     public class IncrementSolutionVersionTask : XrmTask
     {
         private readonly IncrementSolutionCommandLine _commandLine;

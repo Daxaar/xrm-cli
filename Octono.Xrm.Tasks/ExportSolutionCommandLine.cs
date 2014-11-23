@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Command line argument parser for ExportSolutionTask
+    /// </summary>
     public class ExportSolutionCommandLine : CommandLine
     {
         private readonly IList<string> _args;

@@ -7,6 +7,10 @@ using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Creates an OrganizationServiceProxy with the required WCF binding configuration.  Specifically a long timeout to
+    /// support import/export tasks
+    /// </summary>
     public class OrganizationServiceFactory
     {
         public static IOrganizationService Create(ConnectionInfo connectionInfo, ILog logger)

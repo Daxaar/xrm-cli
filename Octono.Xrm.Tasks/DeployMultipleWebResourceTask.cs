@@ -10,6 +10,9 @@ using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Deploys one or more web resource to an Organisation
+    /// </summary>
     public class CopyRecordsTask : XrmTask
     {
         private readonly CopyRecordsCommandLine _commandLine;

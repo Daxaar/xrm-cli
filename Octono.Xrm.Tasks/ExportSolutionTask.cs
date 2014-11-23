@@ -7,6 +7,9 @@ using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Exports a solution managed or unmanaged from an Organisation and optionally incrementing the version number 
+    /// </summary>
     public class ExportSolutionTask : XrmTask
     {
         private readonly ExportSolutionCommandLine _command;

@@ -3,13 +3,16 @@ using System.Globalization;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Ensures the version number when not already present follows the http://semver.org/ format
+    /// </summary>
     public class SolutionVersionFormatter
     {
         public string Increment(string version)
         {
             if (string.IsNullOrEmpty(version))
             {
-                return "0.0.0.1";
+                return "0.0.1";
             }
 
             string[] versions = version.Split('.');

@@ -6,6 +6,10 @@ using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Holds all active connections (IOrganisationService) providing an existing or new instances to the XrmTaskContext
+    /// when request by name
+    /// </summary>
     public class XrmServiceFactory : IXrmServiceFactory,IDisposable
     {
         private readonly ILog _log;

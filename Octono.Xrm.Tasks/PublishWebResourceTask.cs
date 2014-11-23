@@ -3,6 +3,9 @@ using Microsoft.Crm.Sdk.Messages;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Publishes a WebResource typically after depoyment using DeployWebResourceTask
+    /// </summary>
     public class PublishWebResourceTask : XrmTask
     {
         private readonly Guid _id;

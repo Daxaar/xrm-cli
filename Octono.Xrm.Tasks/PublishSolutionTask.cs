@@ -3,6 +3,9 @@ using Microsoft.Crm.Sdk.Messages;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Executes a PublishAllRequests against the Organisation
+    /// </summary>
     public class PublishSolutionCommandLine : CommandLine
     {
         public PublishSolutionCommandLine(IList<string> args) : base(args)

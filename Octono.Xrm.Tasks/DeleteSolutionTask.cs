@@ -5,6 +5,9 @@ using Microsoft.Xrm.Sdk.Client;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Deletes a solution from an Organisation
+    /// </summary>
     public class DeleteSolutionTask : XrmTask
     {
         private readonly DeleteSolutionCommandLine _command;

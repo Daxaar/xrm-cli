@@ -3,11 +3,13 @@ using System.IO;
 using Microsoft.Xrm.Sdk;
 using Octono.Xrm.Tasks.IO;
 
-//TODO: Add support for retrieving all customizable resources
 //TODO: Add support for path format resource names i.e new_/resource.js
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Pulls a WebResource from the Organisation to the specified local file
+    /// </summary>
     public class PullWebResourceTask : XrmTask
     {
         private readonly PullWebResourceCommandLine _commandLine;

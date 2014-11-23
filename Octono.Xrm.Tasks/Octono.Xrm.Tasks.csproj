@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddConnectionTask.cs" />
+    <Compile Include="CommandLine.cs" />
     <Compile Include="Crm\CrmContext.cs" />
     <Compile Include="DeployWebResourceCommandLine.cs" />
     <Compile Include="IO\IXrmConfiguration.cs" />

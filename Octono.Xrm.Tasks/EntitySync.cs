@@ -4,6 +4,9 @@ using Microsoft.Xrm.Sdk;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// WIP: Used for syncing records between Organisations
+    /// </summary>
     public class EntitySync
     {
         private readonly IEnumerable<Entity> _source;

@@ -4,6 +4,9 @@ using Microsoft.Xrm.Sdk;
 
 namespace Octono.Xrm.Tasks
 {
+    /// <summary>
+    /// Equality Comparer for primary attribute comparison based on entity type and Id
+    /// </summary>
     public class PrimaryAttributeEqualityComparer : IEqualityComparer<Entity>
     {
         private readonly string _primaryAttributeName;
