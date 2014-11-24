@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
 using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks

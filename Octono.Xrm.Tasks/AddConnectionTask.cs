@@ -22,36 +22,24 @@ namespace Octono.Xrm.Tasks
 
         public void Execute(IXrmTaskContext context)
         {
+            if(_args.Count < 3)
+                throw new InvalidOperationException("You must specify at least a name for the connection and the Organisation name.");
+
+            var uri = new Uri(_args[2]);
+
+            if (uri.Segments.Count() != 2)
+                throw new FormatException("The URL must be in the format scheme://server/org");
+
             var connectionInfo = new ConnectionInfo
                 {
-                    Debug = _args.Contains("--debug"),
-                    ServerName = ReadArg(_args, "server") ?? ReadArg(_args, "s"),
-                    Port = Convert.ToInt32(ReadArg(_args, "port") ?? ReadArg(_args, "p") ?? "80"),
-                    Protocol = ReadArg(_args, "protocol") ?? "http",
-                    Organisation = ReadArg(_args, "org") ?? ReadArg(_args, "o") ??
-                                   ThrowOnNull<string>("Organization name parameter is required o:yourorgname"),
-                    Name = ReadArg(_args, "name") ??
-                           ThrowOnNull<string>("You must specify a connectionInfo name using the c:name_of_connection_in_config_file format.  Use the AddConnection command to add a connection to configuration."),
+                    ServerName = uri.Host,
+                    Port = uri.Port,
+                    Protocol = uri.Scheme,
+                    Organisation = uri.Segments.Last(),
+                    Name = _args[1]
                 };
 
             context.Configuration.ConnectionStrings[connectionInfo.Name] = connectionInfo;
-        }
-
-        private static string ReadArg(IEnumerable<string> args, string argName)
-        {
-            var arg = args.FirstOrDefault(x => x.Trim().StartsWith(argName + ":"));
-            if (!String.IsNullOrEmpty(arg))
-            {
-                arg = arg.Trim();
-                arg = arg.Substring(arg.IndexOf(":", StringComparison.Ordinal) + 1);
-            }
-
-            return arg;
-        }
-
-        private static T ThrowOnNull<T>(string message)
-        {
-            throw new ArgumentException(message);
         }
     }
 }
