@@ -11,10 +11,14 @@ namespace Octono.Xrm.ConsoleTaskRunner
         {
             History=new List<string>();
         }
-        public void Write(string message)
+
+        public void Write(string message, bool withTimestamp=true)
         {
-            var time = DateTime.Now.TimeOfDay;
-            message = string.Format("{0}:{1}:{2} - {3}", time.Hours, time.Minutes, time.Seconds, message);
+            if (withTimestamp)
+            {
+                var time = DateTime.Now.TimeOfDay;
+                message = string.Format("{0}:{1}:{2} - {3}", time.Hours.ToString("##"), time.Minutes.ToString("##"), time.Seconds.ToString("##"), message);                
+            }
             Console.WriteLine(message);
             History.Add(message + "\n");
         }

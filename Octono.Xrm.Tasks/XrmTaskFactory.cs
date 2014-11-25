@@ -33,7 +33,7 @@ namespace Octono.Xrm.Tasks
                         {
                             args.Add(Directory.GetCurrentDirectory());
                         }
-                        return new PullWebResourceTask(new PullWebResourceCommandLine(args),_writer);
+                        return new PullWebResourceTask(new PullWebResourceCommandLine(args), _writer);
                     }
                 case "deploy":
                     {
@@ -44,14 +44,14 @@ namespace Octono.Xrm.Tasks
                         }
                         if (Path.GetExtension(args[1]) == ".js")
                         {
-                            return new DeployWebResourceTask(new DeployWebResourceCommandLine(args), _reader);                            
+                            return new DeployWebResourceTask(new DeployWebResourceCommandLine(args), _reader);
                         }
-                        
+
                         return new DeployMultipleWebResourceTask(new DeployWebResourceCommandLine(args), _reader);
                     }
                 case "deletesolution":
                     {
-                        return new DeleteSolutionTask(new DeleteSolutionCommandLine(args));                            
+                        return new DeleteSolutionTask(new DeleteSolutionCommandLine(args));
                     }
                 case "import":
                     {
@@ -67,8 +67,16 @@ namespace Octono.Xrm.Tasks
                         return new ExitTask();
                     }
                 case "addconnection":
+                case "addconn":
                     {
                         return new AddConnectionTask(args);
+                    }
+                case "listconnection":
+                case "listconn":
+                case "listconnections":
+                case "connections":
+                    {
+                        return new ListConnectionsTask();
                     }
                 case "publish":
                     {
