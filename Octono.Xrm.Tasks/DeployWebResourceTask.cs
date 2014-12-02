@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 using Octono.Xrm.Tasks.IO;
 //TODO: Adding warning when updating a managed webresource
 //TODO: Support other web resource types
@@ -21,39 +19,34 @@ namespace Octono.Xrm.Tasks
     {
         private readonly DeployWebResourceCommandLine _commandLine;
         private readonly IFileReader _reader;
+        private readonly IWebResourceQuery _query;
 
-        public DeployWebResourceTask(DeployWebResourceCommandLine commandLine, IFileReader reader)
+        public DeployWebResourceTask(DeployWebResourceCommandLine commandLine, IFileReader reader, IWebResourceQuery query)
         {
             _commandLine = commandLine;
             _reader = reader;
+            _query = query;
         }
 
         public override void Execute(IXrmTaskContext context)
         {
-            var content     = _reader.ReadAllBytes(_commandLine.FilePath);
-            string fileNameWithoutExtension = _reader.RemoveFileExtension(Path.GetFileName(_commandLine.FilePath));
+            var content = _reader.ReadAllBytes(_commandLine.FilePath);
             string fileContent64 = Convert.ToBase64String(content);
 
-            if (string.IsNullOrEmpty(fileContent64) && !_commandLine.AllowEmptyFile)
-            {
-                context.Log.Write("The local file is empty.  Use the -f argument if you wish force the deployment.");
-                return;
-            }
+            if (!ContinueWhenFileIsEmpty(context,fileContent64)) return;
 
-            //Retrieve the existing web resource based on the filename
-            context.Log.Write(string.Format("Retrieving {0}", fileNameWithoutExtension));
+            //Use the name if specified on the commandline otherwise default to filename without file extension
+            string resourceName = _commandLine.Name ?? _reader.RemoveFileExtension(Path.GetFileName(_commandLine.FilePath));
+
+            //Retrieve the existing web resource
+            context.Log.Write(string.Format("Retrieving {0}", resourceName));
             IOrganizationService service = context.ServiceFactory.Create(_commandLine.ConnectionName);
-            var query = new WebResourceQuery(service);
-            var resource = query.Retrieve(fileNameWithoutExtension);
+            var resource = _query.Retrieve(service, resourceName);
 
-            if (!string.IsNullOrEmpty(resource.GetAttributeValue<string>("content")) &&
-                resource.GetAttributeValue<string>("content").Equals(fileContent64, StringComparison.CurrentCulture))
-            {
-                context.Log.Write("The server content is the same as the local file content");
-                return;
-            }
+            if (FileOnServerMatchesLocalFile(resource,context,fileContent64)) return;
+
             //Set the content of the webresource to the file content and update
-            context.Log.Write(string.Format("Deploying {0}", fileNameWithoutExtension));
+            context.Log.Write(string.Format("Deploying {0}", resourceName));
             resource["content"] = fileContent64;
             service.Update(resource);
 
@@ -62,34 +55,25 @@ namespace Octono.Xrm.Tasks
             context.Configuration.AppSettings["lastmodified"] = DateTime.Now.ToString(CultureInfo.InvariantCulture);
         }
 
-    }
-
-    public class WebResourceQuery
-    {
-        private readonly IOrganizationService _service;
-
-        public WebResourceQuery(IOrganizationService service)
+        private static bool FileOnServerMatchesLocalFile(Entity resource, IXrmTaskContext context, string fileContent64)
         {
-            if(service == null) throw new ArgumentNullException("service","WebResourceQuery ctor paramter cannot be null");
-            _service = service;
+            if (!string.IsNullOrEmpty(resource.GetAttributeValue<string>("content")) &&
+                resource.GetAttributeValue<string>("content").Equals(fileContent64, StringComparison.CurrentCulture))
+            {
+                context.Log.Write("The server content is the same as the local file content");
+                return true;
+            }
+            return false;
         }
 
-        public Entity Retrieve(string name)
+        private bool ContinueWhenFileIsEmpty(IXrmTaskContext context, string fileContent64)
         {
-            var query = new QueryExpression("webresource") { ColumnSet = new ColumnSet(new[] { "content","webresourcetype" }) };
-
-            query.Criteria.AddCondition("name", ConditionOperator.Equal, name);
-            //query.Criteria.AddCondition("iscustomizable",ConditionOperator.Equal,true);
-
-            query.Criteria.AddFilter(LogicalOperator.And).AddCondition("iscustomizable",ConditionOperator.Equal,true);
-            var result = _service.RetrieveMultiple(query);
-
-            if (result.Entities.Any() == false)
+            if (string.IsNullOrEmpty(fileContent64) && !_commandLine.AllowEmptyFile)
             {
-                throw new InvalidOperationException(string.Format("Cannot find JavaScript web resource {0}", name));                
-            } 
-
-            return result.Entities.Single();            
+                context.Log.Write("The local file is empty.  Use the -f argument if you wish force the deployment.");
+                return false;
+            }
+            return true;
         }
     }
 }

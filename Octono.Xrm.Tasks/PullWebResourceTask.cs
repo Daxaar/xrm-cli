@@ -26,8 +26,8 @@ namespace Octono.Xrm.Tasks
             if (ShowHelp(context.Log)) return;
 
             IOrganizationService service = context.ServiceFactory.Create(_commandLine.ConnectionName);
-            var query       = new WebResourceQuery(service);
-            var entity      = query.Retrieve(_commandLine.Name);
+            var query       = new WebResourceQuery();
+            var entity      = query.Retrieve(service,_commandLine.Name);
             var content     = entity.GetAttributeValue<string>("content").FromBase64String();
             var optionset   = entity.GetAttributeValue<OptionSetValue>("webresourcetype");
             var type        = WebResourceType.ToFileExtension(optionset.Value);

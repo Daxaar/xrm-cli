@@ -71,6 +71,7 @@
     <Compile Include="IO\IXrmConfiguration.cs" />
     <Compile Include="IO\JsonConfigurationManager.cs" />
     <Compile Include="ListConnectionsTask.cs" />
+    <Compile Include="WebResourceQuery.cs" />
     <Compile Include="XrmTaskContext.cs" />
     <Compile Include="DeleteSolutionCommandLine.cs" />
     <Compile Include="DeleteSolutionTask.cs" />

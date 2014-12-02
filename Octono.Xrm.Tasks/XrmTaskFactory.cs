@@ -44,7 +44,7 @@ namespace Octono.Xrm.Tasks
                         }
                         if (Path.GetExtension(args[1]) == ".js")
                         {
-                            return new DeployWebResourceTask(new DeployWebResourceCommandLine(args), _reader);
+                            return new DeployWebResourceTask(new DeployWebResourceCommandLine(args), _reader,new WebResourceQuery());
                         }
 
                         return new DeployMultipleWebResourceTask(new DeployWebResourceCommandLine(args), _reader);
