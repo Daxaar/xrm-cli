@@ -5,6 +5,7 @@ using Microsoft.Xrm.Sdk;
 using Moq;
 using Octono.Xrm.Tasks;
 using Octono.Xrm.Tasks.IO;
+using Octono.Xrm.Tests.Builders;
 
 namespace Octono.Xrm.Tests
 {
@@ -14,16 +15,17 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void ExportsAllSolutionsProvidedOnCommandLine()
         {
-            var command = new ExportSolutionCommandLine(new[] { "export", "sol1,sol2", "conn:connectionName" });
+            var command = new ExportSolutionCommandLine(new[] { "export", "sol1,sol2", "connectionName" });
             var writer = new Mock<IFileWriter>();
-            var service = new Mock<IOrganizationService>();
-            var context = new Mock<IXrmTaskContext>();
-            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(service.Object);
-            service.Setup(x => x.Execute(It.IsAny<OrganizationRequest>())).Returns(new ExportSolutionResponse());
-            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
+            var context = new MockXrmTaskContext();
+            context.Service.Setup(x => x.Execute(It.IsAny<OrganizationRequest>())).Returns(new ExportSolutionResponse());
+
             var task = new ExportSolutionTask(command, writer.Object);
+            
             writer.Setup(x => x.Write(It.IsAny<byte[]>(), It.IsAny<string>())).Callback<byte[], string>((x, y) => Console.WriteLine(y));
+            
             task.Execute(context.Object);
+            
             writer.Verify(x=>x.Write(It.IsAny<byte[]>(),It.IsAny<string>()),Times.Exactly(2));
         }
     }

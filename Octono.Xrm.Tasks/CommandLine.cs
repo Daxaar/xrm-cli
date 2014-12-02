@@ -9,13 +9,10 @@ namespace Octono.Xrm.Tasks
     {
         protected CommandLine(IList<string> args)
         {
-            ConnectionName = args.SingleOrDefault(x => x.StartsWith("cn:") || x.StartsWith("conn:"));
-
-            if (string.IsNullOrEmpty(ConnectionName))
-            {
-                throw new ArgumentException("Connection name [cn:name or conn:name] argument has not been specified.");
-            }
-            ConnectionName = ConnectionName.Substring(ConnectionName.IndexOf(":", System.StringComparison.Ordinal) + 1);
+            //Read the connection if the user has explicitly set it in the params with the prefix otherwise
+            //assume the convention where it's always the last param
+            ConnectionName = args.SingleOrDefault(x => x.StartsWith("cn:") || x.StartsWith("conn:")) ??
+                             args.LastOrDefault();
             Args = args;
         }
         public string ConnectionName { get; set; }

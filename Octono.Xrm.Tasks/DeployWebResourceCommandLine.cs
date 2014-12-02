@@ -14,7 +14,7 @@ namespace Octono.Xrm.Tasks
         }
 
         //TODO: fix this!  It's hacky needing to create an arg string for the base on child tasks
-        public DeployWebResourceCommandLine(string fileName, string connectionName) : base(new[]{"deploy", fileName,"conn:" + connectionName})
+        public DeployWebResourceCommandLine(string fileName, string connectionName) : base(new[]{"deploy", fileName,connectionName})
         {
         }
         public string FilePath { get { return Args[1]; } }

@@ -32,11 +32,11 @@ namespace Octono.Xrm.Tests
         }
 
         [TestMethod]
-        public void CreatesNewFourPartVersionWhenInputIsEmptyString()
+        public void CreatesNewSemanticVersionNumberWhenInputIsEmptyString()
         {
             var formatter = new SolutionVersionFormatter();
             string actual = formatter.Increment("");
-            Assert.AreEqual("0.0.0.1", actual);
+            Assert.AreEqual("0.0.1", actual);
             
         }
 

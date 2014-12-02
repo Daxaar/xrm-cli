@@ -1,10 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xrm.Sdk;
 using Moq;
+using Octono.Xrm.Tasks;
 using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tests.Builders
 {
+    internal class MockXrmTaskContext : Mock<IXrmTaskContext>
+    {
+        public MockXrmTaskContext()
+        {
+            Service = new Mock<IOrganizationService>();
+            Log = new Mock<ILog>();
+            Configuration = new StubXrmConfiguration();
+
+            Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(Service.Object);
+            Setup(x => x.Log).Returns(new Mock<ILog>().Object);
+            Setup(x => x.Configuration).Returns(Configuration);
+        }
+
+        public Mock<ILog> Log { get; set; }
+        public Mock<IOrganizationService> Service { get; set; }
+
+        public StubXrmConfiguration Configuration { get; set; }
+    }
+
     internal class MockFileReaderBuilder
     {
         private readonly Mock<IFileReader> _reader = new Mock<IFileReader>();

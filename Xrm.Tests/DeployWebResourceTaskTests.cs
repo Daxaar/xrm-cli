@@ -21,31 +21,23 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void DoesNotUpdateWebResourceWhenLocalFileIsEmptyAndForceFlagNotSpecified()
         {
-            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), new Mock<IFileReader>().Object);
-            var context = new Mock<IXrmTaskContext>();
-            var service = new Mock<IOrganizationService>();
-
-            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(service.Object);
-            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
-            task.Execute(context.Object);
+            var task    = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), new Mock<IFileReader>().Object);
+            var context = new MockXrmTaskContext();
             
-            service.Verify(x=>x.Update(It.IsAny<Entity>()),Times.Never);
+            task.Execute(context.Object);
+            context.Service.Verify(x=>x.Update(It.IsAny<Entity>()),Times.Never);
         }
 
         [TestMethod]
         public void ReadsWebResourceFileFromDisk()
         {
             var reader  = new MockFileReaderBuilder().Returns(3).ModifiedFiles.WithRandomFileContent.Build();
-            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), reader.Object);
-            var context = new Mock<IXrmTaskContext>();
-            var service = new Mock<IOrganizationService>();
+            var task    = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), reader.Object);
+            var context = new MockXrmTaskContext();
+            
             var collectionWithOneRecord = new EntityCollection(new[] { new Entity("webresource") });
 
-            service.Setup(x => x.RetrieveMultiple(It.IsAny<QueryBase>())).Returns(collectionWithOneRecord);
-            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(service.Object);
-            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
-            context.Setup(x => x.Configuration).Returns(new StubXrmConfiguration());
-
+            context.Service.Setup(x => x.RetrieveMultiple(It.IsAny<QueryBase>())).Returns(collectionWithOneRecord);
             task.Execute(context.Object);
             
             reader.Verify(x=>x.ReadAllBytes(Path),Times.Once);
@@ -79,21 +71,16 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void UpdatesWebResourceContentAsBase64String()
         {
-            var context = new Mock<IXrmTaskContext>();
-            var service = new Mock<IOrganizationService>();
+            var context     = new MockXrmTaskContext();
             var webresource = new Entity("webresource") { Attributes = new AttributeCollection { { "name", "ntt_contribution" } } };
+            var task        = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), CreateFileReaderWithContent().Object);
 
-            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), CreateFileReaderWithContent().Object);
-
-            service.Setup(x => x.RetrieveMultiple(It.IsAny<QueryBase>())).Returns(new EntityCollection(new[] { webresource } ));
-            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(service.Object);
-            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
-            context.Setup(x => x.Configuration).Returns(new StubXrmConfiguration());
+            context.Service.Setup(x => x.RetrieveMultiple(It.IsAny<QueryBase>())).Returns(new EntityCollection(new[] { webresource } ));
 
             task.Execute(context.Object);
 
-            service.Verify(x => x.RetrieveMultiple(It.IsAny<QueryBase>()), Times.Once);
-            service.Verify(x => x.Update(webresource),Times.Once);
+            context.Service.Verify(x => x.RetrieveMultiple(It.IsAny<QueryBase>()), Times.Once);
+            context.Service.Verify(x => x.Update(webresource), Times.Once);
             Assert.AreEqual(WebResourceContent.ToBase64String(),webresource["content"]);
         }
     }

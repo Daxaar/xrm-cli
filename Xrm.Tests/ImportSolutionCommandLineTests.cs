@@ -8,9 +8,22 @@ using System;
 using System.Linq;
 using Octono.Xrm.Tasks;
 using Octono.Xrm.Tasks.IO;
+using Octono.Xrm.Tests.Builders;
 
 namespace Octono.Xrm.Tests
 {
+    [TestClass]
+    public class AddConnectionTaskTests
+    {
+        [TestMethod]
+        public void AcceptsConnectionNameAsLastParameter()
+        {
+            var task = new AddConnectionTask(new List<string> { "addconnection", "http://server/org", "connectionname" });
+            var context = new MockXrmTaskContext();
+            task.Execute(context.Object);
+            Assert.IsTrue(context.Configuration.ConnectionStrings.ContainsKey("connectionname"));
+        }
+    }
     [TestClass]
     public class ImportSolutionCommandLineTests
     {
@@ -52,9 +65,7 @@ namespace Octono.Xrm.Tests
         {
             string defaultPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filename.zip");
             var fileReader  = new Mock<IFileReader>();
-            var context     = new Mock<IXrmTaskContext>();
-            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
-            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(new Mock<IOrganizationService>().Object);
+            var context = new MockXrmTaskContext();
 
             fileReader.Setup(x => x.FileExists(defaultPath)).Returns(true);
             var commandline = new ImportSolutionCommandLine(new[] { "import", "filename.zip", "conn:connectionName" }, fileReader.Object);
@@ -70,10 +81,7 @@ namespace Octono.Xrm.Tests
         {
             string defaultPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Import", "filename.zip");
             var fileReader      = new Mock<IFileReader>();
-            var context         = new Mock<IXrmTaskContext>();
-            
-            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
-            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(new Mock<IOrganizationService>().Object);
+            var context         = new MockXrmTaskContext();
 
             fileReader.Setup(x => x.FileExists(defaultPath)).Returns(true);
             var commandline = new ImportSolutionCommandLine(new[] { "import", "filename.zip", "conn:connectionName" }, fileReader.Object);
@@ -88,18 +96,14 @@ namespace Octono.Xrm.Tests
         public void AcceptsMultipleSolutionNamesOnCommandLine()
         {
             var reader = new Mock<IFileReader>();
-            var context = new Mock<IXrmTaskContext>();
-            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
-            var service = new Mock<IOrganizationService>();
-            
-            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(service.Object);
+            var context = new MockXrmTaskContext();
 
             reader.SetReturnsDefault(true);
             var commandline = new ImportSolutionCommandLine(new[] { "import", "filename1,filename2", "conn:connectionName" }, reader.Object);
             var task = new ImportSolutionTask(commandline);
             task.Execute(context.Object);
 
-            service.Verify(x=>x.Execute(It.IsAny<ImportSolutionRequest>()),Times.Exactly(2));
+            context.Service.Verify(x=>x.Execute(It.IsAny<ImportSolutionRequest>()),Times.Exactly(2));
 
         }
         [TestMethod]
@@ -148,6 +152,14 @@ namespace Octono.Xrm.Tests
             var command = new ImportSolutionCommandLine(new[] { "import", "--overwrite", "conn:connectionName" }, new Mock<IFileReader>().Object);
             Assert.IsTrue(command.OverwriteUmanaged);
         }
+
+        [TestMethod]
+        public void AcceptsConnectionNameAsLastArgument()
+        {
+            var command = new ImportSolutionCommandLine(new[] {"import", "solutionpath", "connectionname"},new Mock<IFileReader>().Object);
+            Assert.AreEqual("connectionname",command.ConnectionName);
+        }
+
 
     }
 }

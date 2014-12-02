@@ -5,6 +5,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Crm.Sdk.Messages;
 using Octono.Xrm.Tasks;
 using Octono.Xrm.Tasks.IO;
+using Octono.Xrm.Tests.Builders;
 
 namespace Octono.Xrm.Tests
 {
@@ -15,11 +16,7 @@ namespace Octono.Xrm.Tests
         public void ImportsAllSolutionsInExportsFolderWhenExportsCommandOptionSet()
         {
             var reader  = new Mock<IFileReader>();
-            var context = new Mock<IXrmTaskContext>();
-            var service = new Mock<IOrganizationService>();
-            
-            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(service.Object);
-            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
+            var context = new MockXrmTaskContext();
 
             reader.Setup(x => x.GetSolutionsInExportFolder()).Returns(new[] { "solution1.zip", "solution2.zip", "conn:connectionName" });
             reader.Setup(x => x.FileExists("solution1.zip")).Returns(true);
@@ -29,7 +26,7 @@ namespace Octono.Xrm.Tests
 
             task.Execute(context.Object);
 
-            service.Verify(x=>x.Execute(It.IsAny<ImportSolutionRequest>()),Times.Exactly(2));
+            context.Service.Verify(x=>x.Execute(It.IsAny<ImportSolutionRequest>()),Times.Exactly(2));
             reader.Verify(x=>x.ReadAllBytes("solution1.zip"),Times.Once);
             reader.Verify(x=>x.ReadAllBytes("solution2.zip"),Times.Once);
         }
@@ -37,11 +34,8 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void ExecutesImportRequestWhenCommandIsValid()
         {
-            var service = new Mock<IOrganizationService>();
             var reader = new Mock<IFileReader>();
-            var context = new Mock<IXrmTaskContext>();
-            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(service.Object);
-            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
+            var context = new MockXrmTaskContext();
 
             const string filePath = @"c:\path\to\file.zip";
 
@@ -53,23 +47,20 @@ namespace Octono.Xrm.Tests
             IXrmTask task = new ImportSolutionTask(command);
             task.Execute(context.Object);
 
-            service.Verify(x => x.Execute(It.IsAny<ImportSolutionRequest>()),Times.Once());
+            context.Service.Verify(x => x.Execute(It.IsAny<ImportSolutionRequest>()),Times.Once());
             Assert.AreEqual(filePath,command.GetSolutionFilePaths().Single());
         }
 
         [TestMethod]
         public void DoesNotAttemptToImportSolutionWhenHelpOptionSpecified()
         {
-            var service = new Mock<IOrganizationService>();
-            var context = new Mock<IXrmTaskContext>();
-            context.Setup(x => x.ServiceFactory.Create(It.IsAny<string>())).Returns(service.Object);
-            context.Setup(x => x.Log).Returns(new Mock<ILog>().Object);
+            var context = new MockXrmTaskContext();
             var commandLine = new ImportSolutionCommandLine(new[] { "import", "--help", "conn:connectionName" }, new Mock<IFileReader>().Object);
             var task        = new ImportSolutionTask(commandLine);
             
             task.Execute(context.Object);
             
-            service.Verify(x=>x.Execute(It.IsAny<OrganizationRequest>()),Times.Never);
+            context.Service.Verify(x=>x.Execute(It.IsAny<OrganizationRequest>()),Times.Never);
         }
 
         [TestMethod]

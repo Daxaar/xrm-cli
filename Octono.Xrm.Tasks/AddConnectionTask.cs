@@ -22,10 +22,12 @@ namespace Octono.Xrm.Tasks
 
         public void Execute(IXrmTaskContext context)
         {
+            if (ShowHelp(context.Log)) return;
+
             if(_args.Count < 3)
                 throw new InvalidOperationException("You must specify at least a name for the connection and the Organisation name.");
 
-            var uri = new Uri(_args[2]);
+            var uri = new Uri(_args[1]);
 
             if (uri.Segments.Count() != 2)
                 throw new FormatException("The URL must be in the format scheme://server/org");
@@ -36,10 +38,21 @@ namespace Octono.Xrm.Tasks
                     Port = uri.Port,
                     Protocol = uri.Scheme,
                     Organisation = uri.Segments.Last(),
-                    Name = _args[1]
+                    Name = _args.Last()
                 };
 
             context.Configuration.ConnectionStrings[connectionInfo.Name] = connectionInfo;
+        }
+
+        private bool ShowHelp(ILog log)
+        {
+            if (_args.Any(arg => arg.Contains("help")))
+            {
+                log.Write("\nUsage");
+                log.Write(@"AddConnection ConnectionName http://server:port/org\n");
+                return true;
+            }
+            return false;
         }
     }
 }
