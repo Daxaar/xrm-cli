@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Octono.Xrm.Tasks;
 
@@ -48,7 +49,7 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void UsesExportPathWhenSpecified()
         {
-            var command = new ExportSolutionCommandLine(new[] { "export", "solution1", @"out:c:\path\to\file", "conn:connectionName" });
+            var command = new ExportSolutionCommandLine(new[] { "export", "solution1", @"c:\path\to\file", "conn:connectionName" });
             Assert.AreEqual(@"c:\path\to\file\solution1.zip",command.BuildExportPath("solution1"));
         }
 
@@ -64,7 +65,7 @@ namespace Octono.Xrm.Tests
         [TestMethod]
         public void UsesExportFolderWhenThirdParameterIsNotExportPath()
         {
-            var command = new ExportSolutionCommandLine(new[] { "export", "solution1", "org:orgname", "conn:connectionName" });
+            var command = new ExportSolutionCommandLine(new[] { "export", "solution1", "connectionName" });
             Assert.AreEqual(@"Export\solution1.zip", command.BuildExportPath("solution1"));
             
         }

@@ -33,9 +33,10 @@ namespace Octono.Xrm.Tasks
 
         public string BuildExportPath(string solutionName, string version = "")
         {
-            string path = _args.FirstOrDefault(x => x.Contains("out:") || x.Contains("output:") || x.Contains("to:"));
+            //export    SolutionName    Path    ConnectionName
+            //0         1               2       3
 
-            if (_args.Count > 3 && _args[2].EndsWith(".zip"))
+            if (_args[2].EndsWith(".zip"))
             {
                 //export path is specifying a full path including filename check only one solution specified and return path
                 if (SolutionNames.Count() > 1)
@@ -45,7 +46,12 @@ namespace Octono.Xrm.Tasks
                 return _args[2];
             }
 
-            path = string.IsNullOrEmpty(path) ? @"Export" : path.Substring(path.IndexOf(':')+1);
+            //If path has been specified use it otherwise use Export directory in current folder
+            string path = "Export";
+            if (_args.Count != 3 && _args[2].StartsWith("-") == false)
+            {
+                path = _args[2];
+            }
 
             if (version != "")
             {
