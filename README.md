@@ -9,7 +9,8 @@ As someone that spends a lot of time at the command line anyway with git, I figu
 
 This tool can also be used by a system administrator for deploying solutions across environments.
 
-Unit tests are written in xunit.  If you wish to use the resharper test runner and you're on a version lower than 8 install this [http://xunitcontrib.codeplex.com/releases](runner plugin)
+Unit tests are written in xunit.  If you wish to use the resharper test runner and you're on a version lower than 8 install this [runner plugin](http://xunitcontrib.codeplex.com/releases)
+
 Some example usages:
 
 #####Export a solution managed and increment the version number also saves the server details to config which will be reused on subsequent commands if server details are not specified.
@@ -30,5 +31,5 @@ Some example usages:
 #####Deploy all changed web resources from folder.
 `xrm.exe deploy "c:\webresources`
 
-#####Pull the javascript web resource new_file from the server to disk into the current dirctory or specify a path.
+#####Pull the javascript web resource new_file from the server to disk into the current directory or specify a path.
 `xrm.exe pull new_file`
