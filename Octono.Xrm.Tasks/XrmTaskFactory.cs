@@ -78,6 +78,13 @@ namespace Octono.Xrm.Tasks
                     {
                         return new ListConnectionsTask();
                     }
+                case "removeconnection":
+                case "removeconn":
+                case "deleteconnection":
+                case "deleteconn":
+                    {
+                        return new RemoveConnectionTask(args);        
+                    }
                 case "publish":
                     {
                         return new PublishSolutionTask(new PublishSolutionCommandLine(args));
