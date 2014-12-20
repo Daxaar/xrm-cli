@@ -1,105 +1,105 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Linq;
 using Octono.Xrm.Tasks;
+using Xunit;
+
 
 namespace Octono.Xrm.Tests
 {
-    [TestClass]
+    
     public class ExportSolutionCommandLineTests
     {
-        [TestMethod]
+        [Fact]
         public void SetsIncrementVersionBeforeExportTrueWhenArgumentIncluded()
         {
             const string incrementArgument = "-i";
             var command = new ExportSolutionCommandLine(new[] { "export", "solution1", incrementArgument, "conn:connectionName" });
-            Assert.IsTrue(command.IncrementVersionBeforeExport);
+            Assert.True(command.IncrementVersionBeforeExport);
         }
 
-        [TestMethod]
+        [Fact]
         public void SetsManagedPropertyTrueWhenArgumentIncluded()
         {
             const string managedArg = "-m";
             var command = new ExportSolutionCommandLine(new[] { "export", "solution1", managedArg, "conn:connectionName" });
-            Assert.IsTrue(command.Managed);
+            Assert.True(command.Managed);
         }
 
-        [TestMethod]
+        [Fact]
         public void CanReadCommaSeparatedSolutionFilesArgument()
         {
             var command = new ExportSolutionCommandLine(new[] { "export", "solution1,solution2", "conn:connectionName" });
-            Assert.IsTrue(command.SolutionNames.Contains("solution1"));
-            Assert.IsTrue(command.SolutionNames.Contains("solution2"));
+            Assert.True(command.SolutionNames.Contains("solution1"));
+            Assert.True(command.SolutionNames.Contains("solution2"));
         }
 
-        [TestMethod]
+        [Fact]
         public void ExportsToExportFolderWhenPathNotSpecified()
         {
             var command = new ExportSolutionCommandLine(new[] { "export", "solution1", "conn:connectionName" });
-            Assert.AreEqual( @"Export\solution1.zip",command.BuildExportPath("solution1"));
+            Assert.Equal( @"Export\solution1.zip",command.BuildExportPath("solution1"));
         }
 
-        [TestMethod]
+        [Fact]
         public void AddsZipExtensionToExportFilePath()
         {
             var command = new ExportSolutionCommandLine(new[] { "export", "solution1", "conn:connectionName" });
-            Assert.AreEqual(@"Export\solution1.zip", command.BuildExportPath("solution1"));
+            Assert.Equal(@"Export\solution1.zip", command.BuildExportPath("solution1"));
         }
 
-        [TestMethod]
+        [Fact]
         public void UsesExportPathWhenSpecified()
         {
             var command = new ExportSolutionCommandLine(new[] { "export", "solution1", @"c:\path\to\file", "conn:connectionName" });
-            Assert.AreEqual(@"c:\path\to\file\solution1.zip",command.BuildExportPath("solution1"));
+            Assert.Equal(@"c:\path\to\file\solution1.zip",command.BuildExportPath("solution1"));
         }
 
-        [TestMethod]
+        [Fact]
         public void SplitsCommaSeparatedListOfSolutions()
         {
             var command = new ExportSolutionCommandLine(new[] { "export", "solution1,solution2", @"out:c:\path\to\file", "conn:connectionName" });
-            Assert.AreEqual(2, command.SolutionNames.Count());
-            Assert.AreEqual("solution1",command.SolutionNames.ToList()[0]);
-            Assert.AreEqual("solution2", command.SolutionNames.ToList()[1]);
+            Assert.Equal(2, command.SolutionNames.Count());
+            Assert.Equal("solution1",command.SolutionNames.ToList()[0]);
+            Assert.Equal("solution2", command.SolutionNames.ToList()[1]);
         }
 
-        [TestMethod]
+        [Fact]
         public void UsesExportFolderWhenThirdParameterIsNotExportPath()
         {
             var command = new ExportSolutionCommandLine(new[] { "export", "solution1", "connectionName" });
-            Assert.AreEqual(@"Export\solution1.zip", command.BuildExportPath("solution1"));
+            Assert.Equal(@"Export\solution1.zip", command.BuildExportPath("solution1"));
             
         }
 
-        [TestMethod]
+        [Fact]
         public void UsesFilenameForSolutionWhenWhenExportPathSpecifiesFilename()
         {
             const string path = @"c:\export\specificfilename.zip";
             var command = new ExportSolutionCommandLine(new[] { "export", "sol1", path, "conn:connectionName" });
 
-            Assert.AreEqual(command.BuildExportPath("sol1"),path);
+            Assert.Equal(command.BuildExportPath("sol1"),path);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreatesSolutionFilenameWithVersionNumber()
         {
             var command = new ExportSolutionCommandLine(new[] { "export", "solution", "conn:connectionName" });
             string path = command.BuildExportPath("solution", "0.0.0.1");
-            Assert.AreEqual("Export\\solution-0-0-0-1.zip",path);
+            Assert.Equal("Export\\solution-0-0-0-1.zip",path);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddsManagedSuffixWhenExportedSolutionIsManaged()
         {
             var command = new ExportSolutionCommandLine(new[] { "export", "solution", "-m", "conn:connectionName" });
             string path = command.BuildExportPath("solution", "0.0.0.1");
-            Assert.AreEqual("Export\\solution-0-0-0-1_managed.zip", path);
+            Assert.Equal("Export\\solution-0-0-0-1_managed.zip", path);
         }        
-        [TestMethod]
+        [Fact]
         public void DoesNotAddManagedSuffixWhenExportedSolutionIsUnmanaged()
         {
             var command = new ExportSolutionCommandLine(new[] { "export", "solution", "conn:connectionName" });
             string path = command.BuildExportPath("solution", "0.0.0.1");
-            Assert.AreEqual("Export\\solution-0-0-0-1.zip", path);
+            Assert.Equal("Export\\solution-0-0-0-1.zip", path);
         }
     }
 }

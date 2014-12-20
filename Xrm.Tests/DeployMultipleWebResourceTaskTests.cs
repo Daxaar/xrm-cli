@@ -1,17 +1,14 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Moq;
 using Octono.Xrm.Tasks;
 using Octono.Xrm.Tasks.IO;
 using Octono.Xrm.Tests.Builders;
+using Xunit;
 
 
 namespace Octono.Xrm.Tests
 {
-    [TestClass]
     public class DeployMultipleWebResourceTaskTests
     {
         private static ILog CreateLog(string promptResponse = "yes")
@@ -21,7 +18,7 @@ namespace Octono.Xrm.Tests
             return log.Object;
         }
 
-        [TestMethod]
+        [Fact]
         public void DeploysAllFilesInFolder()
         {
             var args = new[] { "deploy", "c:\\xyz", "conn:connectionName" };
@@ -31,13 +28,13 @@ namespace Octono.Xrm.Tests
             var context = new MockXrmTaskContext();
 
             var collectionWithOneRecord = new EntityCollection(new[] { new Entity("webresource") });
-            context.Setup(x => x.Log).Returns(CreateLog("yes"));
+            context.Setup(x => x.Log).Returns(CreateLog());
             context.Service.Setup(x => x.RetrieveMultiple(It.IsAny<QueryBase>())).Returns(collectionWithOneRecord);
             task.Execute(context.Object);
             context.Service.Verify(x=>x.Update(It.IsAny<Entity>()),Times.Exactly(3));
         }
 
-        [TestMethod]
+        [Fact]
         public void DoesNotDeployFilesWhenConfirmIsNo()
         {
             var args = new[] { "deploy", "c:\\xyz", "connectionName" };
@@ -49,7 +46,7 @@ namespace Octono.Xrm.Tests
             context.Service.Verify(x => x.Update(It.IsAny<Entity>()), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void DoesNotAskForConfirmationWhenNoConfirmOptionSet()
         {
             var args = new[] { "deploy", "c:\\xyz", "--noconfirm", "connectionName" };

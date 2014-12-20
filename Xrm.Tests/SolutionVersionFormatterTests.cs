@@ -1,42 +1,41 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Octono.Xrm.Tasks;
+using Xunit;
 
 namespace Octono.Xrm.Tests
 {
-    [TestClass]
+    
     public class SolutionVersionFormatterTests
     {
-        [TestMethod]
+        [Fact]
         public void CanIncrementRevisionNumberFromValidInput()
         {
             var formatter = new SolutionVersionFormatter();
             string actual = formatter.Increment("0.0.0.0");
-            Assert.AreEqual("0.0.0.1",actual);
+            Assert.Equal("0.0.0.1",actual);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FormatException))]
+        [Fact]
         public void ThrowsFormatExceptionWhenVersionNumberInvalid()
         {
             var formatter = new SolutionVersionFormatter();
-            formatter.Increment("ABC");
+            Assert.Throws<FormatException>(() => formatter.Increment("ABC"));
         }
 
-        [TestMethod]
+        [Fact]
         public void SupportsIncrementMajorMinorVersionNumber()
         {
             var formatter = new SolutionVersionFormatter();
             string actual = formatter.Increment("1.0");
-            Assert.AreEqual("1.1", actual);
+            Assert.Equal("1.1", actual);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreatesNewSemanticVersionNumberWhenInputIsEmptyString()
         {
             var formatter = new SolutionVersionFormatter();
             string actual = formatter.Increment("");
-            Assert.AreEqual("0.0.1", actual);
+            Assert.Equal("0.0.1", actual);
             
         }
 

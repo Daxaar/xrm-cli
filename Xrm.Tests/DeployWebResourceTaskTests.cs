@@ -1,27 +1,24 @@
 ﻿using System.Linq;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Moq;
 using Octono.Xrm.Tasks;
 using Octono.Xrm.Tasks.IO;
 using Octono.Xrm.Tests.Builders;
+using Xunit;
 
 //TODO: Factory method for context
 
 namespace Octono.Xrm.Tests
 {
-    [TestClass]
+    
     public class DeployWebResourceTaskTests
     {
         private const string Path = @"c:\test\resourcename.js";
-        private const string WebResourceContent = "random javascript content";
         private static readonly string[] Args = new[] { "deploy", Path, "conn:connectionName" };
-        private Mock<IWebResourceQuery> _query;
+        private readonly Mock<IWebResourceQuery> _query;
 
-        [TestInitialize]
-        public void Setup()
+        public DeployWebResourceTaskTests()
         {
             var resource = new Entity();
             resource.Attributes.Add("content","somerandomcontent");
@@ -31,7 +28,7 @@ namespace Octono.Xrm.Tests
                   .Returns(resource);
         }
 
-        [TestMethod]
+        [Fact]
         public void UsesNameArgumentWhenSpecified()
         {
             const string expectedWebResourceName = "new_resourcename";
@@ -44,7 +41,7 @@ namespace Octono.Xrm.Tests
             _query.Verify(x => x.Retrieve(It.IsAny<IOrganizationService>(), expectedWebResourceName), Times.Once);
         }
         
-        [TestMethod]
+        [Fact]
         public void DoesNotUpdateWebResourceWhenLocalFileIsEmptyAndForceFlagNotSpecified()
         {
             var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), new Mock<IFileReader>().Object, _query.Object);
@@ -54,7 +51,7 @@ namespace Octono.Xrm.Tests
             context.Service.Verify(x=>x.Update(It.IsAny<Entity>()),Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void ReadsWebResourceFileFromDisk()
         {
             var reader  = new MockFileReaderBuilder().Returns(3).ModifiedFiles.WithRandomFileContent.Build();
@@ -67,13 +64,6 @@ namespace Octono.Xrm.Tests
             task.Execute(context.Object);
             
             reader.Verify(x=>x.ReadAllBytes(Path),Times.Once);
-        }
-
-        private static Mock<IFileReader> CreateFileReaderWithContent()
-        {
-            var reader = new Mock<IFileReader>();
-            reader.Setup(x => x.ReadAllBytes(Path)).Returns(Encoding.UTF8.GetBytes(WebResourceContent));
-            return reader;
         }
     }
 }

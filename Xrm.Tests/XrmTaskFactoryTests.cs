@@ -1,69 +1,59 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using Moq;
 using Octono.Xrm.Tasks;
 using Octono.Xrm.Tasks.IO;
+using Xunit;
+
 
 namespace Octono.Xrm.Tests
-{
-    [TestClass]
-    public class ConfigurationTests
-    {
-        [TestMethod]
-        public void CanDeserializeJsonConfiguration()
-        {
-            
-        }
-    }
-    [TestClass]
+{    
     public class XrmTaskFactoryTests
     {
-        [TestMethod]
+        [Fact]
         public void WhenCommandIsDeployReturnsDeployWebResourceTask()
         {
             var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object,new Mock<IXrmConfiguration>().Object);
             IXrmTask task = factory.CreateTask(new[] { "deploy", "filename.js","conn:connectionName" });
-            Assert.IsInstanceOfType(task, typeof(DeployWebResourceTask));            
+            Assert.IsType(typeof(DeployWebResourceTask), task);            
         }
 
-        [TestMethod]
+        [Fact]
         public void WhenCommandIsImport_ReturnsImportSolutionTask()
         {
             var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object, new Mock<IXrmConfiguration>().Object);
             IXrmTask task = factory.CreateTask(new[] { "import", "filename", "conn:connectionName" });
-            Assert.IsInstanceOfType(task, typeof(ImportSolutionTask));
+            Assert.IsType(typeof(ImportSolutionTask), task);
         }
 
 
-        [TestMethod]
+        [Fact]
         public void WhenCommandIsExport_ReturnsExportSolutionTask()
         {
             var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object, new Mock<IXrmConfiguration>().Object);
             IXrmTask task = factory.CreateTask(new[] { "export", "filename", "conn:connectionName" });
-            Assert.IsInstanceOfType(task, typeof(ExportSolutionTask));            
+            Assert.IsType(typeof(ExportSolutionTask), task);            
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Fact]
         public void WhenValidCommandIsNotSpecifiedThrowsException()
         {
             var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object, new Mock<IXrmConfiguration>().Object);
-            factory.CreateTask(new[] { "invalidcommand" });
+            Assert.Throws<InvalidOperationException>(() => factory.CreateTask(new[] { "invalidcommand" }));
         }   
-        [TestMethod]
+        [Fact]
         public void AcceptsOrganizationServiceInConstructor()
         {
             var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object, new Mock<IXrmConfiguration>().Object);
 
-            Assert.IsNotNull(factory);
+            Assert.NotNull(factory);
         }
 
-        [TestMethod]
+        [Fact]
         public void WhenCommandIsPublish_ReturnsPublishSolutionTask()
         {
             var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object, new Mock<IXrmConfiguration>().Object);
             IXrmTask task = factory.CreateTask(new[] { "publish", "conn:connectionName" });
-            Assert.IsInstanceOfType(task, typeof(PublishSolutionTask)); 
+            Assert.IsType(typeof(PublishSolutionTask), task); 
         }
 
     }

@@ -1,18 +1,18 @@
 ﻿using System;
 using Microsoft.Crm.Sdk.Messages;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Moq;
 using Octono.Xrm.Tasks;
 using Octono.Xrm.Tasks.IO;
 using Octono.Xrm.Tests.Builders;
+using Xunit;
 
 namespace Octono.Xrm.Tests
 {
-    [TestClass]
+    
     public class ExportSolutionTaskTests
     {
-        [TestMethod]
+        [Fact]
         public void ExportsAllSolutionsProvidedOnCommandLine()
         {
             var command = new ExportSolutionCommandLine(new[] { "export", "sol1,sol2", "connectionName" });

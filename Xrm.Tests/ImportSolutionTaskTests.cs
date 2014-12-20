@@ -1,18 +1,20 @@
 ﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using Moq;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Crm.Sdk.Messages;
 using Octono.Xrm.Tasks;
 using Octono.Xrm.Tasks.IO;
 using Octono.Xrm.Tests.Builders;
+using Xunit;
+
 
 namespace Octono.Xrm.Tests
 {
-    [TestClass]
+    
     public class ImportSolutionTaskTests
     {
-        [TestMethod]
+        [Fact]
         public void ImportsAllSolutionsInExportsFolderWhenExportsCommandOptionSet()
         {
             var reader  = new Mock<IFileReader>();
@@ -31,7 +33,7 @@ namespace Octono.Xrm.Tests
             reader.Verify(x=>x.ReadAllBytes("solution2.zip"),Times.Once);
         }
 
-        [TestMethod]
+        [Fact]
         public void ExecutesImportRequestWhenCommandIsValid()
         {
             var reader = new Mock<IFileReader>();
@@ -48,10 +50,10 @@ namespace Octono.Xrm.Tests
             task.Execute(context.Object);
 
             context.Service.Verify(x => x.Execute(It.IsAny<ImportSolutionRequest>()),Times.Once());
-            Assert.AreEqual(filePath,command.GetSolutionFilePaths().Single());
+            Assert.Equal(filePath,command.GetSolutionFilePaths().Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void DoesNotAttemptToImportSolutionWhenHelpOptionSpecified()
         {
             var context = new MockXrmTaskContext();
@@ -63,7 +65,7 @@ namespace Octono.Xrm.Tests
             context.Service.Verify(x=>x.Execute(It.IsAny<OrganizationRequest>()),Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void ImportsOnlyTheFileSpecifiedWhenReadingFromExportsFolder()
         {
             //TODO:  Noticed a bug whilst using tool that started reading all solutions rather than just the one specified
