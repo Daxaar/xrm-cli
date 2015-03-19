@@ -16,7 +16,14 @@ namespace Octono.Xrm.Tasks
         public static IOrganizationService Create(ConnectionInfo connectionInfo, ILog logger)
         {
             var creds = new ClientCredentials();
-            creds.Windows.ClientCredential = CredentialCache.DefaultNetworkCredentials;
+            if (!string.IsNullOrEmpty(connectionInfo.UserName) && !string.IsNullOrEmpty(connectionInfo.Password))
+            {
+                creds.Windows.ClientCredential = new NetworkCredential(connectionInfo.UserName,connectionInfo.Password);   
+            }
+            else
+            {
+                creds.Windows.ClientCredential = CredentialCache.DefaultNetworkCredentials;                
+            }
 
             var uri = new Uri(connectionInfo.ConnectionString);
             logger.Write("Connecting to " + uri.AbsoluteUri);

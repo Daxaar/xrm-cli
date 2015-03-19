@@ -32,13 +32,27 @@ namespace Octono.Xrm.Tasks
             if (uri.Segments.Count() != 2)
                 throw new FormatException("The URL must be in the format scheme://server/org");
 
+            var user = _args.FirstOrDefault(a => a.StartsWith("user:"));
+            if (string.IsNullOrEmpty(user) == false)
+            {
+                user = user.Remove(0, 5);
+            }
+
+            //TODO: REMOVE THIS HIDEOUS HACK ADDED FOR A QUICK FIX LOCALLY
+            var pwd = _args.FirstOrDefault(a => a.StartsWith("pwd:"));
+            if (string.IsNullOrEmpty(pwd) == false)
+            {
+                pwd = pwd.Remove(0, 4);
+            }
             var connectionInfo = new ConnectionInfo
                 {
                     ServerName = uri.Host,
                     Port = uri.Port,
                     Protocol = uri.Scheme,
                     Organisation = uri.Segments.Last(),
-                    Name = _args.Last()
+                    Name = _args.Last(),
+                    UserName = user,
+                    Password = pwd
                 };
 
             context.Configuration.ConnectionStrings[connectionInfo.Name] = connectionInfo;
