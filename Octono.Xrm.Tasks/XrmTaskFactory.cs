@@ -69,7 +69,7 @@ namespace Octono.Xrm.Tasks
                 case "addconnection":
                 case "addconn":
                     {
-                        return new AddConnectionTask(args);
+                        return new AddConnectionTask(new AddConnectionCommandLine(args));
                     }
                 case "listconnection":
                 case "listconn":

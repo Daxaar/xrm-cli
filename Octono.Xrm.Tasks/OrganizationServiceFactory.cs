@@ -18,7 +18,7 @@ namespace Octono.Xrm.Tasks
             var creds = new ClientCredentials();
             if (!string.IsNullOrEmpty(connectionInfo.UserName) && !string.IsNullOrEmpty(connectionInfo.Password))
             {
-                creds.Windows.ClientCredential = new NetworkCredential(connectionInfo.UserName,connectionInfo.Password);   
+                creds.Windows.ClientCredential = new NetworkCredential(connectionInfo.UserName,DapiSecurePassword.Decrypt(connectionInfo.Password));   
             }
             else
             {

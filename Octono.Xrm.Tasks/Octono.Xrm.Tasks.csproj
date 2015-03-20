@@ -64,9 +64,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddConnectionCommandLine.cs" />
     <Compile Include="AddConnectionTask.cs" />
     <Compile Include="CommandLine.cs" />
     <Compile Include="Crm\CrmContext.cs" />
+    <Compile Include="DapiSecurePassword.cs" />
     <Compile Include="DeployWebResourceCommandLine.cs" />
     <Compile Include="IO\IXrmConfiguration.cs" />
     <Compile Include="IO\JsonConfigurationManager.cs" />

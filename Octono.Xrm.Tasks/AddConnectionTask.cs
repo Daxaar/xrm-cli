@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
@@ -13,46 +13,26 @@ namespace Octono.Xrm.Tasks
     /// </remarks>
     public class AddConnectionTask : IXrmTask
     {
-        private readonly IList<string> _args;
-
-        public AddConnectionTask(IList<string> args)
+        private readonly AddConnectionCommandLine _commandLine;
+        public AddConnectionTask(AddConnectionCommandLine commandLine)
         {
-            _args = args;
+            _commandLine = commandLine;
         }
 
         public void Execute(IXrmTaskContext context)
         {
             if (ShowHelp(context.Log)) return;
 
-            if(_args.Count < 3)
-                throw new InvalidOperationException("You must specify at least a name for the connection and the Organisation name.");
-
-            var uri = new Uri(_args[1]);
-
-            if (uri.Segments.Count() != 2)
-                throw new FormatException("The URL must be in the format scheme://server/org");
-
-            var user = _args.FirstOrDefault(a => a.StartsWith("user:"));
-            if (string.IsNullOrEmpty(user) == false)
-            {
-                user = user.Remove(0, 5);
-            }
-
-            //TODO: REMOVE THIS HIDEOUS HACK ADDED FOR A QUICK FIX LOCALLY
-            var pwd = _args.FirstOrDefault(a => a.StartsWith("pwd:"));
-            if (string.IsNullOrEmpty(pwd) == false)
-            {
-                pwd = pwd.Remove(0, 4);
-            }
+            var uri = _commandLine.Uri;
             var connectionInfo = new ConnectionInfo
                 {
                     ServerName = uri.Host,
                     Port = uri.Port,
                     Protocol = uri.Scheme,
                     Organisation = uri.Segments.Last(),
-                    Name = _args.Last(),
-                    UserName = user,
-                    Password = pwd
+                    Name = _commandLine.Name,
+                    UserName = _commandLine.UserName,
+                    Password = DapiSecurePassword.Encrypt(_commandLine.Password)
                 };
 
             context.Configuration.ConnectionStrings[connectionInfo.Name] = connectionInfo;
@@ -60,10 +40,10 @@ namespace Octono.Xrm.Tasks
 
         private bool ShowHelp(ILog log)
         {
-            if (_args.Any(arg => arg.Contains("help")))
+            if (_commandLine.ShowHelp)
             {
                 log.Write("\nUsage");
-                log.Write(@"AddConnection ConnectionName http://server:port/org\n");
+                log.Write(@"AddConnection http://server:port/org user:username* pwd:password* connectionName * and optional.  If omitted default logon credentials will be used.\n");
                 return true;
             }
             return false;

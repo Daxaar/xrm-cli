@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Security;
 
 namespace Octono.Xrm.Tasks.IO
 {
@@ -15,6 +16,7 @@ namespace Octono.Xrm.Tasks.IO
         [JsonIgnore]
         public bool Debug { get; set; }
 
+        [JsonIgnore]
         public string ConnectionString
         {
             get

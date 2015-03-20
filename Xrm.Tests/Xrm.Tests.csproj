@@ -78,6 +78,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="AddConnectionTaskTests.cs" />
     <Compile Include="DeployMultipleWebResourceTaskTests.cs" />
     <Compile Include="DeployWebResourceTaskTests.cs" />
     <Compile Include="Builders\MockFileReaderBuilder.cs" />

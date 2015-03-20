@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Microsoft.Crm.Sdk.Messages;
 using Moq;
 using System;
@@ -11,18 +10,6 @@ using Xunit;
 
 namespace Octono.Xrm.Tests
 {
-    public class AddConnectionTaskTests
-    {
-        [Fact]
-        public void AcceptsConnectionNameAsLastParameter()
-        {
-            var task = new AddConnectionTask(new List<string> { "addconnection", "http://server/org", "connectionname" });
-            var context = new MockXrmTaskContext();
-            task.Execute(context.Object);
-            Assert.True(context.Configuration.ConnectionStrings.ContainsKey("connectionname"));
-        }
-    }
-    
     public class ImportSolutionCommandLineTests
     {
         [Fact]
