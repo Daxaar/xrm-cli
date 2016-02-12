@@ -13,5 +13,7 @@ namespace Octono.Xrm.Tasks.IO
         IEnumerable<string> GetSolutionsInExportFolder();
         string RemoveFileExtension(string filePath);
         IEnumerable<string> GetModifiedFilesSince(DateTime lastModified, string path, bool recursive = false);
+        bool Exists(string path);
+        IEnumerable<string> ReadLines(string path);
     }
 }

@@ -8,7 +8,7 @@ namespace Octono.Xrm.ConsoleTaskRunner
         {
             //Uncomment for testing via console.
             //args = new[] {"addconnection","test", "http://server/org"};
-            //args = new string[]{"pull","new_/app.js","to:app.js","w12dev"};
+            //args = new []{"pull","new_/app.js","to:app.js","w12dev"};
             var runner = new XrmTaskRunner(new ConsoleLogger());
             
             runner.Run(args);

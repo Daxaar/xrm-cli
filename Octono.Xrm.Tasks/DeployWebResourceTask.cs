@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Globalization;
 using System.IO;
 using Microsoft.Xrm.Sdk;
@@ -20,12 +21,14 @@ namespace Octono.Xrm.Tasks
         private readonly DeployWebResourceCommandLine _commandLine;
         private readonly IFileReader _reader;
         private readonly IWebResourceQuery _query;
+        private readonly IWebResourceMetaData _metadata;
 
-        public DeployWebResourceTask(DeployWebResourceCommandLine commandLine, IFileReader reader, IWebResourceQuery query)
+        public DeployWebResourceTask(DeployWebResourceCommandLine commandLine, IFileReader reader, IWebResourceQuery query, IWebResourceMetaData metadata)
         {
             _commandLine = commandLine;
             _reader = reader;
             _query = query;
+            _metadata = metadata;
         }
 
         public override void Execute(IXrmTaskContext context)
@@ -36,7 +39,9 @@ namespace Octono.Xrm.Tasks
             if (!ContinueWhenFileIsEmpty(context,fileContent64)) return;
 
             //Use the name if specified on the commandline otherwise default to filename without file extension
-            string resourceName = _commandLine.Name ?? _reader.RemoveFileExtension(Path.GetFileName(_commandLine.FilePath));
+            var metadata = _metadata.Load(_commandLine.FilePath);
+            
+            string resourceName = _commandLine.Name ?? metadata.WebResourceName ?? _reader.RemoveFileExtension(Path.GetFileName(_commandLine.FilePath));
 
             //Retrieve the existing web resource
             context.Log.Write(string.Format("Retrieving {0}", resourceName));

@@ -52,6 +52,7 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
@@ -70,12 +71,14 @@
     <Compile Include="Crm\CrmContext.cs" />
     <Compile Include="DapiSecurePassword.cs" />
     <Compile Include="DeployWebResourceCommandLine.cs" />
+    <Compile Include="WebResourceMetaData.cs" />
     <Compile Include="Utils\InvalidFileName.cs" />
     <Compile Include="IO\IXrmConfiguration.cs" />
     <Compile Include="IO\JsonConfigurationManager.cs" />
     <Compile Include="ListConnectionsTask.cs" />
     <Compile Include="RemoveConnectionTask.cs" />
     <Compile Include="WebResourceQuery.cs" />
+    <Compile Include="WebResourceType.cs" />
     <Compile Include="XrmTaskContext.cs" />
     <Compile Include="DeleteSolutionCommandLine.cs" />
     <Compile Include="DeleteSolutionTask.cs" />

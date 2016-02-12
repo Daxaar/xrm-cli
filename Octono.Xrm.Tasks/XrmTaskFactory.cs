@@ -33,7 +33,7 @@ namespace Octono.Xrm.Tasks
                         {
                             args.Add(Directory.GetCurrentDirectory());
                         }
-                        return new PullWebResourceTask(new PullWebResourceCommandLine(args), _writer);
+                        return new PullWebResourceTask(new PullWebResourceCommandLine(args), _writer, new WebResourceMetaData(_writer,_reader));
                     }
                 case "deploy":
                     {
@@ -44,10 +44,11 @@ namespace Octono.Xrm.Tasks
                         }
                         if (Path.GetExtension(args[1]) == ".js")
                         {
-                            return new DeployWebResourceTask(new DeployWebResourceCommandLine(args), _reader,new WebResourceQuery());
+                            return new DeployWebResourceTask(
+                                new DeployWebResourceCommandLine(args), _reader,new WebResourceQuery(),new WebResourceMetaData(_writer,_reader));
                         }
 
-                        return new DeployMultipleWebResourceTask(new DeployWebResourceCommandLine(args), _reader);
+                        return new DeployMultipleWebResourceTask(new DeployWebResourceCommandLine(args), _reader,_writer);
                     }
                 case "deletesolution":
                     {

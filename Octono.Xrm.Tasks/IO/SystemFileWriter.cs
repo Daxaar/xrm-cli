@@ -15,5 +15,10 @@ namespace Octono.Xrm.Tasks.IO
 
             File.WriteAllBytes(path,file);
         }
+
+        public void Write(string content, string path)
+        {
+            Write(System.Text.Encoding.UTF8.GetBytes(content), path);
+        }
     }
 }

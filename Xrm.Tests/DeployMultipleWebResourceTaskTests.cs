@@ -23,8 +23,8 @@ namespace Octono.Xrm.Tests
         {
             var args = new[] { "deploy", "c:\\xyz", "conn:connectionName" };
             var reader  = new MockFileReaderBuilder().Returns(3).ModifiedFiles.WithRandomFileContent.Build();
-
-            var task = new DeployMultipleWebResourceTask(new DeployWebResourceCommandLine(args), reader.Object);
+            var writer = new Mock<IFileWriter>();
+            var task = new DeployMultipleWebResourceTask(new DeployWebResourceCommandLine(args), reader.Object,writer.Object);
             var context = new MockXrmTaskContext();
 
             var collectionWithOneRecord = new EntityCollection(new[] { new Entity("webresource") });
@@ -38,8 +38,8 @@ namespace Octono.Xrm.Tests
         public void DoesNotDeployFilesWhenConfirmIsNo()
         {
             var args = new[] { "deploy", "c:\\xyz", "connectionName" };
-
-            var task = new DeployMultipleWebResourceTask(new DeployWebResourceCommandLine(args), new MockFileReaderBuilder().Build().Object);
+            var writer = new Mock<IFileWriter>();
+            var task = new DeployMultipleWebResourceTask(new DeployWebResourceCommandLine(args), new MockFileReaderBuilder().Build().Object,writer.Object);
             var context = new MockXrmTaskContext();
             context.Setup(x => x.Log).Returns(CreateLog("no"));
             task.Execute(context.Object);
@@ -50,7 +50,8 @@ namespace Octono.Xrm.Tests
         public void DoesNotAskForConfirmationWhenNoConfirmOptionSet()
         {
             var args = new[] { "deploy", "c:\\xyz", "--noconfirm", "connectionName" };
-            var task = new DeployMultipleWebResourceTask(new DeployWebResourceCommandLine(args), new Mock<IFileReader>().Object);
+            var writer = new Mock<IFileWriter>();
+            var task = new DeployMultipleWebResourceTask(new DeployWebResourceCommandLine(args), new Mock<IFileReader>().Object,writer.Object);
             var context = new MockXrmTaskContext();
 
             var log     = new Mock<ILog>();

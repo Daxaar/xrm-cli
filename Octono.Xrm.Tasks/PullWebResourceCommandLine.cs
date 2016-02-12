@@ -29,6 +29,12 @@ namespace Octono.Xrm.Tasks
                 if (!_path.EndsWith(@"\"))
                     _path += @"\";
             }
+
+            //if it's just a filename assume cwd
+            if (!_path.Contains(@"\"))
+            {
+                _path = @".\" + _path;
+            }
         }
 
         public string Name

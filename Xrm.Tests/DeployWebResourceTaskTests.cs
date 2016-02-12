@@ -35,7 +35,9 @@ namespace Octono.Xrm.Tests
             var args = Args.ToList();
             var reader = new MockFileReaderBuilder().Returns(1).ModifiedFiles.WithRandomFileContent;
             args.Add("name:" + expectedWebResourceName);
-            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(args), reader.Build().Object,_query.Object);
+            var meta = new Mock<IWebResourceMetaData>();
+
+            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(args), reader.Build().Object,_query.Object,meta.Object);
             var context = new MockXrmTaskContext();
             task.Execute(context.Object);
             _query.Verify(x => x.Retrieve(It.IsAny<IOrganizationService>(), expectedWebResourceName), Times.Once);
@@ -44,7 +46,8 @@ namespace Octono.Xrm.Tests
         [Fact]
         public void DoesNotUpdateWebResourceWhenLocalFileIsEmptyAndForceFlagNotSpecified()
         {
-            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), new Mock<IFileReader>().Object, _query.Object);
+            var meta = new Mock<IWebResourceMetaData>();
+            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), new Mock<IFileReader>().Object, _query.Object,meta.Object);
             var context = new MockXrmTaskContext();
             
             task.Execute(context.Object);
@@ -54,8 +57,9 @@ namespace Octono.Xrm.Tests
         [Fact]
         public void ReadsWebResourceFileFromDisk()
         {
+            var meta = new Mock<IWebResourceMetaData>();
             var reader  = new MockFileReaderBuilder().Returns(3).ModifiedFiles.WithRandomFileContent.Build();
-            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), reader.Object, _query.Object);
+            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), reader.Object, _query.Object,meta.Object);
             var context = new MockXrmTaskContext();
             
             var collectionWithOneRecord = new EntityCollection(new[] { new Entity("webresource") });

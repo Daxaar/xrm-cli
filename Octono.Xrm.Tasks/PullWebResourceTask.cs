@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Microsoft.Xrm.Sdk;
 using Octono.Xrm.Tasks.IO;
 
@@ -14,11 +13,13 @@ namespace Octono.Xrm.Tasks
     {
         private readonly PullWebResourceCommandLine _commandLine;
         private readonly IFileWriter _writer;
+        private readonly WebResourceMetaData _metaData;
 
-        public PullWebResourceTask(PullWebResourceCommandLine commandLine, IFileWriter writer)
+        public PullWebResourceTask(PullWebResourceCommandLine commandLine, IFileWriter writer, WebResourceMetaData metaData)
         {
             _commandLine = commandLine;
             _writer = writer;
+            _metaData = metaData;
         }
 
         public override void Execute(IXrmTaskContext context)
@@ -47,6 +48,9 @@ namespace Octono.Xrm.Tasks
             }
             _writer.Write(System.Text.Encoding.UTF8.GetBytes(content),path);
             context.Log.Write("File written to " + path);
+
+            //Write the original webresource metadata to a file for deploy task
+            _metaData.Create(_commandLine.Name,_commandLine.Path);
         }
 
         private bool ShowHelp(ILog log)
@@ -60,38 +64,6 @@ namespace Octono.Xrm.Tasks
                 return true;
             }
             return false;
-        }
-    }
-
-    public static class WebResourceType
-    {
-        public static string ToFileExtension(int value)
-        {
-            switch (value)
-            {
-                case 1:
-                    return ".htm";
-                case 2:
-                    return ".css";
-                case 3:
-                    return ".js";
-                case 4:
-                    return ".xml";
-                case 5:
-                    return ".png";
-                case 6:
-                    return ".jpg";
-                case 7:
-                    return ".gif";
-                case 8:
-                    return ".xap";
-                case 9:
-                    return ".xsl";
-                case 10:
-                    return ".ico";
-                default:
-                    throw new ArgumentOutOfRangeException(string.Format("The web resource type with value {0} is unknown.", value));
-            }
         }
     }
 }

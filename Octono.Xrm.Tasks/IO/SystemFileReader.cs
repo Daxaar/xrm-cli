@@ -35,5 +35,15 @@ namespace Octono.Xrm.Tasks.IO
         {
             return Directory.GetFiles(path).Where(file => Directory.GetLastAccessTime(file) > lastModified);
         }
+
+        public bool Exists(string path)
+        {
+            return File.Exists(path);
+        }
+
+        public IEnumerable<string> ReadLines(string path)
+        {
+            return File.ReadLines(path);
+        }
     }
 }

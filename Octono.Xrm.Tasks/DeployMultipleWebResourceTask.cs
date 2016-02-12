@@ -64,11 +64,13 @@ namespace Octono.Xrm.Tasks
     {
         private readonly DeployWebResourceCommandLine _commandLine;
         private readonly IFileReader _reader;
+        private readonly IFileWriter _writer;
 
-        public DeployMultipleWebResourceTask(DeployWebResourceCommandLine commandLine, IFileReader reader)
+        public DeployMultipleWebResourceTask(DeployWebResourceCommandLine commandLine, IFileReader reader, IFileWriter writer)
         {
             _commandLine = commandLine;
             _reader = reader;
+            _writer = writer;
         }
 
         public override void Execute(IXrmTaskContext context)
@@ -90,7 +92,7 @@ namespace Octono.Xrm.Tasks
             {
                 //TODO: Refactor to support creation by TaskFactory.  CommandLine ctor args are too tightly coupled to tasks
                 var commandLine = new DeployWebResourceCommandLine(file,_commandLine.ConnectionName);
-                var task = new DeployWebResourceTask(commandLine, _reader,new WebResourceQuery());
+                var task = new DeployWebResourceTask(commandLine, _reader,new WebResourceQuery(),new WebResourceMetaData(_writer,_reader));
                 task.Execute(context);
             }
             context.Configuration.AppSettings["lastmodified"] = DateTime.Now.ToString(CultureInfo.InvariantCulture);
