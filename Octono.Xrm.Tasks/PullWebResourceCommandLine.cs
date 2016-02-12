@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Octono.Xrm.Tasks.Utils;
 
 namespace Octono.Xrm.Tasks
 {
@@ -18,9 +19,26 @@ namespace Octono.Xrm.Tasks
             _path = _args.Find(x => x.StartsWith("to:")) ??
                     _args.Skip(2).FirstOrDefault(x => !x.StartsWith("-") && Directory.Exists(System.IO.Path.GetDirectoryName(x) ?? "")) ?? 
                     Directory.GetCurrentDirectory();
+
+            if (_path.StartsWith("to:"))
+            {
+                _path = _path.Substring(3);
+            }
+            else
+            {
+                if (!_path.EndsWith(@"\"))
+                    _path += @"\";
+            }
         }
 
-        public string Name { get { return _args[1]; } }
+        public string Name
+        {
+            get
+            {   
+                return InvalidFileName.Escape(_args[1]);
+            }
+        }
+
         public string Path { get{return _path; } }
 
         public bool ShowHelp

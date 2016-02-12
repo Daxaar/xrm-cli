@@ -70,6 +70,7 @@
     <Compile Include="Crm\CrmContext.cs" />
     <Compile Include="DapiSecurePassword.cs" />
     <Compile Include="DeployWebResourceCommandLine.cs" />
+    <Compile Include="Utils\InvalidFileName.cs" />
     <Compile Include="IO\IXrmConfiguration.cs" />
     <Compile Include="IO\JsonConfigurationManager.cs" />
     <Compile Include="ListConnectionsTask.cs" />

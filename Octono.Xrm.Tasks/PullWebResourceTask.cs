@@ -30,15 +30,14 @@ namespace Octono.Xrm.Tasks
             var entity      = query.Retrieve(service,_commandLine.Name);
             var content     = entity.GetAttributeValue<string>("content").FromBase64String();
             var optionset   = entity.GetAttributeValue<OptionSetValue>("webresourcetype");
-            var type        = WebResourceType.ToFileExtension(optionset.Value);
             var path        = _commandLine.Path;
-            
-            if(string.IsNullOrEmpty(path))
-                path = Directory.GetCurrentDirectory();
 
-            var filePath    = Path.Combine(path, _commandLine.Name + type );
+            if (path.EndsWith(@"\"))
+            {
+                path += _commandLine.Name + WebResourceType.ToFileExtension(optionset.Value);
+            }
 
-            if (File.Exists(filePath) && _commandLine.Overwrite == false)
+            if (File.Exists(path) && _commandLine.Overwrite == false)
             {
                 if (context.Log.Prompt("Overwrite existing file? y/n").Contains("n"))
                 {
@@ -46,8 +45,8 @@ namespace Octono.Xrm.Tasks
                     return;
                 }
             }
-            _writer.Write(System.Text.Encoding.UTF8.GetBytes(content),filePath);
-            context.Log.Write("File written to " + filePath);
+            _writer.Write(System.Text.Encoding.UTF8.GetBytes(content),path);
+            context.Log.Write("File written to " + path);
         }
 
         private bool ShowHelp(ILog log)

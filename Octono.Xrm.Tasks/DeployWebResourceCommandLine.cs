@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Octono.Xrm.Tasks.Utils;
 
 namespace Octono.Xrm.Tasks
 {
@@ -56,7 +57,7 @@ namespace Octono.Xrm.Tasks
             get
             {
                 var name = Args.FirstOrDefault(arg => arg.StartsWith("name:"));
-                return name != null ? name.Substring(5) : null;
+                return name != null ? InvalidFileName.Unescape(name.Substring(5)) : null;
             }
         }
 
