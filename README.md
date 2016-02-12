@@ -28,6 +28,8 @@ Some example usages:
 #####When xrm.exe is on your path the current directory is assumed allowing you to specify just file names.
 `xrm.exe deploy new_file.js`
 
+#####Supports web resources with logical names that would create an invalid filename.  This is done by creating a metadata file (*.meta) alongside each downloaded webresource.
+
 #####Deploy all changed web resources from folder.
 `xrm.exe deploy "c:\webresources`
 
