@@ -73,7 +73,10 @@ namespace Octono.Xrm.Tests.Builders
 
         public Mock<IFileReader> Build()
         {
-            return _reader ?? new Mock<IFileReader>();
+            var reader = _reader ?? new Mock<IFileReader>();
+            reader.Setup(x => x.ReadLines(It.IsAny<string>())).Returns(new List<string>() {"afile.js.meta"});
+            reader.Setup(x => x.Exists(It.IsAny<string>())).Returns(true);
+            return reader;
         }
     }
 }

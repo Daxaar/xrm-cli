@@ -59,7 +59,9 @@ namespace Octono.Xrm.Tests
         {
             var meta = new Mock<IWebResourceMetaData>();
             var reader  = new MockFileReaderBuilder().Returns(3).ModifiedFiles.WithRandomFileContent.Build();
-            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), reader.Object, _query.Object,meta.Object);
+            meta.Setup(x => x.Load(It.IsAny<string>())).Returns(new WebResourceMetaData(new Mock<IFileWriter>().Object,reader.Object));
+
+            var task = new DeployWebResourceTask(new DeployWebResourceCommandLine(Args), reader.Object, _query.Object, meta.Object);
             var context = new MockXrmTaskContext();
             
             var collectionWithOneRecord = new EntityCollection(new[] { new Entity("webresource") });
