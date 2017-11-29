@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security;
+using Microsoft.Xrm.Sdk.Query;
 using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
@@ -47,6 +49,40 @@ namespace Octono.Xrm.Tasks
                 return true;
             }
             return false;
+        }
+    }
+
+    public class ConnectionTestTask : IXrmTask
+    {
+        private readonly ConnectionTestCommandLine _commandLine;
+
+        public ConnectionTestTask(ConnectionTestCommandLine commandLine)
+        {
+            _commandLine = commandLine;
+        }
+        public void Execute(IXrmTaskContext context)
+        {
+            var service = context.ServiceFactory.Create(_commandLine.ConnectionName);
+
+            var q = new QueryExpression
+            {
+                EntityName = "account",
+                ColumnSet = new ColumnSet("name")
+            };
+
+            var response = service.RetrieveMultiple(q);
+
+            foreach (var entity in response.Entities)
+            {
+                context.Log.Write(entity.GetAttributeValue<string>("name"),false);
+            }
+        }
+    }
+
+    public class ConnectionTestCommandLine : CommandLine
+    {
+        public ConnectionTestCommandLine(IList<string> args) : base(args)
+        {
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Net;
 using System.ServiceModel.Description;
 using Microsoft.Xrm.Sdk;
@@ -24,6 +25,9 @@ namespace Octono.Xrm.Tasks
             {
                 creds.Windows.ClientCredential = CredentialCache.DefaultNetworkCredentials;                
             }
+
+            creds.UserName.UserName = connectionInfo.UserName;
+            creds.UserName.Password = new NetworkCredential(string.Empty, DapiSecurePassword.Decrypt(connectionInfo.Password)).Password.Replace(":","");
 
             var uri = new Uri(connectionInfo.ConnectionString);
             logger.Write("Connecting to " + uri.AbsoluteUri);

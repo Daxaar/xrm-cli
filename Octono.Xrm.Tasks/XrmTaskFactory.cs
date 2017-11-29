@@ -90,8 +90,14 @@ namespace Octono.Xrm.Tasks
                     {
                         return new PublishSolutionTask(new PublishSolutionCommandLine(args));
                     }
+                case "testconnection":
+                case "connectiontest":
+                case "getaccountnames":
+                {
+                    return new ConnectionTestTask(new ConnectionTestCommandLine(args));
+                }
                 default:
-                    throw new InvalidOperationException(string.Format("Unknown command {0}", args[0]));
+                    throw new InvalidOperationException($"Unknown command {args[0]}");
             }
         }
     }
