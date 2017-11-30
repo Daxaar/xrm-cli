@@ -13,25 +13,25 @@ Unit tests are written in xunit.  If you wish to use the resharper test runner a
 
 Some example usages:
 
-#####Export a solution managed and increment the version number also saves the server details to config which will be reused on subsequent commands if server details are not specified.
+##### Export a solution managed and increment the version number also saves the server details to config which will be reused on subsequent commands if server details are not specified.
 `xrm.exe export solutionname "c:\exports\solution.zip" -i -m o:orgname s:servername --save`
 
-#####Import a solution.
+##### Import a solution.
 `xrm.exe import "c:\exports\solution.zip`
 
-#####Publish all customizations.
+##### Publish all customizations.
 `xrm.exe publish`
 
-#####Deploy new_file web resource from disk.
+##### Deploy new_file web resource from disk.
 `xrm.exe deploy "c:\webresources\new_file.js`
 
-#####When xrm.exe is on your path the current directory is assumed allowing you to specify just file names.
+##### When xrm.exe is on your path the current directory is assumed allowing you to specify just file names.
 `xrm.exe deploy new_file.js`
 
-#####Supports web resources with logical names that would create an invalid filename.  This is done by creating a metadata file (*.meta) alongside each downloaded webresource.
+##### Supports web resources with logical names that would create an invalid filename.  This is done by creating a metadata file (*.meta) alongside each downloaded webresource.
 
-#####Deploy all changed web resources from folder.
+##### Deploy all changed web resources from folder.
 `xrm.exe deploy "c:\webresources`
 
-#####Pull the javascript web resource new_file from the server to disk into the current directory or specify a path.
+##### Pull the javascript web resource new_file from the server to disk into the current directory or specify a path.
 `xrm.exe pull new_file`
