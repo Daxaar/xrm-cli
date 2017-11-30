@@ -69,6 +69,8 @@
     <Compile Include="AddConnectionCommandLine.cs" />
     <Compile Include="AddConnectionTask.cs" />
     <Compile Include="CommandLine.cs" />
+    <Compile Include="ConnectionTestCommandLine.cs" />
+    <Compile Include="ConnectionTestTask.cs" />
     <Compile Include="Crm\CrmContext.cs" />
     <Compile Include="DapiSecurePassword.cs" />
     <Compile Include="DeployWebResourceCommandLine.cs" />
