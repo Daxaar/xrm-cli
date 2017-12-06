@@ -96,6 +96,11 @@ namespace Octono.Xrm.Tasks
                 {
                     return new ConnectionTestTask(new ConnectionTestCommandLine(args));
                 }
+                case "query":
+                case "q":
+                {
+                    return new QueryEntityTask(new QueryEntityCommandLine(args));
+                }
                 default:
                     throw new InvalidOperationException($"Unknown command {args[0]}");
             }

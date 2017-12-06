@@ -74,6 +74,9 @@
     <Compile Include="Crm\CrmContext.cs" />
     <Compile Include="DapiSecurePassword.cs" />
     <Compile Include="DeployWebResourceCommandLine.cs" />
+    <Compile Include="QueryEntityCommandLine.cs" />
+    <Compile Include="QueryEntityTask.cs" />
+    <Compile Include="Utils\CommandLineArgumentExtensions.cs" />
     <Compile Include="WebResourceMetaData.cs" />
     <Compile Include="Utils\InvalidFileName.cs" />
     <Compile Include="IO\IXrmConfiguration.cs" />
