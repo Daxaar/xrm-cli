@@ -27,7 +27,7 @@ namespace Octono.Xrm.Tasks
                 {
                     if (_args[i].StartsWith("pwd:") || _args[i].StartsWith("password:") || _args[i].StartsWith("p:"))
                     {
-                        password = DapiSecurePassword.ToSecureString(_args[i].Remove(0, _args[i].IndexOf(':')));
+                        password = DapiSecurePassword.ToSecureString(_args[i].Remove(0, _args[i].IndexOf(':') + 1));
                         _args[i] = "";
                         break;
                     }
@@ -43,8 +43,9 @@ namespace Octono.Xrm.Tasks
         {
             get
             {
-                var user = _args.FirstOrDefault(a => a.StartsWith("user:") || a.StartsWith("u:"));
-                user = string.IsNullOrEmpty(user) == false ? user.Remove(0, 5) : string.Empty;
+                var user = _args.FirstOrDefault(a => a.StartsWith("u:"));
+
+                user = string.IsNullOrEmpty(user) == false ? user.Remove(0, 2) : string.Empty;
 
                 if(string.IsNullOrEmpty(user)) throw new ArgumentException("username cannot be empty");
 
