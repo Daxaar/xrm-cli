@@ -22,16 +22,19 @@ namespace Octono.Xrm.Tasks
                 var password = new SecureString();
 
                 //Looping rather than a FirstOrDefault allows us to clear the unsecure string value of the user password from
-                //the arg array before returing it as a secure string
+                //the arg array before returning it as a secure string
                 for (int i = 0; i < _args.Count; i++)
                 {
-                    if (_args[i].StartsWith("pwd:") || _args[i].StartsWith("password:"))
+                    if (_args[i].StartsWith("pwd:") || _args[i].StartsWith("password:") || _args[i].StartsWith("p:"))
                     {
                         password = DapiSecurePassword.ToSecureString(_args[i].Remove(0, _args[i].IndexOf(':')));
                         _args[i] = "";
                         break;
                     }
                 }
+
+                if(password.Length == 0) throw new ArgumentException("password cannot be empty");
+
                 return password;
             }
         }
@@ -40,8 +43,12 @@ namespace Octono.Xrm.Tasks
         {
             get
             {
-                var user = _args.FirstOrDefault(a => a.StartsWith("user:"));
-                return string.IsNullOrEmpty(user) == false ? user.Remove(0, 5) : string.Empty;
+                var user = _args.FirstOrDefault(a => a.StartsWith("user:") || a.StartsWith("u:"));
+                user = string.IsNullOrEmpty(user) == false ? user.Remove(0, 5) : string.Empty;
+
+                if(string.IsNullOrEmpty(user)) throw new ArgumentException("username cannot be empty");
+
+                return user;
             }
         }
 
