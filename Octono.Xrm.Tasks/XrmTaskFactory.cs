@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Octono.Xrm.Tasks.IO;
+using Octono.Xrm.Tasks.Utils;
 
 namespace Octono.Xrm.Tasks
 {
@@ -23,7 +25,21 @@ namespace Octono.Xrm.Tasks
 
         public IXrmTask CreateTask(IList<string> args)
         {
-            //args = StripConnectionInfo(args.ToList());
+            //Find the ONE IXrmTask that has been decorated with the XrmTaskAttribute and whose name property matches
+            //the first command in the args list or any of its aliases match the command
+            var taskType = GetType().Assembly.DefinedTypes
+                             .SingleOrDefault(x => x.GetCustomAttributes<XrmTaskAttribute>()
+                             .Any(attribute => attribute.Name.Equals(args[0],StringComparison.CurrentCultureIgnoreCase) ||
+                             attribute.Aliases.Any(a => a.Equals(args[0],StringComparison.CurrentCultureIgnoreCase))));
+
+            //Instantiate and return the task passing its derived CommandLine type on the ctor
+            if (taskType != null)
+            {
+                var cmdline = taskType.GetCustomAttributes<XrmTaskAttribute>().Single().CommandLine;
+                var cmd = Activator.CreateInstance(cmdline,args);
+                return (IXrmTask)Activator.CreateInstance(taskType,cmd);
+            }
+
             switch
                 (args[0].ToLower().Trim())
             {

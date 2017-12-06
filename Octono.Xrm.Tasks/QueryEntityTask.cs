@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xrm.Sdk.Query;
+using Octono.Xrm.Tasks.Utils;
 
 namespace Octono.Xrm.Tasks
 {
+    [XrmTask(typeof(QueryEntityCommandLine),"Query",Aliases = new [] {"q"})]
     public class QueryEntityTask : IXrmTask
     {
         private readonly QueryEntityCommandLine _cmdLine;

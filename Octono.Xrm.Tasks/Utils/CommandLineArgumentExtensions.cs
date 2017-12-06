@@ -14,6 +14,5 @@ namespace Octono.Xrm.Tasks.Utils
         {
             return list.SkipWhile(x => x.StartsWith(argument) == false).Next().SingleOrDefault();
         }
-
     }
 }
