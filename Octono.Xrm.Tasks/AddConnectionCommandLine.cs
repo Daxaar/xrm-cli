@@ -33,8 +33,6 @@ namespace Octono.Xrm.Tasks
                     }
                 }
 
-                if(password.Length == 0) throw new ArgumentException("password cannot be empty");
-
                 return password;
             }
         }
@@ -46,8 +44,6 @@ namespace Octono.Xrm.Tasks
                 var user = _args.FirstOrDefault(a => a.StartsWith("u:"));
 
                 user = string.IsNullOrEmpty(user) == false ? user.Remove(0, 2) : string.Empty;
-
-                if(string.IsNullOrEmpty(user)) throw new ArgumentException("username cannot be empty");
 
                 return user;
             }
