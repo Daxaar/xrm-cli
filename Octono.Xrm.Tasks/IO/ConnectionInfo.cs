@@ -17,13 +17,7 @@ namespace Octono.Xrm.Tasks.IO
         public bool Debug { get; set; }
 
         [JsonIgnore]
-        public string ConnectionString
-        {
-            get
-            {
-                return string.Format("{0}://{1}:{2}/{3}/XRMServices/2011/Organization.svc", Protocol, ServerName, Port,
-                                     Organisation);
-            }
-        }
+        public string ConnectionString =>
+            $"{Protocol}://{ServerName}:{Port}/{Organisation}/XRMServices/2011/Organization.svc";
     }
 }

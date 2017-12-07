@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
@@ -15,8 +14,8 @@ namespace Octono.Xrm.Tasks.IO
                 ConnectionStrings = new Dictionary<string, ConnectionInfo>();
                 AppSettings = new Dictionary<string, string>();
             }
-            public Dictionary<string, string> AppSettings { get; set; }
-            public Dictionary<string, ConnectionInfo> ConnectionStrings { get; set; }
+            public Dictionary<string, string> AppSettings { get; }
+            public Dictionary<string, ConnectionInfo> ConnectionStrings { get; }
         }
 
         private readonly IFileReader _reader;

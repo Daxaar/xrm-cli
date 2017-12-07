@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Octono.Xrm.Tasks
@@ -15,7 +14,7 @@ namespace Octono.Xrm.Tasks
             ShowHelp = args.Any(arg => arg == "--help" || arg == "-help");
         }
 
-        public bool ShowHelp { get; private set; }
-        public string SolutionName { get; private set; }
+        public bool ShowHelp { get; }
+        public string SolutionName { get; }
     }
 }

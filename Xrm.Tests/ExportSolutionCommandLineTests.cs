@@ -28,8 +28,8 @@ namespace Octono.Xrm.Tests
         public void CanReadCommaSeparatedSolutionFilesArgument()
         {
             var command = new ExportSolutionCommandLine(new[] { "export", "solution1,solution2", "conn:connectionName" });
-            Assert.True(command.SolutionNames.Contains("solution1"));
-            Assert.True(command.SolutionNames.Contains("solution2"));
+            Assert.Contains("solution1", command.SolutionNames);
+            Assert.Contains("solution2", command.SolutionNames);
         }
 
         [Fact]

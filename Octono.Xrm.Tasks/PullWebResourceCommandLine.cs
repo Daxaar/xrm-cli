@@ -8,7 +8,7 @@ namespace Octono.Xrm.Tasks
     public class PullWebResourceCommandLine : CommandLine
     {
         private readonly List<string> _args;
-        private readonly string _path = "";
+        private readonly string _path;
 
         public PullWebResourceCommandLine(IList<string> args) : base(args)
         {
@@ -37,21 +37,12 @@ namespace Octono.Xrm.Tasks
             }
         }
 
-        public string Name
-        {
-            get
-            {   
-                return InvalidFileName.Escape(_args[1]);
-            }
-        }
+        public string Name => InvalidFileName.Escape(_args[1]);
 
-        public string Path { get{return _path; } }
+        public string Path => _path;
 
-        public bool ShowHelp
-        {
-            get { return _args.Contains("-help") || _args.Contains("/?") || _args.Contains("--help"); }
-        }
+        public bool ShowHelp => _args.Contains("-help") || _args.Contains("/?") || _args.Contains("--help");
 
-        public bool Overwrite { get { return _args.Contains("--overwrite") || _args.Contains("-o"); } }
+        public bool Overwrite => _args.Contains("--overwrite") || _args.Contains("-o");
     }
 }

@@ -25,7 +25,7 @@ namespace Octono.Xrm.Tasks
             IConfigurationManager configManager = new JsonConfigurationManager(reader,writer);
 
             IXrmConfiguration config = configManager.Load();
-            var taskFactory = new XrmTaskFactory(reader, writer, config);
+            var taskFactory = new XrmTaskFactory(reader, writer);
             try
             {
                 IXrmTask task = taskFactory.CreateTask(args);

@@ -14,7 +14,7 @@ namespace Octono.Xrm.Tasks
     {
         public Entity Retrieve(IOrganizationService service, string name)
         {
-            var query = new QueryExpression("webresource") { ColumnSet = new ColumnSet(new[] { "content","webresourcetype" }) };
+            var query = new QueryExpression("webresource") { ColumnSet = new ColumnSet("content", "webresourcetype") };
 
             query.Criteria.AddCondition("name", ConditionOperator.Equal, name);
             //query.Criteria.AddCondition("iscustomizable",ConditionOperator.Equal,true);
@@ -24,7 +24,7 @@ namespace Octono.Xrm.Tasks
 
             if (result.Entities.Any() == false)
             {
-                throw new InvalidOperationException(string.Format("Cannot find JavaScript web resource {0}", name));                
+                throw new InvalidOperationException($"Cannot find JavaScript web resource {name}");                
             } 
 
             return result.Entities.Single();            

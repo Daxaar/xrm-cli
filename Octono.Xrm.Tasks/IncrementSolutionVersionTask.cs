@@ -19,7 +19,7 @@ namespace Octono.Xrm.Tasks
 
         public void Execute(IXrmTaskContext context)
         {
-            context.Log.Write(string.Format("Incrementing Version Number for solution {0}",_commandLine.Solution));
+            context.Log.Write($"Incrementing Version Number for solution {_commandLine.Solution}");
             string oldVersion, newVersion;
 
             IOrganizationService service = context.ServiceFactory.Create(_commandLine.ConnectionName);
@@ -36,7 +36,7 @@ namespace Octono.Xrm.Tasks
                 orgContext.UpdateObject(solution);
                 orgContext.SaveChanges();
             }
-            context.Log.Write(string.Format("Incremented Solution {0} from {1} to {2}", _commandLine.Solution, oldVersion, newVersion));
+            context.Log.Write($"Incremented Solution {_commandLine.Solution} from {oldVersion} to {newVersion}");
         }
     }
     public class IncrementSolutionCommandLine : CommandLine

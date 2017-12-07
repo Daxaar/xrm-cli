@@ -15,7 +15,7 @@ namespace Octono.Xrm.Tests
     public class DeployWebResourceTaskTests
     {
         private const string Path = @"c:\test\resourcename.js";
-        private static readonly string[] Args = new[] { "deploy", Path, "conn:connectionName" };
+        private static readonly string[] Args = { "deploy", Path, "conn:connectionName" };
         private readonly Mock<IWebResourceQuery> _query;
 
         public DeployWebResourceTaskTests()

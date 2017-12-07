@@ -23,7 +23,7 @@ namespace Octono.Xrm.Tasks
             }
             else
             {
-                context.Log.Write(string.Format("A connection with the name {0} was not found",_args[1]));
+                context.Log.Write($"A connection with the name {_args[1]} was not found");
             }
             
         }

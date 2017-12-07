@@ -20,7 +20,7 @@ namespace Octono.Xrm.Tasks
 
             foreach (var filePath in _command.GetSolutionFilePaths())
             {
-                context.Log.Write(string.Format("Importing {0}", filePath));
+                context.Log.Write($"Importing {filePath}");
                 Guid jobId = Guid.NewGuid();
                 var importRequest = new ImportSolutionRequest
                 {
@@ -32,12 +32,12 @@ namespace Octono.Xrm.Tasks
                 IOrganizationService service = context.ServiceFactory.Create(_command.ConnectionName);
                 service.Execute(importRequest);
                 
-                context.Log.Write(string.Format("Publishing {0}",filePath));
+                context.Log.Write($"Publishing {filePath}");
                 if (_command.Publish)
                 {
                     service.Execute(new PublishAllXmlRequest());
                 }
-                service.Retrieve("importjob", importRequest.ImportJobId, new ColumnSet(new[] { "data", "solutionname" }));
+                service.Retrieve("importjob", importRequest.ImportJobId, new ColumnSet("data", "solutionname"));
                 context.Log.Write("Solution imported successfully");
                 
             }

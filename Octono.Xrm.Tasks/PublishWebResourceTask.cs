@@ -22,10 +22,7 @@ namespace Octono.Xrm.Tasks
             //Publish the change
             context.Log.Write("Publishing");
             var publish = new PublishXmlRequest();
-            string webResourceXml =
-                string.Format(
-                    "<importexportxml><webresources><webresource>{0}</webresource></webresources></importexportxml>",
-                    _id);
+            var webResourceXml = $"<importexportxml><webresources><webresource>{_id}</webresource></webresources></importexportxml>";
 
             publish.ParameterXml = webResourceXml;
             var service = context.ServiceFactory.Create(_connectionName);

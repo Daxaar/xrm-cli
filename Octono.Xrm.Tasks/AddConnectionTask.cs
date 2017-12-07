@@ -1,8 +1,4 @@
-﻿using System.CodeDom.Compiler;
-using System.Linq;
-using System.Security;
-using System.Web.UI.WebControls;
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using System.Linq;
 using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks

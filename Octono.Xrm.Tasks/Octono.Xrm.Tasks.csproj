@@ -71,6 +71,8 @@
     <Compile Include="CommandLine.cs" />
     <Compile Include="ConnectionTestCommandLine.cs" />
     <Compile Include="ConnectionTestTask.cs" />
+    <Compile Include="CopyRecordsCommandLine.cs" />
+    <Compile Include="CopyRecordsTask.cs" />
     <Compile Include="Crm\CrmContext.cs" />
     <Compile Include="DapiSecurePassword.cs" />
     <Compile Include="DeployWebResourceCommandLine.cs" />
@@ -102,7 +104,6 @@
     <Compile Include="ILog.cs" />
     <Compile Include="ImportSolutionCommandLine.cs" />
     <Compile Include="ImportSolutionTask.cs" />
-    <Compile Include="IO\SystemConfigurationManager.cs" />
     <Compile Include="IXrmServiceFactory.cs" />
     <Compile Include="IXrmTask.cs" />
     <Compile Include="IXrmTaskContext.cs" />

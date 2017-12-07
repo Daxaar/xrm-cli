@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using System.Globalization;
 using System.IO;
 using Microsoft.Xrm.Sdk;
@@ -34,7 +33,7 @@ namespace Octono.Xrm.Tasks
         public void Execute(IXrmTaskContext context)
         {
             var content = _reader.ReadAllBytes(_commandLine.FilePath);
-            string fileContent64 = Convert.ToBase64String(content);
+            var fileContent64 = Convert.ToBase64String(content);
 
             if (!ContinueWhenFileIsEmpty(context,fileContent64)) return;
 
@@ -44,14 +43,14 @@ namespace Octono.Xrm.Tasks
             string resourceName = _commandLine.Name ?? metadata.WebResourceName ?? _reader.RemoveFileExtension(Path.GetFileName(_commandLine.FilePath));
 
             //Retrieve the existing web resource
-            context.Log.Write(string.Format("Retrieving {0}", resourceName));
-            IOrganizationService service = context.ServiceFactory.Create(_commandLine.ConnectionName);
+            context.Log.Write($"Retrieving {resourceName}");
+            var service = context.ServiceFactory.Create(_commandLine.ConnectionName);
             var resource = _query.Retrieve(service, resourceName);
 
             if (FileOnServerMatchesLocalFile(resource,context,fileContent64)) return;
 
             //Set the content of the webresource to the file content and update
-            context.Log.Write(string.Format("Deploying {0}", resourceName));
+            context.Log.Write($"Deploying {resourceName}");
             resource["content"] = fileContent64;
             service.Update(resource);
 

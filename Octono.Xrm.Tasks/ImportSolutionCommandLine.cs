@@ -51,7 +51,7 @@ namespace Octono.Xrm.Tasks
                     }
                     else
                     {
-                        throw new Exception(string.Format("Cannot find file {0}.  If you have specified multiple files they must be comma separated", file));                                            
+                        throw new Exception($"Cannot find file {file}.  If you have specified multiple files they must be comma separated");                                            
                     }
                 }
         }
@@ -69,14 +69,11 @@ namespace Octono.Xrm.Tasks
                 return GetSolutionFilePaths().Select(file => _reader.ReadAllBytes(file));
             }
         }
-        public bool Publish { get { return !_args.Contains("--nopublish"); } }
-        public bool ActivateProcesses { get { return !_args.Contains("--noactivate"); } }
+        public bool Publish => !_args.Contains("--nopublish");
+        public bool ActivateProcesses => !_args.Contains("--noactivate");
 
-        public bool ShowHelp { get { return _args.Contains("--help"); } }
+        public bool ShowHelp => _args.Contains("--help");
 
-        public bool OverwriteUmanaged
-        {
-            get { return _args.Contains("--overwrite") || _args.Contains("-o") || _args.Contains("--o"); }
-        }
+        public bool OverwriteUmanaged => _args.Contains("--overwrite") || _args.Contains("-o") || _args.Contains("--o");
     }
 }

@@ -30,7 +30,7 @@ namespace Octono.Xrm.Tasks
             }
 
             if (!_configuration.ConnectionStrings.ContainsKey(connectionName))
-                throw new InvalidOperationException(string.Format("The connection name {0} does not exist in config", connectionName));
+                throw new InvalidOperationException($"The connection name {connectionName} does not exist in config");
 
             var connection = _configuration.ConnectionStrings[connectionName];
             var orgService = OrganizationServiceFactory.Create(connection,_log);
@@ -39,7 +39,7 @@ namespace Octono.Xrm.Tasks
         }
         public void Dispose()
         {
-            foreach (var service in _connectionInstances.Values.OfType<IDisposable>().Where(service => service != null))
+            foreach (var service in _connectionInstances.Values.OfType<IDisposable>().Where(service => true))
             {
                 service.Dispose();
             }

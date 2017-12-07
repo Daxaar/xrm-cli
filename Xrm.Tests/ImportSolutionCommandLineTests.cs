@@ -97,7 +97,7 @@ namespace Octono.Xrm.Tests
             var reader = new Mock<IFileReader>();
             reader.SetReturnsDefault(true);
             var commandline = new ImportSolutionCommandLine(new[] { "import", "filename1", "conn:connectionName" }, reader.Object);
-            Assert.True(commandline.GetSolutionFilePaths().Single().EndsWith(".zip"));
+            Assert.EndsWith(".zip", commandline.GetSolutionFilePaths().Single());
         }
 
         [Fact]
@@ -120,8 +120,8 @@ namespace Octono.Xrm.Tests
             reader.Setup(x => x.FileExists(@"Exports\solution2.zip")).Returns(true);
             var command = new ImportSolutionCommandLine(new[] { "import", "--exports", "conn:connectionName" }, reader.Object);
 
-            Assert.True(command.GetSolutionFilePaths().Contains(@"Exports\solution1.zip"));
-            Assert.True(command.GetSolutionFilePaths().Contains(@"Exports\solution2.zip"));
+            Assert.Contains(@"Exports\solution1.zip", command.GetSolutionFilePaths());
+            Assert.Contains(@"Exports\solution2.zip", command.GetSolutionFilePaths());
         }
 
         [Fact]

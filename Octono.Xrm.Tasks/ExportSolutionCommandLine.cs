@@ -17,19 +17,13 @@ namespace Octono.Xrm.Tasks
             _args = args;
         }
 
-        public IEnumerable<string> SolutionNames { get
-        {
-            return _args[1].Split(',');
-        }}
+        public IEnumerable<string> SolutionNames => _args[1].Split(',');
 
-        public bool ShowHelp { get { return _args.Contains("--help"); } }
+        public bool ShowHelp => _args.Contains("--help");
 
-        public bool Managed { get { return _args.Contains("-m"); } }
+        public bool Managed => _args.Contains("-m");
 
-        public bool IncrementVersionBeforeExport
-        {
-            get { return _args.Contains("-i"); }
-        }
+        public bool IncrementVersionBeforeExport => _args.Contains("-i");
 
         public string BuildExportPath(string solutionName, string version = "")
         {

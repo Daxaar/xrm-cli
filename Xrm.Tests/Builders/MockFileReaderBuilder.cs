@@ -43,7 +43,7 @@ namespace Octono.Xrm.Tests.Builders
                 var files = new List<string>();
                 for (int i = 0; i < _currentCount; i++)
                 {
-                    files.Add(string.Format("file{0}.js", i));
+                    files.Add($"file{i}.js");
                 }
 
                 _reader.Setup(x => x.GetModifiedFilesSince(It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<bool>()))

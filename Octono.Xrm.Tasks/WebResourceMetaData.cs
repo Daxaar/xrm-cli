@@ -16,7 +16,7 @@ namespace Octono.Xrm.Tasks
 
         private WebResourceMetaData(string webresourceName)
         {
-            _webresourceName = webresourceName;
+            WebResourceName = webresourceName;
         }
 
         public WebResourceMetaData(IFileWriter fileWriter, IFileReader fileReader)
@@ -25,21 +25,21 @@ namespace Octono.Xrm.Tasks
             _fileReader = fileReader;
         }
 
-        private readonly string _webresourceName;
-        public string WebResourceName { get { return _webresourceName; } }
+        public string WebResourceName { get; }
+
         public WebResourceMetaData Load(string filePath)
         {
             var path = string.Concat(filePath, ".meta");
             if (!_fileReader.Exists(path))
             {
-                throw new ArgumentException(string.Format("Metadata file does not exist for file {0}", filePath),filePath);
+                throw new ArgumentException($"Metadata file does not exist for file {filePath}",filePath);
             }
 
             var data = _fileReader.ReadLines(path).ToList();
 
             if (data.Count == 0)
             {
-                throw new InvalidDataException(string.Format("Metadata file was empty {0}", filePath));
+                throw new InvalidDataException($"Metadata file was empty {filePath}");
             }
 
             return new WebResourceMetaData(data.FirstOrDefault());

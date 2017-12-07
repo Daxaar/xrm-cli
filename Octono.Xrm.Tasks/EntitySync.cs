@@ -20,15 +20,10 @@ namespace Octono.Xrm.Tasks
             _comparer = new PrimaryAttributeEqualityComparer(primaryAttributeName);
         }
 
-        public IEnumerable<Entity> ToBeDeleted
-        {
-            get { return _target.Except(_source, _comparer); }
-        }
-        public IEnumerable<Entity> ToBeAdded
-        {
-            get { return _source.Except(_target, _comparer); }
-        }
+        public IEnumerable<Entity> ToBeDeleted => _target.Except(_source, _comparer);
 
-        public IEnumerable<Entity> ToBeUpdated { get { return _source.Intersect(_target, _comparer); }}
+        public IEnumerable<Entity> ToBeAdded => _source.Except(_target, _comparer);
+
+        public IEnumerable<Entity> ToBeUpdated => _source.Intersect(_target, _comparer);
     }
 }

@@ -15,8 +15,8 @@ namespace Octono.Xrm.Tasks
             Configuration = configuration;
         }
 
-        public ILog Log { get; private set; }
-        public IXrmServiceFactory ServiceFactory { get; private set; }
-        public IXrmConfiguration Configuration { get; private set; }
+        public ILog Log { get; }
+        public IXrmServiceFactory ServiceFactory { get; }
+        public IXrmConfiguration Configuration { get; }
     }
 }

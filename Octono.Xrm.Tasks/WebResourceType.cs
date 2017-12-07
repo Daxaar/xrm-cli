@@ -40,7 +40,7 @@ namespace Octono.Xrm.Tasks
                 case 10:
                     return ".ico";
                 default:
-                    throw new ArgumentOutOfRangeException(string.Format("The web resource type with value {0} is unknown.", value));
+                    throw new ArgumentOutOfRangeException($"The web resource type with value {value} is unknown.");
             }
         }
     }

@@ -25,10 +25,10 @@ namespace Octono.Xrm.Tasks.IO
         public string RemoveFileExtension(string filename)
         {
             if(string.IsNullOrEmpty(filename))
-                throw new ArgumentNullException("filename","Cannot be null");
+                throw new ArgumentNullException(nameof(filename),"Cannot be null");
             
             string extension = Path.GetExtension(filename);
-            return extension != null ? filename.Replace(extension, "") : filename;
+            return filename.Replace(extension, "");
         }
 
         public IEnumerable<string> GetModifiedFilesSince(DateTime lastModified, string path, bool recursive = false)

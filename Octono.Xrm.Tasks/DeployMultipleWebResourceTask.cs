@@ -1,65 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Microsoft.Xrm.Sdk;
-using Octono.Xrm.Tasks;
-using Octono.Xrm.Tasks.Crm;
 using Octono.Xrm.Tasks.IO;
 
 namespace Octono.Xrm.Tasks
 {
-    /// <summary>
-    /// Deploys one or more web resource to an Organisation
-    /// </summary>
-    public class CopyRecordsTask : IXrmTask
-    {
-        private readonly CopyRecordsCommandLine _commandLine;
-
-        public CopyRecordsTask(CopyRecordsCommandLine commandLine)
-        {
-            _commandLine = commandLine;
-        }
-
-        public void Execute(IXrmTaskContext context)
-        {
-            IOrganizationService service = context.ServiceFactory.Create(_commandLine.ConnectionName);
-            using (var crmContext = new CrmContext(service))
-            using (var destinationContext = new CrmContext(context.ServiceFactory.Create(_commandLine.Destination)))
-            {
-                foreach (var entity in _commandLine.Entities)
-                {
-                    var sourceRecords = crmContext.GetAll(entity.Key)
-                                                  .Where(
-                                                      e =>
-                                                      e.GetAttributeValue<DateTime>("modifiedon") >=
-                                                      _commandLine.FromDate);
-
-                    var targetRecords = destinationContext.GetAll(entity.Key);
-
-                    var sync = new EntitySync(sourceRecords, targetRecords, entity.Value);
-
-                    destinationContext.Delete(sync.ToBeDeleted);
-                    destinationContext.Add(sync.ToBeAdded);
-                }
-            }
-        }
-    }
-
-    public class CopyRecordsCommandLine : CommandLine
-    {
-        public CopyRecordsCommandLine(IList<string> args) : base(args)
-        {
-        }
-
-        public IDictionary<string, string> Entities { get; private set; }
-
-        public DateTime FromDate { get; set; }
-
-        public string Destination { get; set; }
-    }
-
     public class DeployMultipleWebResourceTask : IXrmTask
     {
         private readonly DeployWebResourceCommandLine _commandLine;

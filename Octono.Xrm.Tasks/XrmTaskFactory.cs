@@ -15,12 +15,11 @@ namespace Octono.Xrm.Tasks
     {
         private readonly IFileReader _reader;
         private readonly IFileWriter _writer;
-        private readonly IXrmConfiguration _configuration;
-        public XrmTaskFactory(IFileReader reader,IFileWriter writer,IXrmConfiguration configuration)
+
+        public XrmTaskFactory(IFileReader reader,IFileWriter writer)
         {
             _reader = reader;
             _writer = writer;
-            _configuration = configuration;
         }
 
         public IXrmTask CreateTask(IList<string> args)

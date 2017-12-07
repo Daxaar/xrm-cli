@@ -11,7 +11,7 @@ namespace Octono.Xrm.Tests
             ConnectionStrings = new Dictionary<string, ConnectionInfo>();
         }
 
-        public Dictionary<string, string> AppSettings { get; private set; }
-        public Dictionary<string, ConnectionInfo> ConnectionStrings { get; private set; }
+        public Dictionary<string, string> AppSettings { get; }
+        public Dictionary<string, ConnectionInfo> ConnectionStrings { get; }
     }
 }
