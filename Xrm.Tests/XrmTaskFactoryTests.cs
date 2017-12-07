@@ -56,5 +56,18 @@ namespace Octono.Xrm.Tests
             Assert.IsType<PublishSolutionTask>(task); 
         }
 
+        [Theory]
+        [InlineData("publish", typeof(PublishSolutionTask))]
+        [InlineData("addconnection", typeof(AddConnectionTask))]
+        [InlineData("connectiontest", typeof(ConnectionTestTask))]
+        [InlineData("copy", typeof(CopyRecordsTask))]
+        [InlineData("deletesolution", typeof(DeleteSolutionTask))]
+        public void ReturnsCorrectTaskForSpecifiedCommand(string command, Type taskType)
+        {
+            var factory = new XrmTaskFactory(new Mock<IFileReader>().Object, new Mock<IFileWriter>().Object);
+            IXrmTask task = factory.CreateTask(new[] { command, "conn:connectionName" });
+            Assert.IsType(taskType, task);
+        }
+
     }
 }

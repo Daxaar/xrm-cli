@@ -2,12 +2,14 @@
 using System.Linq;
 using Microsoft.Xrm.Sdk;
 using Octono.Xrm.Tasks.Crm;
+using Octono.Xrm.Tasks.Utils;
 
 namespace Octono.Xrm.Tasks
 {
     /// <summary>
     /// Deploys one or more web resource to an Organisation
     /// </summary>
+    [XrmTask(typeof(CopyRecordsCommandLine),"Copy",Aliases = new []{"copy","cp"})]
     public class CopyRecordsTask : IXrmTask
     {
         private readonly CopyRecordsCommandLine _commandLine;

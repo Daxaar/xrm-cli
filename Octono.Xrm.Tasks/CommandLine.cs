@@ -14,6 +14,6 @@ namespace Octono.Xrm.Tasks
             Args = args;
         }
         public string ConnectionName { get; set; }
-        public IList<string> Args { get; private set; }
+        public IList<string> Args { get; }
     }
 }
