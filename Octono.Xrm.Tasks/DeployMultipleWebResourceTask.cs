@@ -13,7 +13,7 @@ namespace Octono.Xrm.Tasks
     /// <summary>
     /// Deploys one or more web resource to an Organisation
     /// </summary>
-    public class CopyRecordsTask : XrmTask
+    public class CopyRecordsTask : IXrmTask
     {
         private readonly CopyRecordsCommandLine _commandLine;
 
@@ -22,7 +22,7 @@ namespace Octono.Xrm.Tasks
             _commandLine = commandLine;
         }
 
-        public override void Execute(IXrmTaskContext context)
+        public void Execute(IXrmTaskContext context)
         {
             IOrganizationService service = context.ServiceFactory.Create(_commandLine.ConnectionName);
             using (var crmContext = new CrmContext(service))
@@ -60,7 +60,7 @@ namespace Octono.Xrm.Tasks
         public string Destination { get; set; }
     }
 
-    public class DeployMultipleWebResourceTask : XrmTask
+    public class DeployMultipleWebResourceTask : IXrmTask
     {
         private readonly DeployWebResourceCommandLine _commandLine;
         private readonly IFileReader _reader;
@@ -73,7 +73,7 @@ namespace Octono.Xrm.Tasks
             _writer = writer;
         }
 
-        public override void Execute(IXrmTaskContext context)
+        public void Execute(IXrmTaskContext context)
         {
             DateTime lastModified = context.Configuration.AppSettings.ContainsKey("lastmodified")
                     ? DateTime.Parse(context.Configuration.AppSettings["lastmodified"])

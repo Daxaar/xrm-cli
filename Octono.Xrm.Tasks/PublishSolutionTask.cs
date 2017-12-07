@@ -12,7 +12,7 @@ namespace Octono.Xrm.Tasks
         {
         }
     }
-    public class PublishSolutionTask : XrmTask
+    public class PublishSolutionTask : IXrmTask
     {
         private readonly PublishSolutionCommandLine _commandLine;
 
@@ -21,7 +21,7 @@ namespace Octono.Xrm.Tasks
             _commandLine = commandLine;
         }
 
-        public override void Execute(IXrmTaskContext context)
+        public void Execute(IXrmTaskContext context)
         {   
             context.Log.Write("Publishing all changes");
             context.ServiceFactory.Create(_commandLine.ConnectionName).Execute(new PublishAllXmlRequest());

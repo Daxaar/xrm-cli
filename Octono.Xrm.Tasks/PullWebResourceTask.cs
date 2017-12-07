@@ -9,7 +9,7 @@ namespace Octono.Xrm.Tasks
     /// <summary>
     /// Pulls a WebResource from the Organisation to the specified local file
     /// </summary>
-    public class PullWebResourceTask : XrmTask
+    public class PullWebResourceTask : IXrmTask
     {
         private readonly PullWebResourceCommandLine _commandLine;
         private readonly IFileWriter _writer;
@@ -22,7 +22,7 @@ namespace Octono.Xrm.Tasks
             _metaData = metaData;
         }
 
-        public override void Execute(IXrmTaskContext context)
+        public void Execute(IXrmTaskContext context)
         {
             if (ShowHelp(context.Log)) return;
 

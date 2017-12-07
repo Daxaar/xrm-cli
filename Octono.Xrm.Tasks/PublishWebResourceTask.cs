@@ -6,7 +6,7 @@ namespace Octono.Xrm.Tasks
     /// <summary>
     /// Publishes a WebResource typically after depoyment using DeployWebResourceTask
     /// </summary>
-    public class PublishWebResourceTask : XrmTask
+    public class PublishWebResourceTask : IXrmTask
     {
         private readonly Guid _id;
         private readonly string _connectionName;
@@ -17,7 +17,7 @@ namespace Octono.Xrm.Tasks
             _connectionName = connectionName;
         }
 
-        public override void Execute(IXrmTaskContext context)
+        public void Execute(IXrmTaskContext context)
         {
             //Publish the change
             context.Log.Write("Publishing");

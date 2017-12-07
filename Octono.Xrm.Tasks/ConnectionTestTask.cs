@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xrm.Sdk.Query;
+using Octono.Xrm.Tasks.Utils;
 
 namespace Octono.Xrm.Tasks
 {
+    [XrmTask(typeof(ConnectionTestCommandLine),"testconnection",Aliases = new []{"testconn","contest"})]
     public class ConnectionTestTask : IXrmTask
     {
         private readonly ConnectionTestCommandLine _commandLine;

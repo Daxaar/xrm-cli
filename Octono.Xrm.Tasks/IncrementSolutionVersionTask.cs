@@ -8,7 +8,7 @@ namespace Octono.Xrm.Tasks
     /// <summary>
     /// Increments the version number of a solution using the semantic versioning format http://semver.org/
     /// </summary>
-    public class IncrementSolutionVersionTask : XrmTask
+    public class IncrementSolutionVersionTask : IXrmTask
     {
         private readonly IncrementSolutionCommandLine _commandLine;
 
@@ -17,7 +17,7 @@ namespace Octono.Xrm.Tasks
             _commandLine = commandLine;
         }
 
-        public override void Execute(IXrmTaskContext context)
+        public void Execute(IXrmTaskContext context)
         {
             context.Log.Write(string.Format("Incrementing Version Number for solution {0}",_commandLine.Solution));
             string oldVersion, newVersion;

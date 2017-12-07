@@ -1,12 +1,10 @@
 ﻿namespace Octono.Xrm.Tasks
 {
-    public class ExitTask : XrmTask
+    public class ExitTask : IXrmTask
     {
-        public ExitTask() : base(false){}
-        public override void Execute(IXrmTaskContext context)
+        public void Execute(IXrmTaskContext context)
         {
             context.Log.Write("Exiting...");
         }
-
     }
 }

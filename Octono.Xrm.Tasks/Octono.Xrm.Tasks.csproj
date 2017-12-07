@@ -120,7 +120,6 @@
     <Compile Include="SolutionVersionFormatter.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="XrmServiceFactory.cs" />
-    <Compile Include="XrmTask.cs" />
     <Compile Include="XrmTaskFactory.cs" />
     <Compile Include="XrmTaskRunner.cs" />
   </ItemGroup>

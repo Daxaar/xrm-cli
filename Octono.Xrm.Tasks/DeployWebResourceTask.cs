@@ -16,7 +16,7 @@ namespace Octono.Xrm.Tasks
     /// <remarks>
     /// Currently assumes the webresource exists on the server and therefore only updates the content.
     /// </remarks>
-    public class DeployWebResourceTask : XrmTask
+    public class DeployWebResourceTask : IXrmTask
     {
         private readonly DeployWebResourceCommandLine _commandLine;
         private readonly IFileReader _reader;
@@ -31,7 +31,7 @@ namespace Octono.Xrm.Tasks
             _metadata = metadata;
         }
 
-        public override void Execute(IXrmTaskContext context)
+        public void Execute(IXrmTaskContext context)
         {
             var content = _reader.ReadAllBytes(_commandLine.FilePath);
             string fileContent64 = Convert.ToBase64String(content);

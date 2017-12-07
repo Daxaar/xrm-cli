@@ -5,7 +5,7 @@ using Microsoft.Xrm.Sdk.Query;
 
 namespace Octono.Xrm.Tasks
 {
-    public class ImportSolutionTask : XrmTask
+    public class ImportSolutionTask : IXrmTask
     {
         private readonly ImportSolutionCommandLine _command;
 
@@ -14,7 +14,7 @@ namespace Octono.Xrm.Tasks
             _command = command;
         }
 
-        public override void Execute(IXrmTaskContext context)
+        public void Execute(IXrmTaskContext context)
         {
             if (ShowHelp(context.Log)) return;
 

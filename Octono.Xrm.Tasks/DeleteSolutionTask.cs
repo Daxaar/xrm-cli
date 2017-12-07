@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
@@ -8,7 +9,7 @@ namespace Octono.Xrm.Tasks
     /// <summary>
     /// Deletes a solution from an Organisation
     /// </summary>
-    public class DeleteSolutionTask : XrmTask
+    public class DeleteSolutionTask : IXrmTask
     {
         private readonly DeleteSolutionCommandLine _command;
 
@@ -17,20 +18,27 @@ namespace Octono.Xrm.Tasks
             _command = command;
         }
 
-        public override void Execute(IXrmTaskContext context)
+        public void Execute(IXrmTaskContext context)
         {
             ShowHelp(context.Log);
             IOrganizationService service = context.ServiceFactory.Create(_command.ConnectionName);
             using (var ctx = new OrganizationServiceContext(service))
             {
-                var solution = from s in ctx.CreateQuery("solution")
-                               where s.GetAttributeValue<string>("uniquename") == _command.SolutionName
-                               select s.Id;
+                Console.WriteLine($"Are you sure you want to delete the solution {_command.SolutionName}?");
+                var answer = Console.ReadLine();
 
-                context.Log.Write(string.Format("Deleting solution {0}", _command.SolutionName));
-                service.Delete("solution",solution.Single());
+                if (answer != "y" || answer != "yes")
+                {
+                    return;
+                }
+                var solution = from s in ctx.CreateQuery("solution")
+                    where s.GetAttributeValue<string>("uniquename") == _command.SolutionName
+                    select s.Id;
+
+                context.Log.Write($"Deleting solution {_command.SolutionName}");
+                service.Delete("solution", solution.Single());
                 service.Execute(new PublishAllXmlRequest());
-                context.Log.Write(string.Format("Solution deleted successfully"));
+                context.Log.Write("Solution deleted successfully");
             }
         }
 

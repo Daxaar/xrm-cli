@@ -10,7 +10,7 @@ namespace Octono.Xrm.Tasks
     /// <summary>
     /// Exports a solution managed or unmanaged from an Organisation and optionally incrementing the version number 
     /// </summary>
-    public class ExportSolutionTask : XrmTask
+    public class ExportSolutionTask : IXrmTask
     {
         private readonly ExportSolutionCommandLine _command;
         private readonly IFileWriter _writer;
@@ -21,7 +21,7 @@ namespace Octono.Xrm.Tasks
             _writer = writer;
         }
 
-        public override void Execute(IXrmTaskContext context)
+        public void Execute(IXrmTaskContext context)
         {
             if (ShowHelp(context.Log)) return;
 
