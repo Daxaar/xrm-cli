@@ -76,6 +76,8 @@
     <Compile Include="Crm\CrmContext.cs" />
     <Compile Include="DapiSecurePassword.cs" />
     <Compile Include="DeployWebResourceCommandLine.cs" />
+    <Compile Include="EntityAttributesCommandLine.cs" />
+    <Compile Include="EntityAttributesTask.cs" />
     <Compile Include="QueryEntityCommandLine.cs" />
     <Compile Include="QueryEntityTask.cs" />
     <Compile Include="Utils\CommandLineArgumentExtensions.cs" />
