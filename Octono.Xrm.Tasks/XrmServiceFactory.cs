@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Microsoft.Xrm.Sdk;
 using Octono.Xrm.Tasks.IO;
 
@@ -33,6 +34,9 @@ namespace Octono.Xrm.Tasks
                 throw new InvalidOperationException($"The connection name {connectionName} does not exist in config");
 
             var connection = _configuration.ConnectionStrings[connectionName];
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             var orgService = OrganizationServiceFactory.Create(connection,_log);
             _connectionInstances.Add(connectionName,orgService);
             return orgService;
