@@ -21,13 +21,13 @@ namespace Octono.Xrm.Tasks.Utils
         public static string Escape(string path)
         {
             return path;
-            return EscapeRegEx.Replace(path, m => EscapeCharacter + ((short)(m.Value[0])).ToString("X4"));
+            //return EscapeRegEx.Replace(path, m => EscapeCharacter + ((short)(m.Value[0])).ToString("X4"));
         }
 
         public static string Unescape(string path)
         {
             return path;
-            return UnEscapeRegex.Replace(path, m => ((char)Convert.ToInt16(m.Groups[1].Value, 16)).ToString());
+            //return UnEscapeRegex.Replace(path, m => ((char)Convert.ToInt16(m.Groups[1].Value, 16)).ToString());
         }
     }
 }

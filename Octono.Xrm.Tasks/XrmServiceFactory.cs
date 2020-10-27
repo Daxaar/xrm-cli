@@ -25,6 +25,15 @@ namespace Octono.Xrm.Tasks
 
         public IOrganizationService Create(string connectionName)
         {
+            if(string.IsNullOrEmpty(connectionName)){
+                // We'll allow an empty connection name if there is only one connection defined in config
+                if(_connectionInstances.Count == 1){
+                    var ci = _connectionInstances.Single();
+                    _log.Write("Using default connection: " + ci.Key);
+                    return ci.Value;
+                }
+            }
+
             if (_connectionInstances.ContainsKey(connectionName))
             {
                 return _connectionInstances[connectionName];

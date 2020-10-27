@@ -6,6 +6,7 @@ namespace Octono.Xrm.ConsoleTaskRunner
     {
         private static void Main(string[] args)
         {
+            //args = new []{"testconnection","kinderton"};
             var runner = new XrmTaskRunner(new ConsoleLogger());
             runner.Run(args);
         }
